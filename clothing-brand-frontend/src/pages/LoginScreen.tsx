@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const LoginScreen = () => {
@@ -6,7 +6,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Simulate login and redirect to profile for demo
     navigate('/profile');

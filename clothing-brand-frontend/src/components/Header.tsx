@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
+
+interface Product {
+  _id: string;
+  name: string;
+  image: string;
+  category: string;
+}
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
 
@@ -35,7 +42,7 @@ const Header = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
-  const submitSearch = (e) => {
+  const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowSuggestions(false);
     if(searchTerm.trim()) {
@@ -128,7 +135,7 @@ const Header = () => {
                   </Link>
                 ))}
                 <div 
-                  onClick={submitSearch}
+                  onMouseDown={submitSearch as any}
                   style={{padding: '10px', fontSize: '0.75rem', textAlign: 'center', cursor: 'pointer', backgroundColor: '#fcfcfc', color: '#666'}}
                   className="hover:text-primary"
                 >

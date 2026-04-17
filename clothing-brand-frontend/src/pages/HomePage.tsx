@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import './HomePage.css';
 
+interface Product {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  category: string;
+}
+
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -45,7 +53,7 @@ const HomePage = () => {
     </div>
   );
 
-  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items }) => (
+  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items }: { tag: string; titleLight: string; titleItalic: string; subtext?: string; items: Product[] }) => (
     <section className="carousel-section container section">
       <div className="carousel-header flex justify-between items-center" style={{marginBottom: '40px'}}>
         <div>
@@ -57,7 +65,7 @@ const HomePage = () => {
       </div>
       
       <div className="products-carousel-grid">
-        {items.map(product => (
+        {items.map((product: Product) => (
           <div key={product._id} className="carousel-product-card">
             <Link to={`/product/${product._id}`}>
               <div className="carousel-img-wrapper">

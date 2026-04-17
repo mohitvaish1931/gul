@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
+
+interface CartItem {
+  _id: string;
+  name: string;
+  image: string;
+  price: number;
+  qty: number;
+}
 
 const CartScreen = () => {
   const { id } = useParams();
@@ -8,7 +16,7 @@ const CartScreen = () => {
   
   const qty = location.search ? Number(location.search.split('=')[1]) : 1;
 
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     // In a real app we'd dispatch to Redux/Context. Here we'll simulate adding.
@@ -27,7 +35,7 @@ const CartScreen = () => {
     }
   }, [id, qty]);
 
-  const removeFromCartHandler = (removeId) => {
+  const removeFromCartHandler = (removeId: string) => {
     setCartItems(cartItems.filter(x => x._id !== removeId));
     navigate('/cart');
   };

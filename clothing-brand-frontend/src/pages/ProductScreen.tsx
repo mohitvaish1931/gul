@@ -1,13 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
+
+interface Product {
+  _id: string;
+  name: string;
+  image: string;
+  brand: string;
+  category: string;
+  price: number;
+  description: string;
+  countInStock: number;
+}
 
 const ProductScreen = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState<Partial<Product>>({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
@@ -67,12 +78,12 @@ const ProductScreen = () => {
               
               <div className="flex justify-between" style={{marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px'}}>
                 <span>Status:</span>
-                <span style={{color: product.countInStock > 0 ? 'green' : 'red'}}>
-                  {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
+                <span style={{color: (product.countInStock ?? 0) > 0 ? 'green' : 'red'}}>
+                  {(product.countInStock ?? 0) > 0 ? 'In Stock' : 'Out Of Stock'}
                 </span>
               </div>
 
-              {product.countInStock > 0 && (
+              {(product.countInStock ?? 0) > 0 && (
                 <div className="flex justify-between" style={{marginBottom: '20px'}}>
                   <span>Quantity:</span>
                   <select 
@@ -80,7 +91,7 @@ const ProductScreen = () => {
                     onChange={(e) => setQty(Number(e.target.value))}
                     style={{padding: '5px 10px', border: '1px solid #ccc'}}
                   >
-                    {[...Array(product.countInStock).keys()].map(x => (
+                    {[...Array(product.countInStock ?? 0).keys()].map(x => (
                       <option key={x + 1} value={x + 1}>{x + 1}</option>
                     ))}
                   </select>
@@ -89,9 +100,9 @@ const ProductScreen = () => {
               
               <button 
                 onClick={addToCartHandler}
-                disabled={product.countInStock === 0}
+                disabled={(product.countInStock ?? 0) === 0}
                 className="btn btn-primary" 
-                style={{width: '100%', opacity: product.countInStock === 0 ? 0.5 : 1}}
+                style={{width: '100%', opacity: (product.countInStock ?? 0) === 0 ? 0.5 : 1}}
               >
                 Add To Cart
               </button>
