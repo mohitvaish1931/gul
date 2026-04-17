@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd clothing-brand-frontend && npm run build",
+  "installCommand": "cd clothing-brand-frontend && npm install",
+  "outputDirectory": "clothing-brand-frontend/dist",
+  "framework": "vite"
+}
