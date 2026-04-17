@@ -57,7 +57,7 @@ const ProductScreen = () => {
       ) : (
         <div className="product-screen-grid flex flex-col pt-4" style={{justifyContent: 'space-between'}}>
           <div className="product-screen-image">
-            <img src={product.image} alt={product.name} style={{width: '100%', borderRadius: '4px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}} />
+            <img src={product.image} alt={product.name} style={{width: '100%', borderRadius: '4px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}} loading="lazy" />
           </div>
           
           <div className="product-screen-info">

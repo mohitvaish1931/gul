@@ -53,7 +53,7 @@ const ProductListPage = () => {
             <div key={product._id} className="product-card">
               <Link to={`/product/${product._id}`}>
                 <div className="product-img-wrapper">
-                  <img src={product.image} alt={product.name} className="product-img" />
+                  <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
                 </div>
               </Link>
               <div className="product-details">

@@ -23,6 +23,7 @@ const Hero = () => {
             loop 
             muted={true}
             playsInline
+            preload="metadata"
           />
           <div className="hero-overlay"></div>
           <div className="hero-content">

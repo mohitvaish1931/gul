@@ -125,7 +125,7 @@ const Header = () => {
                     className="flex items-center gap-3 hover:bg-gray-50"
                     style={{padding: '10px', borderBottom: '1px solid #eee', textDecoration: 'none'}}
                   >
-                    <img src={item.image} alt={item.name} style={{width: '40px', height: '50px', objectFit: 'cover', borderRadius: '2px'}} />
+                    <img src={item.image} alt={item.name} style={{width: '40px', height: '50px', objectFit: 'cover', borderRadius: '2px'}} loading="lazy" />
                     <div style={{textAlign: 'left', flex: 1}}>
                       <p style={{fontSize: '0.8rem', fontWeight: 600, color: '#333', margin: '0 0 4px 0', lineHeight: 1.2}}>
                         {item.name.length > 25 ? item.name.substring(0, 25) + '...' : item.name}

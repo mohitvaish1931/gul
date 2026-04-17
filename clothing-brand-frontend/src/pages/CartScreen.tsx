@@ -59,7 +59,7 @@ const CartScreen = () => {
             {cartItems.map((item) => (
               <div key={item._id} className="cart-item flex items-center justify-between" style={{borderBottom: '1px solid #eee', paddingBottom: '20px', marginBottom: '20px'}}>
                 <div style={{width: '20%'}}>
-                  <img src={item.image} alt={item.name} style={{width: '100%', borderRadius: '4px'}} />
+                  <img src={item.image} alt={item.name} style={{width: '100%', borderRadius: '4px'}} loading="lazy" />
                 </div>
                 <div style={{width: '40%', paddingLeft: '20px'}}>
                   <Link to={`/product/${item._id}`} className="font-serif" style={{fontSize: '1.2rem', color: '#333'}}>

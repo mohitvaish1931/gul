@@ -103,7 +103,7 @@ const HomePage = () => {
       <section className="bridal-edit-section">
         <div className="bridal-split">
           <div className="bridal-img-side">
-            <img src="/images/bridal-edit.png" alt="Bridal Edit 2026" />
+            <img src="/images/bridal-edit.png" alt="Bridal Edit 2026" loading="lazy" style={{width: '100%', borderRadius: '4px'}} />
           </div>
           <div className="bridal-content-side">
             <span className="gold-capsule">THE BRIDAL EDIT 2026</span>
