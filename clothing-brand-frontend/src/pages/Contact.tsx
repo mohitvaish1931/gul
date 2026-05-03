@@ -67,7 +67,7 @@ const Contact = () => {
             </div>
             <div className="contact-hero-img-wrap animate-fade-in" style={{animationDelay: '0.2s'}}>
               <img 
-                src="/clothing_rack_hero.png" 
+                src="/images/clothing_rack_hero.png" 
                 alt="Gul Fashion Atelier" 
                 className="contact-hero-img"
               />
