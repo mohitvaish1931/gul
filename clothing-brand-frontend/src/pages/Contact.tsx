@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
+import { 
+  Mail, Phone, MapPin, Send, MessageCircle, 
+  Calendar, Star, Sun, Truck, ShieldCheck, 
+  RefreshCcw, Globe, ChevronLeft, ChevronRight,
+  ExternalLink
+} from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
+import './Contact.css';
 
 const Contact = () => {
   useSEO({
     title: 'Contact Us - GUL FASHION Jaipur',
-    description: 'Get in touch with GUL FASHION. We\'re here to help with your clothing inquiries, orders, and styling consultations.',
-    keywords: 'contact gul fashion, customer support, jaipur ethnic wear contact',
+    description: 'Get in touch with GUL FASHION for custom tailoring, styling guidance, and luxury ethnic wear inquiries.',
+    keywords: 'contact gul fashion, jaipur boutique, ethnic wear contact, custom tailoring jaipur',
     url: 'https://gulfashion.com/contact',
     type: 'website'
   });
@@ -14,11 +20,12 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: '',
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -28,146 +35,302 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    alert('Thank you for reaching out! Our styling concierge will contact you shortly.');
+    alert('Thank you! Your style consultation request has been received.');
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section - Centered and Elegant */}
-      <div className="bg-purple-50/30 py-32 border-b border-purple-50">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <span className="small-gold-tag">GUL CONCIERGE</span>
-          <h1 className="text-6xl md:text-7xl font-serif text-purple-950 mb-8 italic">How can we help?</h1>
-          <p className="text-xl text-purple-900/60 max-w-2xl mx-auto font-medium leading-relaxed">
-            Whether it's a sizing query or a custom design request, our team in Jaipur is here to assist you with every detail.
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          
-          {/* Left: Contact Info - 5 columns */}
-          <div className="lg:col-span-5 space-y-10">
-            <div>
-              <h2 className="text-4xl font-serif text-purple-950 mb-6">Concierge Services</h2>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                Experience personalized assistance for all your ethnic wear needs. We offer virtual styling, custom tailoring, and detailed product consultations.
+    <div className="contact-page">
+      {/* Hero Section */}
+      <section className="contact-hero">
+        <div className="container">
+          <div className="contact-hero-grid">
+            <div className="contact-hero-content animate-fade-in">
+              <span className="hero-tag">WE'D LOVE TO HEAR FROM YOU</span>
+              <h1 className="hero-title font-serif">
+                Let's Create Something <br />
+                <i>Beautiful Together</i>
+              </h1>
+              <p className="hero-desc">
+                From custom tailoring to styling guidance — we're here for you.
               </p>
+              <div className="hero-btns">
+                <button className="btn-book">
+                  <Calendar size={18} />
+                  BOOK CONSULTATION
+                </button>
+                <button className="btn-whatsapp-outline">
+                  <MessageCircle size={18} />
+                  CHAT ON WHATSAPP
+                </button>
+              </div>
+            </div>
+            <div className="contact-hero-img-wrap animate-fade-in" style={{animationDelay: '0.2s'}}>
+              <img 
+                src="/clothing_rack_hero.png" 
+                alt="Gul Fashion Atelier" 
+                className="contact-hero-img"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Form Section */}
+      <section className="contact-main-section container">
+        <div className="contact-main-card">
+          {/* Left: Get in Touch */}
+          <div className="contact-info-side">
+            <div className="section-title-wrap">
+              <h2 className="font-serif">Get in Touch</h2>
+              <div className="gold-divider"></div>
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              {[
-                { icon: Mail, title: 'Email Us', detail: 'gul.fashion.jaipur@gmail.com' },
-                { icon: Phone, title: 'Call Us', detail: '+91 78779 37350' },
-                { icon: MapPin, title: 'Our Studio', detail: '455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002' },
-                { icon: MessageCircle, title: 'WhatsApp', detail: 'Instant styling support available.' }
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center p-6 bg-purple-50/50 border border-purple-100 rounded-3xl hover:bg-white hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-500 group">
-                  <div className="w-14 h-14 bg-white text-purple-900 rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-purple-900 group-hover:text-white transition-all duration-500">
-                    <item.icon size={24} />
-                  </div>
-                  <div className="ml-6">
-                    <h3 className="font-bold text-purple-950 text-sm uppercase tracking-widest mb-1">{item.title}</h3>
-                    <p className="text-gray-600 font-medium">{item.detail}</p>
-                  </div>
+            <div className="contact-items-list">
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><Mail size={20} /></div>
+                <div className="item-content">
+                  <h3>EMAIL</h3>
+                  <p>gul.fashion.jaipur@gmail.com</p>
+                  <p className="sub-info">We reply within 24 hours</p>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            {/* Visit Us Card - Fixed and Improved */}
-            <div className="p-10 bg-purple-950 text-white rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-800 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 group-hover:opacity-40 transition-opacity"></div>
-              <h3 className="text-3xl font-serif mb-6 relative z-10">Visit Our Jaipur Studio</h3>
-              <p className="opacity-70 mb-10 relative z-10 text-lg">Experience our collections in person at our flagship Jaipur studio.</p>
-              <div className="space-y-4 relative z-10">
-                <div className="flex justify-between border-b border-white/10 pb-4">
-                  <span className="font-medium opacity-60">Monday - Saturday</span>
-                  <span className="font-bold">10:00 AM - 8:00 PM</span>
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><Phone size={20} /></div>
+                <div className="item-content">
+                  <h3>CALL US</h3>
+                  <p>+91 78779 37350</p>
+                  <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
                 </div>
-                <div className="flex justify-between pt-2">
-                  <span className="font-medium opacity-60">Sunday</span>
-                  <span className="font-bold">11:00 AM - 6:00 PM</span>
+              </div>
+
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><MapPin size={20} /></div>
+                <div className="item-content">
+                  <h3>OUR STUDIO</h3>
+                  <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002, Rajasthan, India</p>
+                  <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
+                </div>
+              </div>
+
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><MessageCircle size={20} /></div>
+                <div className="item-content">
+                  <h3>WHATSAPP</h3>
+                  <p>Instant styling support available.</p>
+                  <a href="https://wa.me/917877937350" className="chat-link">
+                    Chat Now <ArrowRight size={14} />
+                  </a>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Right: Contact Form - 7 columns */}
-          <div className="lg:col-span-7">
-            <div className="bg-white border border-purple-100 p-12 rounded-[3rem] shadow-2xl shadow-purple-900/5 relative">
-              <h2 className="text-4xl font-serif text-purple-950 mb-10">Send a Message</h2>
-
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="block text-xs font-black text-purple-900 uppercase tracking-[0.2em] ml-1">Your Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-6 py-5 bg-purple-50/30 border border-purple-100 rounded-2xl focus:ring-2 focus:ring-purple-200 focus:bg-white outline-none transition-all text-purple-950 font-medium"
-                      placeholder="E.g. Anjali Sharma"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="block text-xs font-black text-purple-900 uppercase tracking-[0.2em] ml-1">Email Address</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-6 py-5 bg-purple-50/30 border border-purple-100 rounded-2xl focus:ring-2 focus:ring-purple-200 focus:bg-white outline-none transition-all text-purple-950 font-medium"
-                      placeholder="email@example.com"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="block text-xs font-black text-purple-900 uppercase tracking-[0.2em] ml-1">Subject</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    className="w-full px-6 py-5 bg-purple-50/30 border border-purple-100 rounded-2xl focus:ring-2 focus:ring-purple-200 focus:bg-white outline-none transition-all text-purple-950 font-medium"
-                    placeholder="How can we help you?"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <label className="block text-xs font-black text-purple-900 uppercase tracking-[0.2em] ml-1">Your Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={6}
-                    className="w-full px-6 py-5 bg-purple-50/30 border border-purple-100 rounded-2xl focus:ring-2 focus:ring-purple-200 focus:bg-white outline-none resize-none transition-all text-purple-950 font-medium"
-                    placeholder="Tell us about your requirements or any questions you have..."
-                    required
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-purple-900 text-white py-6 px-10 rounded-2xl font-black uppercase tracking-[0.3em] text-sm hover:bg-purple-800 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-purple-900/20 flex items-center justify-center space-x-4"
-                >
-                  <span>SEND MESSAGE</span>
-                  <Send size={18} />
-                </button>
-              </form>
+            <div className="availability-banner">
+              <div className="icon"><Sun size={20} /></div>
+              <p>Available Mon – Sat | 10 AM – 7 PM <br /> <span style={{opacity: 0.6, fontSize: '0.75rem'}}>We're closed on Sundays</span></p>
             </div>
           </div>
 
+          {/* Right: Form */}
+          <div className="contact-form-side">
+            <div className="section-title-wrap">
+              <h2 className="font-serif">Send us a Message</h2>
+              <div className="gold-divider"></div>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              <div className="contact-form-grid">
+                <div className="form-group">
+                  <label>YOUR NAME <span>*</span></label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="E.g. Anjali Sharma" 
+                    className="form-input" 
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>EMAIL ADDRESS <span>*</span></label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="email@example.com" 
+                    className="form-input" 
+                    required
+                  />
+                </div>
+                <div className="form-group full">
+                  <label>PHONE NUMBER <span>*</span></label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="E.g. +91 98765 43210" 
+                    className="form-input" 
+                    required
+                  />
+                </div>
+                <div className="form-group full">
+                  <label>SUBJECT <span>*</span></label>
+                  <select 
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    className="form-select" 
+                    required
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="custom">Custom Tailoring Inquiry</option>
+                    <option value="order">Order Tracking / Issues</option>
+                    <option value="styling">Virtual Styling Consultation</option>
+                    <option value="wholesale">Wholesale / Business Inquiry</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className="form-group full">
+                  <label>YOUR MESSAGE <span>*</span></label>
+                  <textarea 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Tell us about your requirements or any questions you have..." 
+                    className="form-textarea" 
+                    rows={5}
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <button type="submit" className="btn-submit-consult">
+                <Send size={18} />
+                START YOUR STYLE CONSULTATION
+              </button>
+            </form>
+
+            <div className="quick-help-wrap">
+              <h4>Need quick help?</h4>
+              <div className="quick-help-btns">
+                <button className="btn-quick"><Phone size={14} /> CALL NOW</button>
+                <button className="btn-quick"><MessageCircle size={14} /> WHATSAPP</button>
+                <button className="btn-quick"><MapPin size={14} /> VISIT STUDIO</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="contact-map-section container">
+        <div className="map-card">
+          <div className="map-iframe-wrap">
+            {/* Using a placeholder for map, in production use Google Maps iframe */}
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.518683501712!2d75.8364!3d26.9175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db6fd7a44f77b%3A0xe74e797c558c4f0!2sJaipur!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy"
+              title="Gul Fashion Studio Location"
+            ></iframe>
+          </div>
+          <div className="map-content">
+            <span className="map-tag">VISIT OUR STUDIO</span>
+            <h2 className="map-title font-serif">Experience Our Collections <br /> in Person</h2>
+            <p className="map-desc">
+              Step into our Jaipur studio and explore our exclusive ethnic wear collections. Get personalized styling, custom fittings, and a truly memorable experience.
+            </p>
+            <button className="btn-directions">
+              <ExternalLink size={18} />
+              GET DIRECTIONS
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="contact-testimonials container">
+        <div className="section-title-wrap">
+          <h2 className="font-serif">Loved by 1000+ Customers</h2>
+          <div className="gold-divider"></div>
+        </div>
+
+        <div className="testimonials-grid">
+          {[
+            { name: 'Neha Sharma', text: 'Amazing collection and perfect fitting. The staff is so friendly and helpful!' },
+            { name: 'Priya Aggarwal', text: 'Best ethnic wear in Jaipur. Highly recommended for bridal shopping!' },
+            { name: 'Riya Kapoor', text: 'Loved the custom stitching. Exactly what I wanted for my sister\'s wedding!' }
+          ].map((test, idx) => (
+            <div key={idx} className="test-card">
+              <div className="stars">
+                {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="var(--gold-primary)" />)}
+              </div>
+              <p className="test-text">"{test.text}"</p>
+              <h5 className="test-author">— {test.name}</h5>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Trust Bar */}
+      <section className="trust-bar">
+        <div className="container trust-grid">
+          <div className="trust-item">
+            <ShieldCheck className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>PREMIUM QUALITY</h5>
+              <p>Finest fabrics & craftsmanship</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <Truck className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>SECURE PAYMENTS</h5>
+              <p>100% secure & trusted</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <RefreshCcw className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>EASY RETURNS</h5>
+              <p>Hassle-free returns</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <Globe className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>WORLDWIDE SHIPPING</h5>
+              <p>Delivering worldwide</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
 export default Contact;
+
+const ArrowRight = ({ size, className }: { size?: number, className?: string }) => (
+  <svg 
+    width={size || 24} 
+    height={size || 24} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
