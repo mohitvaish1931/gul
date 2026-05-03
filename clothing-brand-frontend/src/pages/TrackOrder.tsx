@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Package, Truck, CheckCircle, Clock, MapPin, AlertCircle, Loader2 } from 'lucide-react';
+import { Search, Truck, AlertCircle, Loader2 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import { API_ENDPOINTS, fetchJSON } from '../utils/api';
 
