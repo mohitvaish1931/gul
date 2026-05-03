@@ -50,7 +50,7 @@ const ProductScreen = () => {
           </div>
           
           <div className="product-screen-info">
-            <h1 className="font-serif" style={{fontSize: '2.5rem', marginBottom: '10px', color: 'var(--primary-color)'}}>{product.name}</h1>
+            <h1 className="font-serif" style={{fontSize: '2.5rem', marginBottom: '10px', color: 'var(--primary-purple)'}}>{product.name}</h1>
             <h3 style={{fontSize: '1rem', color: '#666', borderBottom: '1px solid #eee', paddingBottom: '20px', marginBottom: '20px'}}>
               Brand: {product.brand} | Category: {product.category}
             </h3>

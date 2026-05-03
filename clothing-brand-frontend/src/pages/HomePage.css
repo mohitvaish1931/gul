@@ -64,7 +64,7 @@
   left: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.9);
-  color: var(--primary-color);
+  color: var(--primary-purple);
   text-align: center;
   padding: 15px 0;
   font-size: 0.85rem;
@@ -90,12 +90,13 @@
 }
 
 .carousel-product-card:hover .cp-name {
-  color: var(--primary-color);
+  color: var(--primary-purple);
 }
 
 .cp-price {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent-purple);
 }
 
 /* Bridal Edit Split Section */
@@ -184,7 +185,7 @@
 
 .badge-title {
   font-size: 1.2rem;
-  color: var(--primary-color);
+  color: var(--primary-purple);
   margin-bottom: 5px;
 }
 

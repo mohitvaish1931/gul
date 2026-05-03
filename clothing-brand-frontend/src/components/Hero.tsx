@@ -26,7 +26,7 @@ const Hero = () => {
           />
           <div className="hero-overlay"></div>
           <div className="hero-content">
-            <h1 className="hero-title animate-fade-in font-serif">Regal Elegance</h1>
+            <h1 className="hero-title animate-fade-in font-serif">Regal <span style={{color: 'var(--accent-purple)'}}>Elegance</span></h1>
             <p className="hero-subtitle animate-fade-in" style={{animationDelay: '0.2s'}}>
               Discover our latest collection of handcrafted bridal and festive wear
             </p>

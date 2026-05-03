@@ -1,127 +1,100 @@
-.categories-masonry-section {
-  width: 100%;
-}
-
-.categories-masonry {
+.categories-masonry-dual {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 350px 350px;
-  gap: 4px; /* White borders effectively created by gap if background behind is white, or just natural spacing */
-  background-color: #fff;
-  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  height: 80vh;
+  gap: 2px;
+  background-color: #f8f0ff;
 }
 
-.cat-card {
+.cat-card-purple {
   position: relative;
   overflow: hidden;
   display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.cat-card:hover .cat-bg-img {
-  transform: scale(1.05); /* Slight zoom on hover for premium feel */
 }
 
 .cat-bg-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.cat-overlay {
+.cat-overlay-purple {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Gradient at the bottom specifically to make text readable, mimicking design */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0) 100%);
-  pointer-events: none;
+  inset: 0;
+  background: linear-gradient(to top, rgba(45, 0, 77, 0.6) 0%, transparent 60%);
+  transition: background 0.5s ease;
 }
 
-.cat-text-content {
+.cat-text-content-purple {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 30px;
+  bottom: 60px;
+  left: 60px;
   color: #fff;
-  z-index: 2;
-  text-align: left;
+  z-index: 10;
 }
 
-.cat-title {
-  font-size: 2.2rem;
-  margin-bottom: 5px;
-  line-height: 1;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-  letter-spacing: 1px;
-}
-
-.cat-subtitle {
-  font-family: 'Inter', sans-serif;
+.cat-tag-purple {
   font-size: 0.75rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  display: block;
+  color: var(--gold-primary);
+}
+
+.cat-title-purple {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.cat-desc-purple {
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  font-family: 'Playfair Display', serif;
+}
+
+.cat-link-purple {
+  font-size: 0.85rem;
+  font-weight: 700;
   letter-spacing: 2px;
-  color: #CCA35E; /* Dull gold color matching the screenshot */
-  text-transform: uppercase;
+  border-bottom: 2px solid var(--gold-primary);
+  padding-bottom: 8px;
+  transition: all 0.3s ease;
 }
 
-/* Grid placing */
-.cat-sarees {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
+.cat-card-purple:hover .cat-bg-img {
+  transform: scale(1.05);
 }
 
-.cat-lehengas {
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
+.cat-card-purple:hover .cat-overlay-purple {
+  background: linear-gradient(to top, rgba(45, 0, 77, 0.8) 0%, transparent 40%);
 }
 
-.cat-suits {
-  grid-column: 3 / 4;
-  grid-row: 1 / 2;
+.cat-card-purple:hover .cat-link-purple {
+  color: var(--gold-primary);
+  letter-spacing: 3px;
 }
 
-.cat-indowestern {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-}
-
-.cat-kurtas {
-  grid-column: 3 / 4;
-  grid-row: 2 / 3;
-}
-
-/* Enhancing Left Large Title since it's a bigger block */
-.cat-sarees .cat-title {
-  font-size: 3rem;
-}
-
-@media (max-width: 900px) {
-  .categories-masonry {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 400px 300px 300px;
-  }
-  .cat-sarees {
-    grid-column: 1 / 3;
-    grid-row: 1 / 2;
-  }
-  .cat-lehengas { grid-column: 1 / 2; grid-row: 2 / 3; }
-  .cat-suits { grid-column: 2 / 3; grid-row: 2 / 3; }
-  .cat-indowestern { grid-column: 1 / 2; grid-row: 3 / 4; }
-  .cat-kurtas { grid-column: 2 / 3; grid-row: 3 / 4; }
-}
-
-@media (max-width: 576px) {
-  .categories-masonry {
+@media (max-width: 992px) {
+  .categories-masonry-dual {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 300px);
+    height: auto;
   }
-  .cat-sarees { grid-column: 1 / 2; grid-row: 1 / 2; }
-  .cat-lehengas { grid-column: 1 / 2; grid-row: 2 / 3; }
-  .cat-suits { grid-column: 1 / 2; grid-row: 3 / 4; }
-  .cat-indowestern { grid-column: 1 / 2; grid-row: 4 / 5; }
-  .cat-kurtas { grid-column: 1 / 2; grid-row: 5 / 6; }
+  
+  .cat-card-purple {
+    height: 500px;
+  }
+  
+  .cat-text-content-purple {
+    left: 30px;
+    bottom: 40px;
+  }
+  
+  .cat-title-purple {
+    font-size: 2.5rem;
+  }
 }

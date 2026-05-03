@@ -38,10 +38,10 @@ const CartScreen = () => {
 
   return (
     <div className="container page-top-padding" style={{padding: '50px 5%'}}>
-      <h1 className="font-serif text-center" style={{fontSize: '2.5rem', marginBottom: '30px', color: 'var(--primary-color)'}}>Shopping Cart</h1>
+      <h1 className="font-serif text-center" style={{fontSize: '2.5rem', marginBottom: '30px', color: 'var(--primary-purple)'}}>Shopping Cart</h1>
       
       {cartItems.length === 0 ? (
-        <div className="text-center" style={{padding: '50px 0', border: '1px solid #eee', background: '#fafafa', borderRadius: '4px'}}>
+        <div className="text-center" style={{padding: '50px 0', border: '1px solid #efe4ff', background: '#fdfaff', borderRadius: '4px'}}>
           <h2 className="font-serif mb-4" style={{marginBottom: '20px'}}>Your cart is empty</h2>
           <Link to="/shop" className="btn btn-primary">Go Back To Shop</Link>
         </div>

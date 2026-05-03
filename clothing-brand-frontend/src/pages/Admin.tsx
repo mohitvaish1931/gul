@@ -11,11 +11,8 @@ import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 
 const SUBCATEGORIES: Record<string, string[]> = {
-  Sarees: ['Silk', 'Chiffon', 'Georgette', 'Cotton', 'Bandhani', 'Kanjivaram'],
-  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style'],
   'Kurta Sets': ['Daily Wear', 'Festive', 'Hand-embroidered', 'Printed'],
-  Lehengas: ['Bridal', 'Party Wear', 'Light Lehenga', 'Floral'],
-  Dresses: ['Maxi', 'Midi', 'Fusion', 'Ethnic Dress']
+  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style']
 };
 
 const Admin = () => {
@@ -92,8 +89,8 @@ const Admin = () => {
       name: 'Revenue', 
       value: `₹${totalRevenue.toLocaleString()}`, 
       icon: TrendingUp, 
-      color: 'from-primary-red/10 to-primary-red/20', 
-      iconColor: 'text-primary-red',
+      color: 'from-primary-purple/10 to-primary-purple/20', 
+      iconColor: 'text-primary-purple',
       change: '+15%',
       isPositive: true
     },
@@ -301,7 +298,7 @@ const Admin = () => {
                 name="name"
                 type="text"
                 autoComplete="off"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="Enter product name"
               />
             </div>
@@ -310,21 +307,18 @@ const Admin = () => {
               <select 
                 id="product-category" 
                 name="category" 
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
                 <option value="">Select category</option>
-                <option value="Sarees">Sarees</option>
-                <option value="Suits">Suits</option>
                 <option value="Kurta Sets">Kurta Sets</option>
-                <option value="Lehengas">Lehengas</option>
-                <option value="Dresses">Dresses</option>
+                <option value="Suits">Suits</option>
               </select>
             </div>
             {selectedCategory && SUBCATEGORIES[selectedCategory]?.length > 0 && (
               <div>
                 <label htmlFor="product-subcategory" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Subcategory</label>
-                <select id="product-subcategory" name="subcategory" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
+                <select id="product-subcategory" name="subcategory" className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none">
                   <option value="">Select subcategory</option>
                   {SUBCATEGORIES[selectedCategory].map(sub => (
                     <option key={sub} value={sub.toLowerCase().replace(/\s+/g, '-')}>{sub}</option>
@@ -341,7 +335,7 @@ const Admin = () => {
                 name="price"
                 type="number"
                 autoComplete="off"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="0"
               />
             </div>
@@ -352,7 +346,7 @@ const Admin = () => {
                 name="originalPrice"
                 type="number"
                 autoComplete="off"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="0"
               />
             </div>
@@ -364,7 +358,7 @@ const Admin = () => {
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="Enter stock quantity"
               />
             </div>
@@ -374,7 +368,7 @@ const Admin = () => {
                 id="product-sizes"
                 name="sizes_raw"
                 type="text"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="5, 6, 7, 8, 9"
               />
             </div>
@@ -384,7 +378,7 @@ const Admin = () => {
                 id="product-shapes"
                 name="shapes_raw"
                 type="text"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="Heart, Round, Oval"
               />
             </div>
@@ -394,7 +388,7 @@ const Admin = () => {
                 id="product-colors"
                 name="colors_raw"
                 type="text"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="Gold, Rose Gold, Silver"
               />
             </div>
@@ -406,13 +400,13 @@ const Admin = () => {
                 id="product-link"
                 name="productLink"
                 type="text"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="https://instagram.com/p/..."
               />
             </div>
             <div>
               <label htmlFor="product-status" className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Publishing Status</label>
-              <select id="product-status" name="status" className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none">
+              <select id="product-status" name="status" className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none">
                 <option value="published">Published</option>
                 <option value="pre-upload">Pre-upload (Draft)</option>
               </select>
@@ -423,7 +417,7 @@ const Admin = () => {
                 id="product-order"
                 name="displayOrder"
                 type="number"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="0"
                 defaultValue="0"
               />
@@ -435,7 +429,7 @@ const Admin = () => {
               id="product-description"
               name="description"
               rows={4}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
               placeholder="Enter product description"
             />
           </div>
@@ -447,7 +441,7 @@ const Admin = () => {
                 name="dimensions"
                 type="text"
                 autoComplete="off"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="Length x Width x Height"
               />
             </div>
@@ -458,7 +452,7 @@ const Admin = () => {
                 name="weight"
                 type="text"
                 autoComplete="off"
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 placeholder="50g"
               />
             </div>
@@ -469,7 +463,7 @@ const Admin = () => {
               id="product-materials"
               name="materials_raw"
               rows={2}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
               placeholder="Premium Silk&#10;18k Gold PVD"
             />
           </div>
@@ -479,7 +473,7 @@ const Admin = () => {
               id="product-specifications"
               name="specifications_raw"
               rows={3}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
               placeholder="Waterproof&#10;Anti-Tarnish&#10;Hypoallergenic"
             />
           </div>
@@ -489,7 +483,7 @@ const Admin = () => {
               id="product-care"
               name="careInstructions_raw"
               rows={3}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
               placeholder="Waterproof and Sweatproof&#10;Chlorine and Sea water safe"
             />
           </div>
@@ -581,7 +575,7 @@ const Admin = () => {
                 onChange={e => setIsBOGO(e.target.checked)}
                 className="rounded border-sapphire-luxury accent-gold-primary"
               />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-primary-red">Buy 1 Get 1 (BOGO)</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary-purple">Buy 1 Get 1 (BOGO)</span>
             </label>
           </div>
           <div className="flex space-x-4">
@@ -900,18 +894,18 @@ const Admin = () => {
     };
 
     return (
-      <div className="fixed inset-0 bg-luxury-dark/90 backdrop-blur-md flex items-center justify-center z-[100] overflow-y-auto py-10">
+      <div className="fixed inset-0 bg-white/90 backdrop-blur-md flex items-center justify-center z-[100] overflow-y-auto py-10">
         <div className="bg-white border border-gold-primary/20 rounded-3xl shadow-2xl max-w-4xl w-full mx-4 p-8 md:p-12">
           <div className="mb-8">
             <h3 className="text-3xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Edit Product</h3>
-            <p className="text-[10px] font-bold text-primary-red tracking-[0.3em] uppercase">ID: {localForm?.id || localForm?._id}</p>
+            <p className="text-[10px] font-bold text-primary-purple tracking-[0.3em] uppercase">ID: {localForm?.id || localForm?._id}</p>
           </div>
           <form onSubmit={submit} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product Name</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.name || ''}
                   onChange={e => setLocalForm({ ...localForm, name: e.target.value })}
                   placeholder="Product name"
@@ -920,7 +914,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Category</label>
                 <select
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.category || ''}
                   onChange={e => setLocalForm({ ...localForm, category: e.target.value })}
                 >
@@ -937,7 +931,7 @@ const Admin = () => {
                 <div>
                   <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Subcategory</label>
                   <select
-                    className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                    className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                     value={localForm?.subcategory || ''}
                     onChange={e => setLocalForm({ ...localForm, subcategory: e.target.value })}
                   >
@@ -953,7 +947,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Current Price (₹)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.price || 0}
                   onChange={e => setLocalForm({ ...localForm, price: e.target.value })}
                   placeholder="Price"
@@ -962,7 +956,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Original Price (₹)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.originalPrice || ''}
                   onChange={e => setLocalForm({ ...localForm, originalPrice: e.target.value })}
                   placeholder="Original price"
@@ -971,7 +965,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Stock</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none"
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
@@ -988,7 +982,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Sizes (Comma separated)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none"
                   type="text"
                   value={localForm?.sizes || ''}
                   onChange={e => setLocalForm({ ...localForm, sizes: e.target.value })}
@@ -998,7 +992,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Shapes (Comma separated)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none"
                   type="text"
                   value={localForm?.shapes || ''}
                   onChange={e => setLocalForm({ ...localForm, shapes: e.target.value })}
@@ -1008,7 +1002,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Colors (Comma separated)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none"
                   type="text"
                   value={localForm?.colors || ''}
                   onChange={e => setLocalForm({ ...localForm, colors: e.target.value })}
@@ -1020,7 +1014,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Product External Link (Optional)</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.productLink || ''}
                   onChange={e => setLocalForm({ ...localForm, productLink: e.target.value })}
                   placeholder="https://instagram.com/p/..."
@@ -1029,7 +1023,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Publishing Status</label>
                 <select
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.status || 'published'}
                   onChange={e => setLocalForm({ ...localForm, status: e.target.value })}
                 >
@@ -1041,7 +1035,7 @@ const Admin = () => {
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Display Order (Numbering)</label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.displayOrder || 0}
                   onChange={e => setLocalForm({ ...localForm, displayOrder: parseInt(e.target.value, 10) || 0 })}
                   placeholder="0"
@@ -1051,7 +1045,7 @@ const Admin = () => {
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Description</label>
               <textarea
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 rows={4}
                 value={localForm?.description || ''}
                 onChange={e => setLocalForm({ ...localForm, description: e.target.value })}
@@ -1062,7 +1056,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Dimensions</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.dimensions || ''}
                   onChange={e => setLocalForm({ ...localForm, dimensions: e.target.value })}
                   placeholder="e.g. 20cm x 15cm"
@@ -1071,7 +1065,7 @@ const Admin = () => {
               <div>
                 <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Weight</label>
                 <input
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                   value={localForm?.weight || ''}
                   onChange={e => setLocalForm({ ...localForm, weight: e.target.value })}
                   placeholder="e.g. 50g"
@@ -1081,7 +1075,7 @@ const Admin = () => {
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Materials (One per line)</label>
               <textarea
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 rows={2}
                 value={localForm?.materials || ''}
                 onChange={e => setLocalForm({ ...localForm, materials: e.target.value })}
@@ -1091,7 +1085,7 @@ const Admin = () => {
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Specifications (One per line)</label>
               <textarea
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 rows={3}
                 value={localForm?.specifications || ''}
                 onChange={e => setLocalForm({ ...localForm, specifications: e.target.value })}
@@ -1101,7 +1095,7 @@ const Admin = () => {
             <div>
               <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Care Instructions (One per line)</label>
               <textarea
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 transition-all outline-none"
                 rows={3}
                 value={localForm?.careInstructions || ''}
                 onChange={e => setLocalForm({ ...localForm, careInstructions: e.target.value })}
@@ -1219,7 +1213,7 @@ const Admin = () => {
                   onChange={e => setLocalForm({ ...localForm, isBOGO: e.target.checked })}
                   className="rounded border-teal-luxury accent-gold-primary"
                 />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-red">Buy 1 Get 1 (BOGO)</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-purple">Buy 1 Get 1 (BOGO)</span>
               </label>
             </div>
             <div className="flex justify-end space-x-2">
@@ -1434,7 +1428,7 @@ const Admin = () => {
         } fixed inset-y-0 left-0 border-r border-gold-primary/5 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.3)]`}
       >
         <div className={`flex items-center gap-4 transition-all duration-500 border-b border-gold-primary/5 ${isSidebarOpen ? 'p-8' : 'p-6 justify-center'}`}>
-          <div className="w-12 h-12 bg-gradient-to-tr from-primary-red to-rose-gold rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_8px_20px_-6px_rgba(139,29,46,0.6)] rotate-3 hover:rotate-0 transition-all duration-500">
+          <div className="w-12 h-12 bg-gradient-to-tr from-primary-purple to-rose-gold rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_8px_20px_-6px_rgba(139,29,46,0.6)] rotate-3 hover:rotate-0 transition-all duration-500">
             <span className="font-serif text-2xl font-bold italic">G</span>
           </div>
           {isSidebarOpen && (
@@ -1474,7 +1468,7 @@ const Admin = () => {
         <div className="p-6 border-t border-gold-primary/5">
           <button 
             onClick={() => navigate('/')}
-            className={`flex items-center transition-all duration-500 hover:text-primary-red group ${
+            className={`flex items-center transition-all duration-500 hover:text-primary-purple group ${
               isSidebarOpen ? 'w-full gap-5 px-6 py-4 text-text-muted rounded-2xl' : 'w-14 h-14 justify-center mx-auto text-text-muted rounded-2xl'
             } hover:bg-red-500/5`}
           >
@@ -1491,7 +1485,7 @@ const Admin = () => {
           <div className="flex items-center gap-6">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-3 bg-luxury-dark/5 hover:bg-luxury-dark/10 rounded-2xl transition-all text-text-muted group"
+              className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-text-muted group"
             >
               <Menu className={`w-5 h-5 transition-transform duration-500 ${!isSidebarOpen && 'rotate-90'}`} />
             </button>
@@ -1513,14 +1507,14 @@ const Admin = () => {
               <input 
                 type="text" 
                 placeholder="Search resources..." 
-                className="bg-luxury-dark/[0.03] border border-gold-primary/5 rounded-2xl py-3 pl-14 pr-8 text-[11px] font-bold tracking-widest uppercase focus:ring-4 focus:ring-gold-primary/10 focus:bg-white w-96 transition-all outline-none"
+                className="bg-white/[0.03] border border-gold-primary/5 rounded-2xl py-3 pl-14 pr-8 text-[11px] font-bold tracking-widest uppercase focus:ring-4 focus:ring-gold-primary/10 focus:bg-white w-96 transition-all outline-none"
               />
             </div>
             
             <div className="flex items-center gap-4">
-              <button className="p-3 relative bg-luxury-dark/5 hover:bg-luxury-dark/10 rounded-2xl transition-all text-text-muted">
+              <button className="p-3 relative bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-text-muted">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary-red rounded-full border-2 border-white animate-pulse"></span>
+                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary-purple rounded-full border-2 border-white animate-pulse"></span>
               </button>
               <div className="w-px h-8 bg-gold-primary/10 mx-2"></div>
               <div className="flex items-center gap-4 group cursor-pointer">
@@ -1528,7 +1522,7 @@ const Admin = () => {
                   <p className="text-xs font-black text-text-primary uppercase tracking-widest leading-none mb-1">Admin</p>
                   <p className="text-[10px] text-gold-primary font-bold tracking-tighter uppercase opacity-70">Master Store</p>
                 </div>
-                <div className="w-12 h-12 rounded-2xl bg-luxury-dark/5 border border-gold-primary/10 flex items-center justify-center text-gold-primary group-hover:bg-gold-primary group-hover:text-white transition-all duration-500 shadow-inner">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-gold-primary/10 flex items-center justify-center text-gold-primary group-hover:bg-gold-primary group-hover:text-white transition-all duration-500 shadow-inner">
                   <User className="w-6 h-6" />
                 </div>
               </div>
@@ -1545,7 +1539,7 @@ const Admin = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-8 rounded-3xl border border-gold-primary/10 shadow-sm relative overflow-hidden mb-10">
               <div className="relative z-10">
                 <h1 className="text-3xl font-black text-text-primary luxury-serif mb-2">
-                  Welcome back, <span className="text-primary-red">Admin</span>
+                  Welcome back, <span className="text-primary-purple">Admin</span>
                 </h1>
                 <p className="text-text-muted text-sm font-medium">
                   Here's what's happening with <span className="text-gold-primary font-bold">Gul Fashion</span> today.
@@ -1558,7 +1552,7 @@ const Admin = () => {
                     {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-luxury-dark/30 rounded-2xl flex items-center justify-center text-primary-red shadow-inner">
+                <div className="w-12 h-12 bg-white/30 rounded-2xl flex items-center justify-center text-primary-purple shadow-inner">
                   <PieChart className="w-6 h-6" />
                 </div>
               </div>
@@ -1578,7 +1572,7 @@ const Admin = () => {
                   
                   <div className="relative z-10 flex flex-col gap-6">
                     <div className="flex items-center justify-between">
-                      <div className={`w-14 h-14 rounded-2xl bg-luxury-dark/5 ${stat.iconColor} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}>
+                      <div className={`w-14 h-14 rounded-2xl bg-white/5 ${stat.iconColor} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}>
                         <stat.icon className="w-7 h-7" />
                       </div>
                       <div className={`flex items-center gap-1.5 text-[11px] font-black px-3 py-1.5 rounded-full shadow-sm ${
@@ -1598,7 +1592,7 @@ const Admin = () => {
                       </div>
                     </div>
 
-                    <div className="w-full h-1.5 bg-luxury-dark/5 rounded-full overflow-hidden mt-2">
+                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-2">
                       <div className={`h-full bg-gradient-to-r ${stat.color} w-3/4 opacity-80 group-hover:w-full transition-all duration-1000`}></div>
                     </div>
                   </div>
@@ -1612,12 +1606,12 @@ const Admin = () => {
               <div className="lg:col-span-2 bg-white border border-gold-primary/10 rounded-3xl shadow-sm overflow-hidden flex flex-col">
                 <div className="px-8 py-6 border-b border-gold-primary/5 flex items-center justify-between bg-white/50">
                   <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-6 bg-primary-red rounded-full"></div>
+                    <div className="w-1.5 h-6 bg-primary-purple rounded-full"></div>
                     <h3 className="text-xs font-black text-text-primary tracking-[0.2em] uppercase">Recent Activity</h3>
                   </div>
                   <button 
                     onClick={() => setActiveTab('orders')}
-                    className="flex items-center gap-1 text-[10px] font-black text-gold-primary hover:text-primary-red transition-all tracking-widest uppercase"
+                    className="flex items-center gap-1 text-[10px] font-black text-gold-primary hover:text-primary-purple transition-all tracking-widest uppercase"
                   >
                     All Orders <ChevronRight className="w-3 h-3" />
                   </button>
@@ -1635,13 +1629,13 @@ const Admin = () => {
                     </thead>
                     <tbody className="divide-y divide-gold-primary/5">
                       {recentOrders.map((order) => (
-                        <tr key={order.id} className="hover:bg-luxury-dark/10 transition-colors">
+                        <tr key={order.id} className="hover:bg-white/10 transition-colors">
                           <td className="px-8 py-4 whitespace-nowrap text-sm font-bold text-text-primary tabular-nums">
                             {order.orderNumber}
                           </td>
                           <td className="px-8 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-primary-red/10 flex items-center justify-center text-primary-red text-xs font-bold">
+                              <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center text-primary-purple text-xs font-bold">
                                 {order.customer.charAt(0)}
                               </div>
                               <span className="text-sm text-text-secondary font-medium">{order.customer}</span>
@@ -1680,9 +1674,9 @@ const Admin = () => {
                 <div className="grid grid-cols-1 gap-4">
                   <button 
                     onClick={() => setShowAddProduct(true)}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-luxury-dark/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-primary-red group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-primary-purple group-hover:scale-110 transition-transform">
                       <Plus className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -1693,7 +1687,7 @@ const Admin = () => {
 
                   <button 
                     onClick={() => setActiveTab('content')}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-luxury-dark/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
                   >
                     <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-gold-primary group-hover:scale-110 transition-transform">
                       <ImageIcon className="w-5 h-5" />
@@ -1704,7 +1698,7 @@ const Admin = () => {
                     </div>
                   </button>
 
-                  <button className="flex items-center gap-4 p-4 rounded-2xl bg-luxury-dark/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group">
+                  <button className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group">
                     <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-blue-600 group-hover:scale-110 transition-transform">
                       <Settings className="w-5 h-5" />
                     </div>
@@ -1733,15 +1727,15 @@ const Admin = () => {
             <div className="bg-white p-10 rounded-[3rem] border border-gold-primary/10 shadow-sm flex items-center justify-between relative overflow-hidden">
               <div className="relative z-10">
                 <h2 className="text-3xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-2">Live Inventory</h2>
-                <div className="w-16 h-1 bg-primary-red rounded-full"></div>
+                <div className="w-16 h-1 bg-primary-purple rounded-full"></div>
               </div>
               <div className="flex items-center gap-10 relative z-10">
                 <div className="text-right">
                   <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Health Score</p>
                   <p className="text-lg font-black text-emerald-600 tracking-widest">98.5%</p>
                 </div>
-                <div className="flex items-center space-x-4 bg-luxury-dark/5 px-6 py-4 rounded-[2rem] border border-gold-primary/10 shadow-inner">
-                  <Package className="h-6 w-6 text-primary-red" />
+                <div className="flex items-center space-x-4 bg-white/5 px-6 py-4 rounded-[2rem] border border-gold-primary/10 shadow-inner">
+                  <Package className="h-6 w-6 text-primary-purple" />
                   <span className="text-sm font-black text-text-primary uppercase tracking-widest">{state.products.length} Total SKUs</span>
                 </div>
               </div>
@@ -1752,7 +1746,7 @@ const Admin = () => {
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="min-w-full">
                   <thead>
-                    <tr className="bg-luxury-dark/5">
+                    <tr className="bg-white/5">
                       <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Item Specification</th>
                       <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Category</th>
                       <th className="px-10 py-6 text-center text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Quantity</th>
@@ -1762,10 +1756,10 @@ const Admin = () => {
                   </thead>
                   <tbody className="divide-y divide-gold-primary/5">
                     {state.products.map((product) => (
-                      <tr key={(product as any).id} className="hover:bg-luxury-dark/[0.02] transition-all duration-300 group">
+                      <tr key={(product as any).id} className="hover:bg-white/[0.02] transition-all duration-300 group">
                         <td className="px-10 py-6 whitespace-nowrap">
                           <div className="flex items-center gap-5">
-                            <div className="w-16 h-16 rounded-2xl bg-luxury-dark/5 overflow-hidden border border-gold-primary/10 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
+                            <div className="w-16 h-16 rounded-2xl bg-white/5 overflow-hidden border border-gold-primary/10 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
                               <img src={getImageUrl(product.image)} alt="" className="w-full h-full object-cover" />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                             </div>
@@ -1776,13 +1770,13 @@ const Admin = () => {
                           </div>
                         </td>
                         <td className="px-10 py-6 whitespace-nowrap">
-                          <span className="px-4 py-1.5 bg-luxury-dark/5 rounded-full text-[10px] font-black text-gold-primary border border-gold-primary/10 uppercase tracking-widest">
+                          <span className="px-4 py-1.5 bg-white/5 rounded-full text-[10px] font-black text-gold-primary border border-gold-primary/10 uppercase tracking-widest">
                             {product.category}
                           </span>
                         </td>
                         <td className="px-10 py-6 whitespace-nowrap text-center">
                           <div className="flex flex-col items-center gap-2">
-                            <span className={`text-2xl font-black luxury-serif ${((product as any).stock || 0) <= 5 ? 'text-primary-red' : 'text-text-primary'}`}>
+                            <span className={`text-2xl font-black luxury-serif ${((product as any).stock || 0) <= 5 ? 'text-primary-purple' : 'text-text-primary'}`}>
                               {(product as any).stock || 0}
                             </span>
                             <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden shadow-inner">
@@ -1830,7 +1824,7 @@ const Admin = () => {
               <div className="relative z-10">
                 <h2 className="text-3xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-2">Master Catalog</h2>
                 <div className="flex items-center gap-4">
-                  <span className="text-[11px] text-text-muted uppercase tracking-[0.3em] font-black">Collection Total: <span className="text-primary-red">{state.products.length}</span></span>
+                  <span className="text-[11px] text-text-muted uppercase tracking-[0.3em] font-black">Collection Total: <span className="text-primary-purple">{state.products.length}</span></span>
                   <div className="w-2 h-2 bg-gold-primary rounded-full animate-pulse"></div>
                 </div>
               </div>
@@ -1840,14 +1834,14 @@ const Admin = () => {
                   <input
                     type="text"
                     placeholder="Filter products..."
-                    className="bg-luxury-dark/5 border border-gold-primary/5 rounded-[2rem] py-3.5 pl-14 pr-8 text-[11px] font-black uppercase tracking-widest focus:ring-4 focus:ring-gold-primary/10 focus:bg-white w-80 transition-all outline-none"
+                    className="bg-white/5 border border-gold-primary/5 rounded-[2rem] py-3.5 pl-14 pr-8 text-[11px] font-black uppercase tracking-widest focus:ring-4 focus:ring-gold-primary/10 focus:bg-white w-80 transition-all outline-none"
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
                   />
                 </div>
                 <button 
                   onClick={() => setShowAddProduct(true)}
-                  className="bg-luxury-dark text-white px-8 py-4 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] hover:bg-gold-primary transition-all duration-500 shadow-xl shadow-luxury-dark/20 flex items-center gap-3"
+                  className="bg-white text-white px-8 py-4 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] hover:bg-gold-primary transition-all duration-500 shadow-xl shadow-luxury-dark/20 flex items-center gap-3"
                 >
                   <Plus className="w-4 h-4" /> New Acquisition
                 </button>
@@ -1861,7 +1855,7 @@ const Admin = () => {
                 <div className="flex justify-center mt-6">
                   <button 
                     onClick={() => setShowAddProduct(false)}
-                    className="text-[10px] font-black text-text-muted uppercase tracking-widest hover:text-primary-red transition-colors"
+                    className="text-[10px] font-black text-text-muted uppercase tracking-widest hover:text-primary-purple transition-colors"
                   >
                     Cancel Addition
                   </button>
@@ -1873,7 +1867,7 @@ const Admin = () => {
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="min-w-full">
                   <thead>
-                    <tr className="bg-luxury-dark/5">
+                    <tr className="bg-white/5">
                       <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Acquisition Detail</th>
                       <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Classification</th>
                       <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Valuation</th>
@@ -1885,7 +1879,7 @@ const Admin = () => {
                     {state.products.filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.category.toLowerCase().includes(productSearch.toLowerCase())).map((product, i) => (
                       <tr 
                         key={(product as any)._id || product.id || i}
-                        className={`hover:bg-luxury-dark/[0.02] transition-all duration-500 group cursor-move ${dragOverProductIndex === i ? 'border-t-2 border-gold-primary' : ''}`}
+                        className={`hover:bg-white/[0.02] transition-all duration-500 group cursor-move ${dragOverProductIndex === i ? 'border-t-2 border-gold-primary' : ''}`}
                         draggable
                         onDragStart={() => setDraggedProductIndex(i)}
                         onDragEnter={(e) => handleDragEnterProduct(e, i)}
@@ -1903,7 +1897,7 @@ const Admin = () => {
                               <div className="absolute inset-0 ring-1 ring-inset ring-white/20 rounded-2xl"></div>
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-sm font-black text-text-primary tracking-wide group-hover:text-primary-red transition-colors">{product.name}</span>
+                              <span className="text-sm font-black text-text-primary tracking-wide group-hover:text-primary-purple transition-colors">{product.name}</span>
                               <div className="flex gap-1.5 mt-2">
                                 {product.sizes?.map(s => (
                                   <span key={s} className="text-[8px] px-2 py-1 bg-gold-primary/5 border border-gold-primary/10 rounded-md text-gold-primary font-black uppercase tracking-tighter">{s}</span>
@@ -1949,7 +1943,7 @@ const Admin = () => {
                                   }
                                 }
                               }}
-                              className="p-3 bg-white border border-gold-primary/10 rounded-2xl text-text-muted hover:text-primary-red hover:border-primary-red/30 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1"
+                              className="p-3 bg-white border border-gold-primary/10 rounded-2xl text-text-muted hover:text-primary-purple hover:border-primary-purple/30 transition-all shadow-sm hover:shadow-xl hover:-translate-y-1"
                               title="Delete"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -1971,7 +1965,7 @@ const Admin = () => {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
               <div className="bg-white border border-gold-primary/10 p-8 rounded-3xl shadow-sm relative overflow-hidden group">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-primary-red/10 rounded-2xl flex items-center justify-center text-primary-red">
+                  <div className="w-12 h-12 bg-primary-purple/10 rounded-2xl flex items-center justify-center text-primary-purple">
                     <Video className="w-6 h-6" />
                   </div>
                   <div>
@@ -1979,10 +1973,10 @@ const Admin = () => {
                     <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest">Main Storefront Reels</p>
                   </div>
                 </div>
-                <div className="relative z-10 bg-luxury-dark/10 p-4 rounded-2xl border border-gold-primary/5">
+                <div className="relative z-10 bg-white/10 p-4 rounded-2xl border border-gold-primary/5">
                   <VideoManager />
                 </div>
-                <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary-red/5 rounded-full blur-2xl group-hover:bg-primary-red/10 transition-colors"></div>
+                <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary-purple/5 rounded-full blur-2xl group-hover:bg-primary-purple/10 transition-colors"></div>
               </div>
 
               <div className="bg-white border border-gold-primary/10 p-8 rounded-3xl shadow-sm relative overflow-hidden group">
@@ -1995,7 +1989,7 @@ const Admin = () => {
                     <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest">Promotions & Labels</p>
                   </div>
                 </div>
-                <div className="relative z-10 bg-luxury-dark/10 p-4 rounded-2xl border border-gold-primary/5">
+                <div className="relative z-10 bg-white/10 p-4 rounded-2xl border border-gold-primary/5">
                   <BannerManager />
                 </div>
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-gold-primary/5 rounded-full blur-2xl group-hover:bg-gold-primary/10 transition-colors"></div>
@@ -2012,7 +2006,7 @@ const Admin = () => {
                   <p className="text-[10px] text-text-muted font-bold uppercase tracking-widest">Manage promo codes</p>
                 </div>
               </div>
-              <div className="relative z-10 bg-luxury-dark/10 p-6 rounded-2xl border border-gold-primary/5">
+              <div className="relative z-10 bg-white/10 p-6 rounded-2xl border border-gold-primary/5">
                 <CouponManager />
               </div>
               <div className="absolute -right-8 -top-8 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-colors"></div>
@@ -2026,7 +2020,7 @@ const Admin = () => {
             <div className="bg-white p-8 rounded-3xl border border-gold-primary/10 shadow-sm flex items-center justify-between relative overflow-hidden">
               <div className="relative z-10">
                 <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Order Management</h2>
-                <div className="w-12 h-1 bg-primary-red rounded-full"></div>
+                <div className="w-12 h-1 bg-primary-purple rounded-full"></div>
               </div>
               <div className="flex items-center gap-6 relative z-10">
                 <div className="text-right">
@@ -2035,12 +2029,12 @@ const Admin = () => {
                     {orders.filter(o => o.status === 'Processing').length} Pending
                   </p>
                 </div>
-                <div className="flex items-center space-x-3 bg-luxury-dark/30 px-4 py-3 rounded-2xl border border-gold-primary/10 shadow-inner">
-                  <ShoppingBag className="h-5 w-5 text-primary-red" />
+                <div className="flex items-center space-x-3 bg-white/30 px-4 py-3 rounded-2xl border border-gold-primary/10 shadow-inner">
+                  <ShoppingBag className="h-5 w-5 text-primary-purple" />
                   <span className="text-xs font-bold text-text-primary uppercase tracking-wider">{orders.length} Total</span>
                 </div>
               </div>
-              <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-primary-red/5 rounded-full blur-2xl"></div>
+              <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-primary-purple/5 rounded-full blur-2xl"></div>
             </div>
 
             <div className="bg-white border border-gold-primary/10 rounded-3xl overflow-hidden shadow-sm">
@@ -2058,7 +2052,7 @@ const Admin = () => {
                   </thead>
                   <tbody className="divide-y divide-gold-primary/5">
                     {orders.map((order) => (
-                      <tr key={order._id} className="hover:bg-luxury-dark/10 transition-all duration-200 group">
+                      <tr key={order._id} className="hover:bg-white/10 transition-all duration-200 group">
                         <td className="px-8 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="text-sm font-bold text-text-primary tabular-nums">
@@ -2128,7 +2122,7 @@ const Admin = () => {
                                   console.error(err);
                                 }
                               }}
-                              className="text-[10px] bg-luxury-dark/5 border border-gold-primary/10 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-gold-primary/10 font-black uppercase tracking-[0.2em] cursor-pointer hover:bg-white transition-all"
+                              className="text-[10px] bg-white/5 border border-gold-primary/10 rounded-xl px-4 py-3 outline-none focus:ring-4 focus:ring-gold-primary/10 font-black uppercase tracking-[0.2em] cursor-pointer hover:bg-white transition-all"
                             >
                               <option value="Processing">Processing</option>
                               <option value="Shipped">Shipped</option>
@@ -2154,7 +2148,7 @@ const Admin = () => {
           <div className="space-y-10">
             <div className="bg-white p-12 rounded-[3.5rem] border border-gold-primary/10 shadow-sm relative overflow-hidden group">
               <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto">
-                <div className="w-20 h-20 bg-luxury-dark text-gold-primary rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl group-hover:rotate-12 transition-transform duration-700">
+                <div className="w-20 h-20 bg-white text-gold-primary rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl group-hover:rotate-12 transition-transform duration-700">
                   <Users className="w-10 h-10" />
                 </div>
                 <h2 className="text-4xl font-black text-text-primary luxury-serif tracking-[0.1em] uppercase mb-4">Elite Clientele</h2>
@@ -2167,7 +2161,7 @@ const Admin = () => {
               
               {/* Refined Background Elements */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.05),transparent)] pointer-events-none"></div>
-              <div className="absolute top-0 right-0 w-96 h-96 bg-primary-red/[0.02] rounded-full blur-[120px]"></div>
+              <div className="absolute top-0 right-0 w-96 h-96 bg-primary-purple/[0.02] rounded-full blur-[120px]"></div>
               <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold-primary/[0.02] rounded-full blur-[120px]"></div>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-luxury-dark py-20">
+    <div className="min-h-screen bg-white py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
         <div className="prose max-w-none text-text-primary space-y-8 font-medium">
           {/* Who we are section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider font-bold">Who We Are</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider font-bold">Who We Are</h2>
             <p className="text-text-secondary">
               GUL FASHION is a luxury clothing brand committed to protecting your privacy. 
               Our website address is available upon request.
@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
 
           {/* Comments section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider font-bold">Comments</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider font-bold">Comments</h2>
             <p className="mb-4 text-text-secondary">
               When visitors leave comments on the site we collect the data shown in the comments form, 
               and also the visitor's IP address and browser user agent string to help spam detection.
@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
             <p className="text-text-secondary">
               An anonymized string created from your email address (also called a hash) may be provided 
               to the Gravatar service to see if you are using it. The Gravatar service privacy policy is 
-              available at <a href="https://automattic.com/privacy/" className="text-primary-red hover:text-text-primary transition-colors underline">https://automattic.com/privacy/</a>. 
+              available at <a href="https://automattic.com/privacy/" className="text-primary-purple hover:text-text-primary transition-colors underline">https://automattic.com/privacy/</a>. 
               After approval of your comment, your profile picture is visible to the public in the context 
               of your comment.
             </p>
@@ -136,21 +136,21 @@ const PrivacyPolicy = () => {
 
           {/* Contact section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm relative overflow-hidden group">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider font-black">Contact Us</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider font-black">Contact Us</h2>
             <p className="text-text-secondary font-medium leading-relaxed mb-8">
               If you have any questions about our privacy policy or how we handle your data, please contact us at:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-text-primary font-bold tracking-widest uppercase text-[10px]">
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-red mb-1">EMAIL</p>
-                  <p className="text-sm">GUL FASHIONfashion@gmail.com</p>
+                  <p className="text-primary-purple mb-1">EMAIL</p>
+                  <p className="text-sm">gul.fashion.jaipur@gmail.com</p>
                </div>
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-red mb-1">PHONE</p>
+                  <p className="text-primary-purple mb-1">PHONE</p>
                   <p className="text-sm">+91 78779 37350</p>
                </div>
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-red mb-1">ADDRESS</p>
+                  <p className="text-primary-purple mb-1">ADDRESS</p>
                   <p className="text-sm">Pahadiya chowk, Jaipur 302002</p>
                </div>
             </div>

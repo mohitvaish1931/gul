@@ -72,7 +72,7 @@ const ShowcaseVideos: React.FC = () => {
             {state.user && state.user.email === 'admin@GUL FASHION.com' && (
               <button 
                 onClick={() => setShowInput(!showInput)} 
-                className="px-6 py-2.5 bg-primary-red text-white rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-lg hover:shadow-primary-red/20"
+                className="px-6 py-2.5 bg-primary-purple text-white rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-lg hover:shadow-primary-purple/20"
               >
                 {showInput ? 'CLOSE' : 'ADD VIDEO'}
               </button>
@@ -80,14 +80,14 @@ const ShowcaseVideos: React.FC = () => {
             <div className="hidden sm:flex gap-4">
               <button
                 onClick={() => scroll('left')}
-                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm"
+                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-purple hover:text-white hover:border-primary-purple transition-all duration-300 shadow-sm"
                 aria-label="Scroll left"
               >
                 <ChevronLeft className="w-6 h-6 mx-auto" />
               </button>
               <button
                 onClick={() => scroll('right')}
-                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-red hover:text-white hover:border-primary-red transition-all duration-300 shadow-sm"
+                className="w-12 h-12 rounded-full bg-white border border-gold-primary/20 text-text-primary hover:bg-primary-purple hover:text-white hover:border-primary-purple transition-all duration-300 shadow-sm"
                 aria-label="Scroll right"
               >
                 <ChevronRight className="w-6 h-6 mx-auto" />
@@ -104,13 +104,13 @@ const ShowcaseVideos: React.FC = () => {
                   value={title} 
                   onChange={e => setTitle(e.target.value)} 
                   placeholder="Video Title" 
-                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-red transition-all duration-300" 
+                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-purple transition-all duration-300" 
                 />
                 <input 
                   value={url} 
                   onChange={e => setUrl(e.target.value)} 
                   placeholder="Video URL (mp4)" 
-                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-red transition-all duration-300" 
+                  className="px-6 py-3 bg-luxury-dark border border-gold-primary/20 text-text-primary rounded-full placeholder-text-muted outline-none focus:border-primary-purple transition-all duration-300" 
                 />
                 <div className="flex items-center gap-4">
                   <input 
@@ -121,7 +121,7 @@ const ShowcaseVideos: React.FC = () => {
                   />
                   <button 
                     onClick={addVideo} 
-                    className="bg-primary-red text-white px-8 py-3 rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-md"
+                    className="bg-primary-purple text-white px-8 py-3 rounded-full text-xs tracking-widest luxury-serif hover:bg-text-primary transition-all duration-300 shadow-md"
                   >
                     ADD
                   </button>
@@ -139,7 +139,7 @@ const ShowcaseVideos: React.FC = () => {
           {items.map((item) => (
             <div
               key={(item as any)._id || item.id}
-              className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] snap-start bg-white border border-gold-primary/20 rounded-3xl overflow-hidden relative shadow-lg group hover:border-primary-red/30 transition-all duration-500"
+              className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] snap-start bg-white border border-gold-primary/20 rounded-3xl overflow-hidden relative shadow-lg group hover:border-primary-purple/30 transition-all duration-500"
             >
               <Link to="/products">
                 {item.type === 'video' ? (
@@ -159,7 +159,7 @@ const ShowcaseVideos: React.FC = () => {
                   />
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-red/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-purple/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="absolute left-6 bottom-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                   <p className="text-xs luxury-serif tracking-[0.2em] bg-white/90 backdrop-blur-md text-text-primary px-6 py-2.5 rounded-full border border-gold-primary/30 shadow-xl uppercase font-bold">

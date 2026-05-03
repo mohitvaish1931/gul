@@ -6,19 +6,19 @@ const AboutUs = () => {
     title: 'About Us - GUL FASHION',
     description: 'Discover the story of GUL FASHION. Our heritage, craftsmanship, and commitment to luxury clothing.',
     keywords: 'about us, brand story, clothing heritage, craftsmanship, GUL FASHION',
-    url: 'https://GUL FASHIONjewles.com/about-us',
+    url: 'https://gulfashionjaipur.com/about-us',
     type: 'website'
   });
 
   return (
-    <div className="min-h-screen bg-luxury-dark py-20">
+    <div className="min-h-screen bg-white py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
           <h1 className="luxury-serif text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-gold-primary to-rose-gold mb-6">
             Our Story
           </h1>
-          <p className="text-primary-red text-xl italic font-bold luxury-serif">
+          <p className="text-primary-purple text-xl italic font-bold luxury-serif">
             "Timeless elegance, modern craftsmanship."
           </p>
         </div>
@@ -27,7 +27,7 @@ const AboutUs = () => {
         <div className="prose max-w-none text-text-primary space-y-12">
           {/* Heritage Section */}
           <section className="bg-white/50 p-8 rounded-2xl border border-gold-primary/30 backdrop-blur-sm shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">The Legacy of GUL FASHION</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">The Legacy of GUL FASHION</h2>
             <p className="leading-relaxed text-black font-medium">
               Founded on the principles of exquisite artistry and uncompromising quality, GUL FASHION has emerged as a beacon of luxury in the world of high clothing. Our journey began with a simple vision: to create pieces that don't just adorn, but tell a story of heritage and sophistication.
             </p>
@@ -38,13 +38,13 @@ const AboutUs = () => {
 
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-12">
             <div>
-              <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Meticulous Craftsmanship</h2>
+              <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">Meticulous Craftsmanship</h2>
               <p className="leading-relaxed text-black font-medium">
                 We believe that true luxury lies in the details. From the initial hand-drawn sketch to the final polish, each creation undergoes a rigorous process of quality control.
               </p>
               <ul className="mt-6 space-y-3">
                 <li className="flex items-center gap-3">
-                  <span className="text-primary-red">✦</span>
+                  <span className="text-primary-purple">✦</span>
                   <span className="text-text-primary font-bold">Premium 18k Gold PVD Finish</span>
                 </li>
                 <li className="flex items-center gap-3">
@@ -52,7 +52,7 @@ const AboutUs = () => {
                   <span className="text-text-primary font-bold">High-Grade Surgical Premium Silk Base</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="text-primary-red">✦</span>
+                  <span className="text-primary-purple">✦</span>
                   <span className="text-text-primary font-bold">Hand-Selected Round-Cut Crystals</span>
                 </li>
               </ul>
@@ -67,7 +67,7 @@ const AboutUs = () => {
           </section>
 
           <section className="text-center py-12 border-y border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Our Mission</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">Our Mission</h2>
             <p className="text-xl text-text-primary max-w-2xl mx-auto leading-relaxed italic luxury-serif">
               To inspire moments of happiness and celebration by providing exceptional clothing that resonates with the unique personality of every wearer.
             </p>

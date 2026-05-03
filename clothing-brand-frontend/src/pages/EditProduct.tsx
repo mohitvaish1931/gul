@@ -5,11 +5,8 @@ import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
 const SUBCATEGORIES: Record<string, string[]> = {
-  Sarees: ['Silk', 'Chiffon', 'Georgette', 'Cotton', 'Bandhani', 'Kanjivaram'],
-  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style'],
   'Kurta Sets': ['Daily Wear', 'Festive', 'Hand-embroidered', 'Printed'],
-  Lehengas: ['Bridal', 'Party Wear', 'Light Lehenga', 'Floral'],
-  Dresses: ['Maxi', 'Midi', 'Fusion', 'Ethnic Dress']
+  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style']
 };
 
 const EditProduct = () => {
@@ -275,13 +272,13 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-luxury-dark py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate('/admin')}
-            className="flex items-center space-x-2 text-gold-primary hover:text-primary-red transition-all mb-6 font-bold tracking-widest text-xs uppercase"
+            className="flex items-center space-x-2 text-gold-primary hover:text-primary-purple transition-all mb-6 font-bold tracking-widest text-xs uppercase"
           >
             <ChevronLeft className="h-4 w-4" />
             <span>BACK TO ADMIN</span>
@@ -289,7 +286,7 @@ const EditProduct = () => {
           <h1 className="text-4xl font-black text-text-primary luxury-serif tracking-widest uppercase">
             Edit Product
           </h1>
-          <div className="w-16 h-1 bg-primary-red mt-4 mb-2"></div>
+          <div className="w-16 h-1 bg-primary-purple mt-4 mb-2"></div>
           <p className="text-text-secondary font-medium italic">{form.name || 'Loading...'}</p>
         </div>
 
@@ -321,7 +318,7 @@ const EditProduct = () => {
                   type="text"
                   value={form.name || ''}
                   onChange={e => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="Enter product name"
                 />
               </div>
@@ -330,14 +327,11 @@ const EditProduct = () => {
                 <select
                   value={form.category || ''}
                   onChange={e => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 >
                   <option value="">Select category</option>
-                  <option value="Sarees">Sarees</option>
-                  <option value="Suits">Suits</option>
                   <option value="Kurta Sets">Kurta Sets</option>
-                  <option value="Lehengas">Lehengas</option>
-                  <option value="Dresses">Dresses</option>
+                  <option value="Suits">Suits</option>
                 </select>
               </div>
               <div>
@@ -346,7 +340,7 @@ const EditProduct = () => {
                   type="number"
                   value={form.displayOrder || 0}
                   onChange={e => setForm({ ...form, displayOrder: parseInt(e.target.value, 10) || 0 })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="0"
                 />
               </div>
@@ -356,7 +350,7 @@ const EditProduct = () => {
                   <select 
                     value={form.subcategory || ''} 
                     onChange={e => setForm({ ...form, subcategory: e.target.value })}
-                    className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   >
                     <option value="">Select subcategory</option>
                     {SUBCATEGORIES[form.category].map(sub => (
@@ -381,7 +375,7 @@ const EditProduct = () => {
                   type="number"
                   value={form.price || 0}
                   onChange={e => setForm({ ...form, price: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="0"
                 />
               </div>
@@ -391,7 +385,7 @@ const EditProduct = () => {
                   type="number"
                   value={form.originalPrice || ''}
                   onChange={e => setForm({ ...form, originalPrice: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="0"
                 />
               </div>
@@ -408,7 +402,7 @@ const EditProduct = () => {
                       setForm({ ...form, stock: val === '' ? '' : parseInt(val, 10) });
                     }
                   }}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="Enter stock quantity"
                 />
               </div>
@@ -418,7 +412,7 @@ const EditProduct = () => {
                   type="text"
                   value={form.sizes || ''}
                   onChange={e => setForm({ ...form, sizes: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="5, 6, 7"
                 />
               </div>
@@ -428,7 +422,7 @@ const EditProduct = () => {
                   type="text"
                   value={form.shapes || ''}
                   onChange={e => setForm({ ...form, shapes: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="Heart, Round, Oval"
                 />
               </div>
@@ -438,7 +432,7 @@ const EditProduct = () => {
                   type="text"
                   value={form.colors || ''}
                   onChange={e => setForm({ ...form, colors: e.target.value })}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                   placeholder="Gold, Rose Gold, Silver"
                 />
               </div>
@@ -452,7 +446,7 @@ const EditProduct = () => {
               value={form.description || ''}
               onChange={e => setForm({ ...form, description: e.target.value })}
               rows={5}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
               placeholder="Enter product description"
             />
           </div>
@@ -465,7 +459,7 @@ const EditProduct = () => {
                 type="text"
                 value={form.dimensions || ''}
                 onChange={e => setForm({ ...form, dimensions: e.target.value })}
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 placeholder="Length x Width x Height"
               />
             </div>
@@ -475,7 +469,7 @@ const EditProduct = () => {
                 type="text"
                 value={form.weight || ''}
                 onChange={e => setForm({ ...form, weight: e.target.value })}
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 placeholder="e.g. 50g"
               />
             </div>
@@ -489,7 +483,7 @@ const EditProduct = () => {
                 value={form.materials || ''}
                 onChange={e => setForm({ ...form, materials: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 placeholder="Premium Silk&#10;18k Gold Finish"
               />
             </div>
@@ -499,7 +493,7 @@ const EditProduct = () => {
                 value={form.specifications || ''}
                 onChange={e => setForm({ ...form, specifications: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 placeholder="18k Gold Finish&#10;Waterproof&#10;Hypoallergenic"
               />
             </div>
@@ -509,7 +503,7 @@ const EditProduct = () => {
                 value={form.careInstructions || ''}
                 onChange={e => setForm({ ...form, careInstructions: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 placeholder="Waterproof and Sweatproof&#10;Chlorine and Sea water safe"
               />
             </div>
@@ -522,7 +516,7 @@ const EditProduct = () => {
               Images
             </h3>
             {form.images && form.images.length > 0 && (
-              <div className="mb-6 bg-luxury-dark/5 p-4 rounded-xl border border-gold-primary/10">
+              <div className="mb-6 bg-white/5 p-4 rounded-xl border border-gold-primary/10">
                 <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Images</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {form.images.map((img: string, idx: number) => (
@@ -539,7 +533,7 @@ const EditProduct = () => {
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
+              className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
             />
           
             {previewImages.length > 0 && (
@@ -563,7 +557,7 @@ const EditProduct = () => {
               Videos
             </h3>
             {form.videos && form.videos.length > 0 && (
-              <div className="mb-6 bg-luxury-dark/5 p-4 rounded-xl border border-gold-primary/10">
+              <div className="mb-6 bg-white/5 p-4 rounded-xl border border-gold-primary/10">
                 <p className="text-[10px] font-bold text-text-muted mb-3 uppercase tracking-widest">Current Videos</p>
                 <div className="space-y-2">
                   {form.videos.map((vid: string, idx: number) => (
@@ -583,7 +577,7 @@ const EditProduct = () => {
                   multiple
                   accept="video/*"
                   onChange={handleVideoChange}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-gold-primary/20 file:text-gold-primary hover:file:bg-gold-primary/30"
                 />
               </div>
               <div className="space-y-4">
@@ -597,7 +591,7 @@ const EditProduct = () => {
                     newUrls[0] = e.target.value;
                     setVideoUrls(newUrls);
                   }}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 />
                 <input
                   type="text"
@@ -608,7 +602,7 @@ const EditProduct = () => {
                     newUrls[1] = e.target.value;
                     setVideoUrls(newUrls);
                   }}
-                  className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-purple/20 outline-none transition-all"
                 />
               </div>
             </div>
@@ -620,16 +614,16 @@ const EditProduct = () => {
                 type="checkbox"
                 checked={!!form.soldOut}
                 onChange={e => setForm({ ...form, soldOut: e.target.checked })}
-                className="w-5 h-5 rounded border-gold-primary/30 text-primary-red focus:ring-primary-red/20 transition-all cursor-pointer"
+                className="w-5 h-5 rounded border-gold-primary/30 text-primary-purple focus:ring-primary-purple/20 transition-all cursor-pointer"
               />
-              <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-red transition-colors">Mark as Sold Out</span>
+              <span className="text-[10px] font-black tracking-widest uppercase group-hover:text-primary-purple transition-colors">Mark as Sold Out</span>
             </label>
 
             <div className="flex space-x-4">
               <button
                 type="button"
                 onClick={() => navigate('/admin')}
-                className="px-8 py-3 bg-white text-text-primary rounded-xl border border-gold-primary/20 hover:bg-luxury-dark/5 transition-all text-[10px] font-black uppercase tracking-widest"
+                className="px-8 py-3 bg-white text-text-primary rounded-xl border border-gold-primary/20 hover:bg-white/5 transition-all text-[10px] font-black uppercase tracking-widest"
               >
                 Cancel
               </button>

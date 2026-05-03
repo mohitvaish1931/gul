@@ -29,7 +29,7 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-luxury-dark py-20">
+    <div className="min-h-screen bg-white py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
@@ -46,10 +46,10 @@ const FAQ = () => {
           {faqs.map((faq, index) => (
             <div 
               key={index} 
-              className="bg-white/60 backdrop-blur-md border border-gold-primary/30 p-8 rounded-2xl hover:border-primary-red/40 transition-all duration-300 shadow-sm"
+              className="bg-white/60 backdrop-blur-md border border-gold-primary/30 p-8 rounded-2xl hover:border-primary-purple/40 transition-all duration-300 shadow-sm"
             >
               <h3 className="luxury-serif text-xl text-text-primary mb-4 flex items-start gap-4 font-bold">
-                <span className="bg-primary-red text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm shadow-sm font-bold">Q</span>
+                <span className="bg-primary-purple text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm shadow-sm font-bold">Q</span>
                 {faq.question}
               </h3>
               <div className="text-text-secondary leading-relaxed flex items-start gap-4 font-medium">
@@ -61,14 +61,14 @@ const FAQ = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 bg-luxury-dark/5 p-12 rounded-3xl border border-gold-primary/30 text-center shadow-lg backdrop-blur-sm">
+        <div className="mt-16 bg-white/5 p-12 rounded-3xl border border-gold-primary/30 text-center shadow-lg backdrop-blur-sm">
           <h2 className="luxury-serif text-3xl text-text-primary mb-4 font-bold">Still have questions?</h2>
           <p className="text-text-primary/70 mb-8 max-w-xl mx-auto font-bold">
             Our luxury consultants are available to assist you with any inquiries you may have.
           </p>
           <a 
             href="/contact" 
-            className="inline-block bg-text-primary text-white px-10 py-4 rounded-xl font-black tracking-widest text-sm hover:bg-primary-red transition-all duration-300 shadow-xl"
+            className="inline-block bg-text-primary text-white px-10 py-4 rounded-xl font-black tracking-widest text-sm hover:bg-primary-purple transition-all duration-300 shadow-xl"
           >
             CONTACT CUSTOMER CARE
           </a>

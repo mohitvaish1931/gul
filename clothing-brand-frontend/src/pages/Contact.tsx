@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 
 const Contact = () => {
   useSEO({
-    title: 'Contact Us - GUL FASHION Premium Clothing',
-    description: 'Get in touch with GUL FASHION. We\'re here to help with your clothing inquiries, orders, and customer service.',
-    keywords: 'contact us, customer service, clothing support, GUL FASHION contact',
-    url: 'https://GUL FASHIONjewles.com/contact',
+    title: 'Contact Us - GUL FASHION Jaipur',
+    description: 'Get in touch with GUL FASHION. We\'re here to help with your clothing inquiries, orders, and styling consultations.',
+    keywords: 'contact gul fashion, customer support, jaipur ethnic wear contact',
+    url: 'https://gulfashion.com/contact',
     type: 'website'
   });
 
@@ -27,209 +27,147 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log('Form submitted:', formData);
-    // Reset form
     setFormData({ name: '', email: '', subject: '', message: '' });
-    alert('Thank you for your message! We will get back to you soon.');
+    alert('Thank you for reaching out! Our styling concierge will contact you shortly.');
   };
 
   return (
-    <div className="min-h-screen bg-luxury-dark">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-wine/20 via-teal-luxury/10 to-primary-wine/20 py-16 shadow-[inset_0_1px_0_rgba(255,215,0,0.1)]">
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-black text-text-primary mb-6 luxury-serif uppercase tracking-widest drop-shadow-sm">CONTACT US</h1>
-
-          <p className="text-xl text-primary-red leading-relaxed font-bold italic luxury-serif">
-            We'd love to hear from you. Get in touch with our team for any questions,
-            custom orders, or clothing consultations.
+      <div className="bg-purple-50/50 py-24 border-b border-purple-100">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <span className="small-gold-tag">GET IN TOUCH</span>
+          <h1 className="text-5xl md:text-6xl font-serif text-purple-950 mb-6 italic">How can we help?</h1>
+          <p className="text-xl text-purple-800/70 max-w-2xl mx-auto font-medium">
+            Whether it's a sizing query or a custom design request, our team in Jaipur is here to assist you.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+          
           {/* Contact Information */}
-          <div className="space-y-8">
+          <div className="space-y-12">
             <div>
-              <h2 className="text-3xl font-black text-primary-red mb-6 luxury-serif uppercase tracking-widest">Get In Touch</h2>
-              <p className="text-text-secondary text-lg leading-relaxed mb-8 font-medium">
-                Whether you have questions about our clothing collection, need assistance with an order,
-                or want to discuss custom designs, our team is here to help. Reach out to us through
-                any of the channels below.
+              <h2 className="text-3xl font-serif text-purple-950 mb-6">Concierge Services</h2>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Experience personalized assistance for all your ethnic wear needs. We offer virtual styling, custom tailoring, and detailed product consultations.
               </p>
             </div>
 
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-gold-primary to-gold-soft p-3 rounded-lg shadow-glow-gold">
-
-                  <Mail className="h-6 w-6 text-luxury-dark" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="p-6 bg-white border border-purple-100 rounded-2xl hover:shadow-xl hover:shadow-purple-500/5 transition-all">
+                <div className="w-12 h-12 bg-purple-100 text-purple-900 rounded-xl flex items-center justify-center mb-4">
+                  <Mail size={24} />
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-1">Email Us</h3>
-                  <p className="text-text-secondary uppercase tracking-widest text-sm font-medium">GUL FASHIONfashion@gmail.com</p>
-                </div>
+                <h3 className="font-bold text-purple-950 mb-1">Email Us</h3>
+                <p className="text-gray-600 text-sm break-all">gul.fashion.jaipur@gmail.com</p>
               </div>
 
-              <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-teal-luxury to-gold-primary p-3 rounded-lg shadow-glow-emerald">
-
-                  <Phone className="h-6 w-6 text-platinum" />
+              <div className="p-6 bg-white border border-purple-100 rounded-2xl hover:shadow-xl hover:shadow-purple-500/5 transition-all">
+                <div className="w-12 h-12 bg-purple-100 text-purple-900 rounded-xl flex items-center justify-center mb-4">
+                  <Phone size={24} />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-text-primary mb-1 uppercase tracking-widest">Phone</h3>
-                  <p className="text-text-secondary font-bold">+91 78779 37350</p>
-                  <p className="text-text-secondary font-bold">+91 80940 51710</p>
-                </div>
+                <h3 className="font-bold text-purple-950 mb-1">Call Us</h3>
+                <p className="text-gray-600 text-sm">+91 78779 37350</p>
               </div>
 
-              <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-primary-wine to-gold-soft p-3 rounded-lg shadow-glow-ruby">
-
-                  <MapPin className="h-6 w-6 text-platinum" />
+              <div className="p-6 bg-white border border-purple-100 rounded-2xl hover:shadow-xl hover:shadow-purple-500/5 transition-all">
+                <div className="w-12 h-12 bg-purple-100 text-purple-900 rounded-xl flex items-center justify-center mb-4">
+                  <MapPin size={24} />
                 </div>
-                <div>
-                  <h3 className="text-lg font-black text-primary-red mb-1 uppercase tracking-widest">Visit Our Store</h3>
-                  <p className="text-text-secondary font-bold">
-                    455, four gate out side mandhi khatikan<br />
-                    Pahadiya chowk, near chota shiv tample<br />
-                    Pincode- 302002
-                  </p>
-                </div>
+                <h3 className="font-bold text-purple-950 mb-1">Our Studio</h3>
+                <p className="text-gray-600 text-sm">455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002</p>
               </div>
 
-              <div className="flex items-start space-x-4 group">
-                <div className="bg-gradient-to-r from-teal-luxury to-gold-primary p-3 rounded-lg shadow-glow-emerald">
-
-                  <Clock className="h-6 w-6 text-platinum" />
+              <div className="p-6 bg-white border border-purple-100 rounded-2xl hover:shadow-xl hover:shadow-purple-500/5 transition-all">
+                <div className="w-12 h-12 bg-purple-100 text-purple-900 rounded-xl flex items-center justify-center mb-4">
+                  <MessageCircle size={24} />
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-teal-luxury mb-1">Business Hours</h3>
-
-                  <p className="text-text-secondary font-medium">
-                    Monday - Saturday: 10:00 AM - 8:00 PM<br />
-                    Sunday: 11:00 AM - 6:00 PM
-                  </p>
-                </div>
+                <h3 className="font-bold text-purple-950 mb-1">WhatsApp</h3>
+                <p className="text-gray-600 text-sm">Instant styling support available.</p>
               </div>
             </div>
 
-            {/* Services */}
-            <div className="bg-white/30 border border-gold-primary/20 p-6 rounded-2xl shadow-sm">
-              <h3 className="text-xl font-black text-primary-red mb-4 luxury-serif uppercase tracking-widest">Our Services</h3>
-              <ul className="space-y-2 text-text-primary font-medium">
-                <li className="flex items-center space-x-2">
-                  <span className="text-primary-red">✨</span>
-                  <span>Custom Clothing Design</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="text-gold-primary">✨</span>
-                  <span>Clothing Repair & Maintenance</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="text-primary-red">✨</span>
-                  <span>Professional Resizing</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="text-gold-primary">✨</span>
-                  <span>Gift Wrapping Services</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="text-primary-red">✨</span>
-                  <span>Clothing Authentication</span>
-                </li>
-              </ul>
+            <div className="p-8 bg-purple-900 text-white rounded-3xl shadow-2xl">
+              <h3 className="text-2xl font-serif mb-4">Visit Us in Jaipur</h3>
+              <p className="opacity-80 mb-6">Experience our collections in person at our flagship Jaipur studio.</p>
+              <div className="space-y-2 opacity-90 text-sm">
+                <p className="flex justify-between border-b border-white/10 pb-2"><span>Monday - Saturday</span> <span>10:00 AM - 8:00 PM</span></p>
+                <p className="flex justify-between"><span>Sunday</span> <span>11:00 AM - 6:00 PM</span></p>
+              </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white/40 border border-gold-primary/20 p-8 rounded-2xl shadow-sm">
-            <h2 className="text-2xl font-black text-primary-red mb-6 luxury-serif uppercase tracking-widest">Send Us a Message</h2>
+          <div className="bg-white border border-purple-100 p-10 rounded-[2.5rem] shadow-sm relative">
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-purple-50 rounded-full blur-3xl opacity-50"></div>
+            <h2 className="text-3xl font-serif text-purple-950 mb-8">Send a Message</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
-                    Full Name *
-                  </label>
+                  <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Your Name</label>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
-                    placeholder="Your full name"
+                    className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                    placeholder="E.g. Anjali Sharma"
                     required
                   />
                 </div>
-
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
-                    Email Address *
-                  </label>
+                  <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Email Address</label>
                   <input
                     type="email"
-                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
-                    placeholder="your.email@example.com"
+                    className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                    placeholder="email@example.com"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
-                  Subject *
-                </label>
+                <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Subject</label>
                 <input
                   type="text"
-                  id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none transition-all duration-300"
-                  placeholder="What is this regarding?"
+                  className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+                  placeholder="What can we help you with?"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-text-primary mb-2 luxury-serif">
-                  Message *
-                </label>
+                <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Your Message</label>
                 <textarea
-                  id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-4 py-3 bg-white/50 border border-gold-primary/30 rounded-lg text-text-primary placeholder-text-muted focus:ring-2 focus:ring-primary-red/50 focus:border-transparent outline-none resize-none transition-all duration-300"
-                  placeholder="Tell us how we can help you..."
+                  rows={5}
+                  className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none resize-none transition-all"
+                  placeholder="Tell us about your requirements..."
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full btn-premium-gold text-luxury-dark py-3 px-6 rounded-lg font-medium hover:shadow-glow transition-all duration-300 flex items-center justify-center space-x-2"
+                className="w-full bg-purple-900 text-white py-5 px-8 rounded-xl font-bold uppercase tracking-[0.2em] hover:bg-purple-800 transition-all shadow-xl shadow-purple-900/10 flex items-center justify-center space-x-3"
               >
-                <Send className="h-5 w-5" />
                 <span>Send Message</span>
+                <Send size={18} />
               </button>
             </form>
-
-            <div className="mt-8 p-4 bg-primary-red/10 border-l-4 border-primary-red rounded-r-lg">
-              <p className="text-sm text-text-primary font-bold">
-                <strong className="text-primary-red">Response Time:</strong> We typically respond to all inquiries within 24 hours during business days.
-              </p>
-            </div>
           </div>
         </div>
       </div>

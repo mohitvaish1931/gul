@@ -54,13 +54,13 @@
 }
 
 .product-name:hover {
-  color: var(--primary-color);
+  color: var(--primary-purple);
 }
 
 .product-price {
-  color: var(--secondary-color);
-  font-weight: 600;
-  font-size: 1.1rem;
+  color: var(--accent-purple);
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 
 /* Product Detail Screen */
@@ -82,10 +82,10 @@
 }
 
 .error-box {
-  background-color: #ffeaea;
-  color: #d11a2a;
+  background-color: #f8f0ff;
+  color: var(--primary-purple);
   padding: 15px;
-  border: 1px solid #d11a2a;
+  border: 1px solid #efe4ff;
   border-radius: 4px;
   margin: 20px 0;
 }

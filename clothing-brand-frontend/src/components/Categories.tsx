@@ -4,55 +4,29 @@ import './Categories.css';
 const Categories = () => {
   return (
     <section className="section categories-masonry-section" style={{padding: '0'}}>
-      <div className="categories-masonry">
+      <div className="categories-masonry-dual">
         
-        {/* Left Large Column */}
-        <Link to="/shop?keyword=Sarees" className="cat-card cat-sarees">
-          <img src="/images/saree-category.png" alt="Sarees" className="cat-bg-img" />
-          <div className="cat-overlay"></div>
-          <div className="cat-text-content">
-            <h3 className="cat-title font-serif">Sarees</h3>
-            <span className="cat-subtitle">400+ STYLES</span>
+        {/* Left: Kurta Sets */}
+        <Link to="/shop?keyword=Kurta" className="cat-card-purple">
+          <img src="/images/kurta-category.png" alt="Kurta Sets" className="cat-bg-img" />
+          <div className="cat-overlay-purple"></div>
+          <div className="cat-text-content-purple">
+            <span className="cat-tag-purple">THE ETHNIC EDIT</span>
+            <h3 className="cat-title-purple font-serif">Kurta Sets</h3>
+            <p className="cat-desc-purple">Timeless craftsmanship meets modern silhouettes.</p>
+            <span className="cat-link-purple">EXPLORE COLLECTION</span>
           </div>
         </Link>
 
-        {/* Right Top Left */}
-        <Link to="/shop?keyword=Lehengas" className="cat-card cat-lehengas">
-          <img src="/images/bridal-edit.png" alt="Lehengas" className="cat-bg-img" />
-          <div className="cat-overlay"></div>
-          <div className="cat-text-content">
-            <h3 className="cat-title font-serif">Lehengas</h3>
-            <span className="cat-subtitle">200+ STYLES</span>
-          </div>
-        </Link>
-
-        {/* Right Top Right */}
-        <Link to="/shop?keyword=Suits" className="cat-card cat-suits">
+        {/* Right: Suits */}
+        <Link to="/shop?keyword=Suit" className="cat-card-purple">
           <img src="/images/suits-category.png" alt="Suits" className="cat-bg-img" />
-          <div className="cat-overlay"></div>
-          <div className="cat-text-content">
-            <h3 className="cat-title font-serif">Suits</h3>
-            <span className="cat-subtitle">500+ STYLES</span>
-          </div>
-        </Link>
-
-        {/* Right Bottom Left */}
-        <Link to="/shop?keyword=Indowestern" className="cat-card cat-indowestern">
-          <img src="/images/indowestern-category.png" alt="Indowestern" className="cat-bg-img" />
-          <div className="cat-overlay"></div>
-          <div className="cat-text-content">
-            <h3 className="cat-title font-serif">Indowestern</h3>
-            <span className="cat-subtitle">150+ STYLES</span>
-          </div>
-        </Link>
-
-        {/* Right Bottom Right */}
-        <Link to="/shop?keyword=Kurtas" className="cat-card cat-kurtas">
-          <img src="/images/kurta-category.png" alt="Kurtas" className="cat-bg-img" />
-          <div className="cat-overlay"></div>
-          <div className="cat-text-content">
-            <h3 className="cat-title font-serif">Kurtas</h3>
-            <span className="cat-subtitle">150+ STYLES</span>
+          <div className="cat-overlay-purple"></div>
+          <div className="cat-text-content-purple">
+            <span className="cat-tag-purple">DESIGNER FAVORITES</span>
+            <h3 className="cat-title-purple font-serif">Suits</h3>
+            <p className="cat-desc-purple">Regal elegance for every precious occasion.</p>
+            <span className="cat-link-purple">EXPLORE COLLECTION</span>
           </div>
         </Link>
 

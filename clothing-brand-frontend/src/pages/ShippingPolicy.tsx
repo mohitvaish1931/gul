@@ -2,7 +2,7 @@
 
 const ShippingPolicy = () => {
   return (
-    <div className="min-h-screen bg-luxury-dark py-20">
+    <div className="min-h-screen bg-white py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 text-center">
@@ -17,7 +17,7 @@ const ShippingPolicy = () => {
         {/* Content */}
         <div className="prose max-w-none text-text-primary space-y-8 font-medium">
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Delivery Time</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Delivery Time</h2>
             <p className="mb-4 text-text-secondary">
               All orders are usually dispatched within 2-3 working days unless stated otherwise. Once 
               dispatched, it takes 4-8 working days to deliver depending upon the location.
@@ -29,16 +29,16 @@ const ShippingPolicy = () => {
           </section>
 
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Shipping Cost</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Shipping Cost</h2>
             <p className="text-text-secondary">
-              We charge <span className="text-primary-red font-bold">₹70 per order</span> and also offer 
-              <span className="text-primary-red font-bold"> free shipping on all orders above ₹1499</span>.
+              We charge <span className="text-primary-purple font-bold">₹70 per order</span> and also offer 
+              <span className="text-primary-purple font-bold"> free shipping on all orders above ₹1499</span>.
             </p>
           </section>
 
           {/* RTO/Un-delivered section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">RTO/Un-delivered Shipment</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">RTO/Un-delivered Shipment</h2>
             <p className="mb-4 text-text-secondary">
               We are not liable for undelivered shipment or RTO (Return to Origin) due to wrong address / 
               misinformation provided while placing an order.
@@ -50,7 +50,7 @@ const ShippingPolicy = () => {
 
           {/* Tracking Order section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Tracking Your Order</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Tracking Your Order</h2>
             <p className="text-text-secondary">
               Once your order is shipped from our warehouse, you will receive an email including a tracking 
               number to check the status.
@@ -59,7 +59,7 @@ const ShippingPolicy = () => {
 
           {/* Lost Shipment section */}
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider">Lost Shipment</h2>
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Lost Shipment</h2>
             <p className="mb-4 text-text-secondary">
               Incase your package gets lost during the transit, we shall re-ship your order.
             </p>
@@ -70,19 +70,19 @@ const ShippingPolicy = () => {
           </section>
 
           {/* Contact section */}
-          <section className="pt-12 border-t-2 border-primary-red/20 text-center">
-            <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Need Help with Your Order?</h2>
+          <section className="pt-12 border-t-2 border-primary-purple/20 text-center">
+            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">Need Help with Your Order?</h2>
             <p className="mb-8 text-text-secondary italic">
               Feel free to reach us out on:
             </p>
             <div className="flex flex-col md:flex-row justify-center gap-8 text-text-primary font-bold tracking-widest text-sm">
               <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20">
                 <p className="text-[10px] text-text-muted mb-1 font-normal">EMAIL</p>
-                <a href="mailto:GUL FASHIONfashion@gmail.com" className="hover:text-primary-red transition-all">GUL FASHIONfashion@gmail.com</a>
+                <a href="mailto:gul.fashion.jaipur@gmail.com" className="hover:text-primary-purple transition-all">gul.fashion.jaipur@gmail.com</a>
               </div>
               <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20">
                 <p className="text-[10px] text-text-muted mb-1 font-normal">WHATSAPP</p>
-                <a href="https://wa.me/917877937350" className="hover:text-primary-red transition-all">+91 78779 37350</a>
+                <a href="https://wa.me/917877937350" className="hover:text-primary-purple transition-all">+91 78779 37350</a>
               </div>
             </div>
           </section>
