@@ -34,7 +34,7 @@ export interface FAQSchema {
 }
 
 /**
- * Generate Product schema for jewelry items
+ * Generate Product schema for clothing items
  */
 export const generateProductSchema = (product: ProductSchema) => {
   return {

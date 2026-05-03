@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import './HomePage.css';
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -45,7 +45,7 @@ const HomePage = () => {
     </div>
   );
 
-  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items }) => (
+  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items }: any) => (
     <section className="carousel-section container section">
       <div className="carousel-header flex justify-between items-center" style={{marginBottom: '40px'}}>
         <div>
@@ -57,7 +57,7 @@ const HomePage = () => {
       </div>
       
       <div className="products-carousel-grid">
-        {items.map(product => (
+        {items.map((product: any) => (
           <div key={product._id} className="carousel-product-card">
             <Link to={`/product/${product._id}`}>
               <div className="carousel-img-wrapper">

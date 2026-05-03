@@ -5,12 +5,11 @@ import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
 const SUBCATEGORIES: Record<string, string[]> = {
-  earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
-  necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
-  bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
-  rings: ['Adjustable', 'Band', 'Statement', 'Stackable'],
-  'hand-chains': ['Dainty', 'Statement', 'Layered'],
-  sets: ['Bridal Sets', 'Daily Wear', 'Gift Sets']
+  Sarees: ['Silk', 'Chiffon', 'Georgette', 'Cotton', 'Bandhani', 'Kanjivaram'],
+  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style'],
+  'Kurta Sets': ['Daily Wear', 'Festive', 'Hand-embroidered', 'Printed'],
+  Lehengas: ['Bridal', 'Party Wear', 'Light Lehenga', 'Floral'],
+  Dresses: ['Maxi', 'Midi', 'Fusion', 'Ethnic Dress']
 };
 
 const EditProduct = () => {
@@ -334,12 +333,11 @@ const EditProduct = () => {
                   className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
                 >
                   <option value="">Select category</option>
-                  <option value="earrings">Earrings</option>
-                  <option value="bracelets">Bracelets</option>
-                  <option value="necklaces">Necklaces</option>
-                  <option value="rings">Rings</option>
-                  <option value="sets">Jewelry Sets</option>
-                  <option value="hand-chains">Hand Chains</option>
+                  <option value="Sarees">Sarees</option>
+                  <option value="Suits">Suits</option>
+                  <option value="Kurta Sets">Kurta Sets</option>
+                  <option value="Lehengas">Lehengas</option>
+                  <option value="Dresses">Dresses</option>
                 </select>
               </div>
               <div>
@@ -492,7 +490,7 @@ const EditProduct = () => {
                 onChange={e => setForm({ ...form, materials: e.target.value })}
                 rows={3}
                 className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 outline-none transition-all"
-                placeholder="Stainless Steel&#10;18k Gold Finish"
+                placeholder="Premium Silk&#10;18k Gold Finish"
               />
             </div>
             <div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Plus, Edit, Trash2, Eye, EyeOff, Package, Users, ShoppingBag, 
+  Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, 
   TrendingUp, ArrowUp, ArrowDown, LayoutDashboard, Tag, Settings, 
   LogOut, Bell, Search, Menu, ChevronRight, PieChart, Video, 
   Image as ImageIcon, Ticket, User
@@ -11,12 +11,11 @@ import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 
 const SUBCATEGORIES: Record<string, string[]> = {
-  earrings: ['Ear cuff', 'Stud', 'Hoop', 'C-Circle', 'Dangle', 'Tassel', 'Sets'],
-  necklaces: ['Dainty', 'Layered', 'Pendant', 'Y-necklace', 'Choker'],
-  bracelets: ['Stackable', 'Tennis bracelets', 'Bangle & Cuff'],
-  rings: ['Adjustable', 'Band', 'Statement', 'Stackable'],
-  'hand-chains': ['Dainty', 'Statement', 'Layered'],
-  sets: ['Bridal Sets', 'Daily Wear', 'Gift Sets']
+  Sarees: ['Silk', 'Chiffon', 'Georgette', 'Cotton', 'Bandhani', 'Kanjivaram'],
+  Suits: ['Anarkali', 'Straight Cut', 'Sharara', 'Palazzo Set', 'Gown Style'],
+  'Kurta Sets': ['Daily Wear', 'Festive', 'Hand-embroidered', 'Printed'],
+  Lehengas: ['Bridal', 'Party Wear', 'Light Lehenga', 'Floral'],
+  Dresses: ['Maxi', 'Midi', 'Fusion', 'Ethnic Dress']
 };
 
 const Admin = () => {
@@ -31,7 +30,7 @@ const Admin = () => {
   const [productSearch, setProductSearch] = useState('');
   
   const [orders, setOrders] = useState<any[]>([]);
-  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
 
   React.useEffect(() => {
     if (!state.user || !state.user.isAdmin) {
@@ -41,7 +40,6 @@ const Admin = () => {
 
   React.useEffect(() => {
     const fetchOrders = async () => {
-      setIsLoadingOrders(true);
       try {
         const res = await fetch(API_ENDPOINTS.ORDERS.BASE);
         if (res.ok) {
@@ -50,8 +48,6 @@ const Admin = () => {
         }
       } catch (err) {
         console.error('Failed to fetch orders:', err);
-      } finally {
-        setIsLoadingOrders(false);
       }
     };
     fetchOrders();
@@ -112,10 +108,7 @@ const Admin = () => {
     status: order.status || 'Processing'
   }));
   
-  const handleDragStartProduct = (e: React.DragEvent, index: number) => {
-    setDraggedProductIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-  };
+
 
   const handleDragEnterProduct = (e: React.DragEvent, index: number) => {
     e.preventDefault();
@@ -154,36 +147,7 @@ const Admin = () => {
     setDragOverProductIndex(null);
   };
 
-  const handleProductReorder = async (currentIndex: number, direction: 'up' | 'down') => {
-    const nextIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (nextIndex < 0 || nextIndex >= state.products.length) return;
 
-    const products = [...state.products];
-    const temp = products[currentIndex];
-    products[currentIndex] = products[nextIndex];
-    products[nextIndex] = temp;
-
-    // Update local state first for instant feedback
-    dispatch({ type: 'SET_PRODUCTS', payload: products });
-
-    // Prepare for backend update
-    const reorderPayload = products.map((p, idx) => ({
-      id: (p as any)._id || p.id,
-      displayOrder: idx,
-    }));
-
-    try {
-      const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/reorder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ products: reorderPayload }),
-      });
-      if (!res.ok) throw new Error('Reorder failed');
-    } catch (err) {
-      console.error('Reorder update failed:', err);
-      // Optionally revert state if it fails?
-    }
-  };
 
   const ProductForm = () => {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -350,12 +314,11 @@ const Admin = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
                 <option value="">Select category</option>
-                <option value="earrings">Earrings</option>
-                <option value="bracelets">Bracelets</option>
-                <option value="necklaces">Necklaces</option>
-                <option value="rings">Rings</option>
-                <option value="sets">Jewelry Sets</option>
-                <option value="hand-chains">Hand Chains</option>
+                <option value="Sarees">Sarees</option>
+                <option value="Suits">Suits</option>
+                <option value="Kurta Sets">Kurta Sets</option>
+                <option value="Lehengas">Lehengas</option>
+                <option value="Dresses">Dresses</option>
               </select>
             </div>
             {selectedCategory && SUBCATEGORIES[selectedCategory]?.length > 0 && (
@@ -507,7 +470,7 @@ const Admin = () => {
               name="materials_raw"
               rows={2}
               className="w-full px-4 py-3 bg-luxury-dark/10 border border-gold-primary/10 rounded-xl text-text-primary placeholder-text-muted/40 focus:ring-2 focus:ring-primary-red/20 transition-all outline-none"
-              placeholder="Stainless Steel&#10;18k Gold PVD"
+              placeholder="Premium Silk&#10;18k Gold PVD"
             />
           </div>
           <div>
@@ -966,7 +929,7 @@ const Admin = () => {
                   <option value="bracelets">Bracelets</option>
                   <option value="necklaces">Necklaces</option>
                   <option value="rings">Rings</option>
-                  <option value="sets">Jewelry Sets</option>
+                  <option value="sets">Clothing Sets</option>
                   <option value="hand-chains">Hand Chains</option>
                 </select>
               </div>
@@ -1122,7 +1085,7 @@ const Admin = () => {
                 rows={2}
                 value={localForm?.materials || ''}
                 onChange={e => setLocalForm({ ...localForm, materials: e.target.value })}
-                placeholder="Stainless Steel&#10;18k Gold PVD"
+                placeholder="Premium Silk&#10;18k Gold PVD"
               />
             </div>
             <div>
@@ -1132,7 +1095,7 @@ const Admin = () => {
                 rows={3}
                 value={localForm?.specifications || ''}
                 onChange={e => setLocalForm({ ...localForm, specifications: e.target.value })}
-                placeholder="Stainless Steel&#10;18k Gold Finish"
+                placeholder="Premium Silk&#10;18k Gold Finish"
               />
             </div>
             <div>
@@ -1808,7 +1771,7 @@ const Admin = () => {
                             </div>
                             <div className="flex flex-col">
                               <span className="text-sm font-black text-text-primary tracking-wide">{product.name}</span>
-                              <span className="text-[10px] text-text-muted font-bold tracking-widest uppercase mt-0.5">ID: {(product as any).id.substring(0,8)}</span>
+                              <span className="text-[10px] text-text-muted font-bold tracking-widest uppercase mt-0.5">ID: {String((product as any)._id || product.id).substring(0,8)}</span>
                             </div>
                           </div>
                         </td>
@@ -1892,6 +1855,20 @@ const Admin = () => {
               <div className="absolute -right-10 -top-10 w-64 h-64 bg-gold-primary/5 rounded-full blur-[80px]"></div>
             </div>
 
+            {showAddProduct && (
+              <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                <ProductForm />
+                <div className="flex justify-center mt-6">
+                  <button 
+                    onClick={() => setShowAddProduct(false)}
+                    className="text-[10px] font-black text-text-muted uppercase tracking-widest hover:text-primary-red transition-colors"
+                  >
+                    Cancel Addition
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="bg-white border border-gold-primary/10 rounded-[3rem] overflow-hidden shadow-sm">
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="min-w-full">
@@ -1908,7 +1885,12 @@ const Admin = () => {
                     {state.products.filter(p => !productSearch || p.name.toLowerCase().includes(productSearch.toLowerCase()) || p.category.toLowerCase().includes(productSearch.toLowerCase())).map((product, i) => (
                       <tr 
                         key={(product as any)._id || product.id || i}
-                        className="hover:bg-luxury-dark/[0.02] transition-all duration-500 group"
+                        className={`hover:bg-luxury-dark/[0.02] transition-all duration-500 group cursor-move ${dragOverProductIndex === i ? 'border-t-2 border-gold-primary' : ''}`}
+                        draggable
+                        onDragStart={() => setDraggedProductIndex(i)}
+                        onDragEnter={(e) => handleDragEnterProduct(e, i)}
+                        onDragOver={handleDragOverProduct}
+                        onDragEnd={handleDragEndProduct}
                       >
                         <td className="px-10 py-6 whitespace-nowrap">
                           <div className="flex items-center gap-6">

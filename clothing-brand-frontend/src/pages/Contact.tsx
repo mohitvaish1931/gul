@@ -4,9 +4,9 @@ import { useSEO } from '../utils/useSEO';
 
 const Contact = () => {
   useSEO({
-    title: 'Contact Us - GUL FASHION Premium Jewelry',
-    description: 'Get in touch with GUL FASHION. We\'re here to help with your jewelry inquiries, orders, and customer service.',
-    keywords: 'contact us, customer service, jewelry support, GUL FASHION contact',
+    title: 'Contact Us - GUL FASHION Premium Clothing',
+    description: 'Get in touch with GUL FASHION. We\'re here to help with your clothing inquiries, orders, and customer service.',
+    keywords: 'contact us, customer service, clothing support, GUL FASHION contact',
     url: 'https://GUL FASHIONjewles.com/contact',
     type: 'website'
   });
@@ -44,7 +44,7 @@ const Contact = () => {
 
           <p className="text-xl text-primary-red leading-relaxed font-bold italic luxury-serif">
             We'd love to hear from you. Get in touch with our team for any questions,
-            custom orders, or jewelry consultations.
+            custom orders, or clothing consultations.
           </p>
         </div>
       </div>
@@ -56,7 +56,7 @@ const Contact = () => {
             <div>
               <h2 className="text-3xl font-black text-primary-red mb-6 luxury-serif uppercase tracking-widest">Get In Touch</h2>
               <p className="text-text-secondary text-lg leading-relaxed mb-8 font-medium">
-                Whether you have questions about our jewelry collection, need assistance with an order,
+                Whether you have questions about our clothing collection, need assistance with an order,
                 or want to discuss custom designs, our team is here to help. Reach out to us through
                 any of the channels below.
               </p>
@@ -70,7 +70,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-text-primary mb-1">Email Us</h3>
-                  <p className="text-text-secondary uppercase tracking-widest text-sm font-medium">GUL FASHIONjewel@gmail.com</p>
+                  <p className="text-text-secondary uppercase tracking-widest text-sm font-medium">GUL FASHIONfashion@gmail.com</p>
                 </div>
               </div>
 
@@ -123,11 +123,11 @@ const Contact = () => {
               <ul className="space-y-2 text-text-primary font-medium">
                 <li className="flex items-center space-x-2">
                   <span className="text-primary-red">✨</span>
-                  <span>Custom Jewelry Design</span>
+                  <span>Custom Clothing Design</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <span className="text-gold-primary">✨</span>
-                  <span>Jewelry Repair & Maintenance</span>
+                  <span>Clothing Repair & Maintenance</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <span className="text-primary-red">✨</span>
@@ -139,7 +139,7 @@ const Contact = () => {
                 </li>
                 <li className="flex items-center space-x-2">
                   <span className="text-primary-red">✨</span>
-                  <span>Jewelry Authentication</span>
+                  <span>Clothing Authentication</span>
                 </li>
               </ul>
             </div>

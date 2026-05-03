@@ -1,11 +1,11 @@
-import React from 'react';
+
 import { useSEO } from '../utils/useSEO';
 
 const AboutUs = () => {
   useSEO({
     title: 'About Us - GUL FASHION',
-    description: 'Discover the story of GUL FASHION. Our heritage, craftsmanship, and commitment to luxury jewelry.',
-    keywords: 'about us, brand story, jewelry heritage, craftsmanship, GUL FASHION',
+    description: 'Discover the story of GUL FASHION. Our heritage, craftsmanship, and commitment to luxury clothing.',
+    keywords: 'about us, brand story, clothing heritage, craftsmanship, GUL FASHION',
     url: 'https://GUL FASHIONjewles.com/about-us',
     type: 'website'
   });
@@ -29,7 +29,7 @@ const AboutUs = () => {
           <section className="bg-white/50 p-8 rounded-2xl border border-gold-primary/30 backdrop-blur-sm shadow-sm">
             <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">The Legacy of GUL FASHION</h2>
             <p className="leading-relaxed text-black font-medium">
-              Founded on the principles of exquisite artistry and uncompromising quality, GUL FASHION has emerged as a beacon of luxury in the world of high jewelry. Our journey began with a simple vision: to create pieces that don't just adorn, but tell a story of heritage and sophistication.
+              Founded on the principles of exquisite artistry and uncompromising quality, GUL FASHION has emerged as a beacon of luxury in the world of high clothing. Our journey began with a simple vision: to create pieces that don't just adorn, but tell a story of heritage and sophistication.
             </p>
             <p className="mt-4 leading-relaxed text-black font-medium">
               Every piece in our collection is a testament to the skill of our master artisans, who blend traditional techniques passed down through generations with contemporary design sensibilities.
@@ -49,7 +49,7 @@ const AboutUs = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-gold-primary">✦</span>
-                  <span className="text-text-primary font-bold">High-Grade Surgical Stainless Steel Base</span>
+                  <span className="text-text-primary font-bold">High-Grade Surgical Premium Silk Base</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-primary-red">✦</span>
@@ -69,7 +69,7 @@ const AboutUs = () => {
           <section className="text-center py-12 border-y border-gold-primary/20">
             <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Our Mission</h2>
             <p className="text-xl text-text-primary max-w-2xl mx-auto leading-relaxed italic luxury-serif">
-              To inspire moments of happiness and celebration by providing exceptional jewelry that resonates with the unique personality of every wearer.
+              To inspire moments of happiness and celebration by providing exceptional clothing that resonates with the unique personality of every wearer.
             </p>
           </section>
 

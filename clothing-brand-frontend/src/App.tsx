@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,6 +18,11 @@ import Contact from './pages/Contact';
 import AboutUs from './pages/AboutUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
+import ApparelCareGuide from './pages/ApparelCareGuide';
+import FAQ from './pages/FAQ';
+import ShippingPolicy from './pages/ShippingPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import Accessibility from './pages/Accessibility';
 
 const MainLayout = () => {
   const location = useLocation();
@@ -43,6 +47,11 @@ const MainLayout = () => {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/care-guide" element={<ApparelCareGuide />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/accessibility" element={<Accessibility />} />
         </Routes>
       </main>
       {!isAdmin && <Footer />}

@@ -1,8 +1,12 @@
 {
   "name": "gul-root",
   "private": true,
+  "workspaces": [
+    "clothing-brand-frontend",
+    "clothing-brand-backend"
+  ],
   "scripts": {
-    "build": "cd clothing-brand-frontend && npm install && npm run build",
-    "install": "cd clothing-brand-frontend && npm install"
+    "build": "npm run build --workspace=clothing-brand-frontend",
+    "install-all": "npm install"
   }
 }

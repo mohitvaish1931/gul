@@ -1,7 +1,5 @@
-import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { products as seedProducts } from '../data/products';
-import type { Product as SeedProduct } from '../data/products';
-import { API_BASE_URL, API_ENDPOINTS } from '../utils/api';
+import { createContext, useContext, useReducer, type ReactNode, useEffect } from 'react';
+import { API_ENDPOINTS } from '../utils/api';
 
 export interface Product {
   id: string | number;
@@ -84,6 +82,7 @@ interface AppState {
   videos: Video[];
   banners: Banner[];
   coupons: Coupon[];
+  orders: any[];
 }
 
 type AppAction =
@@ -114,7 +113,9 @@ type AppAction =
   | { type: 'TOGGLE_SIGNIN'; payload?: boolean }
   | { type: 'SET_SEARCH_QUERY'; payload: string }
   | { type: 'SET_SEARCH_RESULTS'; payload: Product[] }
-  | { type: 'TOGGLE_SEARCH'; payload?: boolean };
+  | { type: 'TOGGLE_SEARCH'; payload?: boolean }
+  | { type: 'SET_ORDERS'; payload: any[] }
+  | { type: 'UPDATE_ORDER'; payload: any };
 
 const initialState: AppState = {
   user: null,
@@ -128,6 +129,7 @@ const initialState: AppState = {
   videos: [],
   banners: [],
   coupons: [],
+  orders: [],
 };
 
 const appReducer = (state: AppState, action: AppAction): AppState => {
@@ -245,6 +247,12 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         isSearchOpen: action.payload !== undefined ? action.payload : !state.isSearchOpen,
       };
+    
+    case 'SET_ORDERS':
+      return { ...state, orders: action.payload };
+    
+    case 'UPDATE_ORDER':
+      return { ...state, orders: state.orders.map(o => o._id === action.payload._id ? action.payload : o) };
     
     default:
       return state;

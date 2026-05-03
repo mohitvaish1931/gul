@@ -1,30 +1,30 @@
-import React from 'react';
+
 
 const FAQ = () => {
   const faqs = [
     {
-      question: "How do I care for my GUL FASHION jewelry?",
-      answer: "We recommend keeping your jewelry away from moisture, chemicals, and perfumes. Store each piece separately in a dry place, preferably in the airtight bags provided. Please refer to our Jewellery Care Guide for detailed instructions."
+      question: "How do I care for my GUL FASHION clothing?",
+      answer: "Most of our ethnic wear requires professional dry cleaning to maintain the fabric and embroidery quality. Please refer to our Garment Care Guide for detailed instructions on storage and maintenance."
     },
     {
       question: "What are the shipping charges?",
-      answer: "We charge a flat rate of ₹70 for shipping across India. However, we offer free shipping on all orders above ₹1499."
+      answer: "We offer free shipping on all orders above ₹1999 across India. For orders below this amount, a flat shipping fee of ₹99 applies."
     },
     {
       question: "How long will it take to receive my order?",
-      answer: "Orders are typically dispatched within 2-3 working days. Once shipped, delivery takes approximately 4-8 working days depending on your location."
+      answer: "Orders are typically dispatched within 3-5 working days as many of our pieces are handcrafted. Once shipped, delivery takes approximately 4-8 working days."
     },
     {
       question: "Do you offer international shipping?",
-      answer: "Currently, we only ship within India. We are working on expanding our reach to international enthusiasts soon."
+      answer: "Currently, we only ship within India. We are working on bringing Gul Fashion to our international customers very soon."
     },
     {
       question: "Can I return or exchange a product?",
-      answer: "We accept returns only for damaged products with a mandatory unboxing video proof. Size exchanges are available for finger rings only. Please check our Refund Policy for more details."
+      answer: "We accept size exchanges for unworn garments with original tags within 7 days of delivery. For returns, we only accept damaged products with mandatory unboxing video proof."
     },
     {
-      question: "Is your jewelry authentic?",
-      answer: "Yes, all our pieces are certified authentic and crafted with the highest quality materials. We stand behind the craftsmanship of every item we sell."
+      question: "Is your clothing authentic?",
+      answer: "Yes, all our garments are crafted using premium fabrics and authentic hand-embroidery techniques. Each piece goes through rigorous quality checks."
     }
   ];
 

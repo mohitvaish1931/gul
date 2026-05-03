@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
@@ -8,7 +8,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const { state } = useAppContext();
@@ -38,7 +38,7 @@ const Header = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
-  const submitSearch = (e) => {
+  const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setShowSuggestions(false);
     if(searchTerm.trim()) {

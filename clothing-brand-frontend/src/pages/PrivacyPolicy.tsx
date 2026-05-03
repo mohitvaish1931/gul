@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 const PrivacyPolicy = () => {
   return (
@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
           <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
             <h2 className="luxury-serif text-3xl text-primary-red mb-4 uppercase tracking-wider font-bold">Who We Are</h2>
             <p className="text-text-secondary">
-              GUL FASHION is a luxury jewelry brand committed to protecting your privacy. 
+              GUL FASHION is a luxury clothing brand committed to protecting your privacy. 
               Our website address is available upon request.
             </p>
           </section>
@@ -143,7 +143,7 @@ const PrivacyPolicy = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-text-primary font-bold tracking-widest uppercase text-[10px]">
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
                   <p className="text-primary-red mb-1">EMAIL</p>
-                  <p className="text-sm">GUL FASHIONjewel@gmail.com</p>
+                  <p className="text-sm">GUL FASHIONfashion@gmail.com</p>
                </div>
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
                   <p className="text-primary-red mb-1">PHONE</p>

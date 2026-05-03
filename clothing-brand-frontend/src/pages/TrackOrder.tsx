@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Package, Truck, CheckCircle, Clock, MapPin, AlertCircle, Loader2, ChevronRight } from 'lucide-react';
+import { Search, Package, Truck, CheckCircle, Clock, MapPin, AlertCircle, Loader2 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import { API_ENDPOINTS, fetchJSON } from '../utils/api';
 
@@ -45,9 +45,9 @@ interface OrderTrackingResponse {
 
 const TrackOrder = () => {
   useSEO({
-    title: 'Track Your Order - GUL FASHION Jewelry Delivery Status',
-    description: 'Track your GUL FASHION jewelry order in real-time. Get live updates on your shipment status, delivery date and package location.',
-    keywords: 'track order, order tracking, jewelry delivery, shipment status, order status',
+    title: 'Track Your Order - GUL FASHION Clothing Delivery Status',
+    description: 'Track your GUL FASHION clothing order in real-time. Get live updates on your shipment status, delivery date and package location.',
+    keywords: 'track order, order tracking, clothing delivery, shipment status, order status',
     url: 'https://GUL FASHIONjewles.com/track-order',
     type: 'website'
   });
@@ -110,7 +110,7 @@ const TrackOrder = () => {
             TRACK YOUR ORDER
           </h1>
           <p className="text-text-secondary text-lg">
-            Enter your order details below to track your jewelry shipment
+            Enter your order details below to track your clothing shipment
           </p>
         </div>
 
@@ -209,7 +209,7 @@ const TrackOrder = () => {
               <div className="relative">
                 <div className="absolute top-6 left-0 w-full h-0.5 bg-white/10 -z-10 hidden md:block"></div>
                 <div className="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
-                  {['Processing', 'Shipped', 'Delivered'].map((step, idx) => (
+                  {['Processing', 'Shipped', 'Delivered'].map((step) => (
                     <div key={step} className="flex flex-col items-center text-center relative z-10 w-full md:w-1/3">
                       <div className={`p-4 rounded-full transition-all duration-500 ${getStatusColor(step, trackingResult.order.status)}`}>
                         {getStatusIcon(step)}

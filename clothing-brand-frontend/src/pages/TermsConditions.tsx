@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 const TermsConditions = () => {
   return (
@@ -80,7 +80,7 @@ const TermsConditions = () => {
             <div className="flex flex-col md:flex-row justify-center gap-8 text-text-primary font-bold tracking-widest text-sm">
               <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20 shadow-sm">
                 <p className="text-[10px] text-text-muted mb-1 font-normal uppercase">Email</p>
-                <a href="mailto:GUL FASHIONjewel@gmail.com" className="hover:text-primary-red transition-all">GUL FASHIONjewel@gmail.com</a>
+                <a href="mailto:GUL FASHIONfashion@gmail.com" className="hover:text-primary-red transition-all">GUL FASHIONfashion@gmail.com</a>
               </div>
               <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20 shadow-sm">
                 <p className="text-[10px] text-text-muted mb-1 font-normal uppercase">WhatsApp</p>

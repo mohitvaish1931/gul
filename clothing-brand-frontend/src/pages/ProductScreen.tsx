@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
 
 const ProductScreen = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState<any>({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
 
   useEffect(() => {

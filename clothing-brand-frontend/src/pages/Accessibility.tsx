@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 const Accessibility = () => {
   return (
@@ -47,7 +47,7 @@ const Accessibility = () => {
           <section className="pt-12 border-t-2 border-primary-red/20 text-center">
             <h2 className="luxury-serif text-3xl text-primary-red mb-6 uppercase tracking-wider">Contact Information</h2>
             <div className="mt-8 space-y-4 text-text-primary font-bold tracking-widest uppercase text-sm">
-              <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Email:</span> GUL FASHIONjewel@gmail.com</p>
+              <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Email:</span> GUL FASHIONfashion@gmail.com</p>
               <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Phone:</span> +91 78779 37350</p>
             </div>
           </section>
