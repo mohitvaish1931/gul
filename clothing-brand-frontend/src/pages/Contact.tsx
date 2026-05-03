@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { 
   Mail, Phone, MapPin, Send, MessageCircle, 
   Calendar, Star, Sun, Truck, ShieldCheck, 
-  RefreshCcw, Globe, ChevronLeft, ChevronRight,
-  ExternalLink
+  RefreshCcw, Globe, ExternalLink
 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import './Contact.css';
