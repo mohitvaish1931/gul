@@ -158,8 +158,8 @@ const HomePage = () => {
       <section className="store-locator-banner" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
         <div className="store-locator-overlay">
           <div className="store-locator-content text-center">
-            <h2 className="title font-serif" style={{color: '#fff', fontSize: '3.5rem', marginBottom: '20px'}}>Find Your Perfect Look, <i style={{color: 'var(--secondary-color)'}}>In-Store</i></h2>
-            <p style={{color: '#ddd', fontSize: '1.2rem', marginBottom: '30px'}}>Discover elegance firsthand at our exclusive boutique showrooms.</p>
+            <h2 className="title font-serif" style={{color: 'var(--text-primary)', fontSize: '3.5rem', marginBottom: '20px'}}>Find Your Perfect Look, <i style={{color: 'var(--primary-red)'}}>In-Store</i></h2>
+            <p style={{color: 'var(--text-secondary)', fontSize: '1.2rem', marginBottom: '30px'}}>Discover elegance firsthand at our exclusive boutique showrooms.</p>
             <button className="btn btn-primary" style={{padding: '15px 40px'}}>FIND YOUR NEAREST STORE</button>
           </div>
         </div>

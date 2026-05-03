@@ -1,7 +1,8 @@
 .footer {
-  background-color: #1A0B12; /* Very dark rich background */
-  color: #fff;
-  padding: 80px 0 20px;
+  background-color: #fff;
+  color: #1a1a1a;
+  padding: 80px 0 30px;
+  border-top: 1px solid #f0f0f0;
 }
 
 .footer-grid {
@@ -11,15 +12,8 @@
   margin-bottom: 60px;
 }
 
-.footer-brand {
-  font-size: 2rem;
-  color: var(--secondary-color);
-  margin-bottom: 20px;
-  line-height: 1;
-}
-
 .footer-desc {
-  color: #a0a0a0;
+  color: #666;
   font-size: 0.9rem;
   line-height: 1.8;
   margin-bottom: 25px;
@@ -28,33 +22,37 @@
 
 .social-links {
   display: flex;
-  gap: 15px;
+  gap: 12px;
 }
 
 .social-links a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.05);
-  color: var(--secondary-color);
+  background-color: #f8f8f8;
+  color: #1a1a1a;
   transition: all 0.3s ease;
+  border: 1px solid #eee;
 }
 
 .social-links a:hover {
-  background-color: var(--secondary-color);
-  color: #1A0B12;
+  background-color: var(--primary-red);
+  color: #fff;
+  border-color: var(--primary-red);
   transform: translateY(-3px);
 }
 
 .footer-heading {
   font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 25px;
-  color: #fff;
-  font-weight: 500;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .footer-links {
@@ -66,36 +64,39 @@
 }
 
 .footer-links a {
-  color: #a0a0a0;
+  color: #666;
   font-size: 0.9rem;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .footer-links a:hover {
-  color: var(--secondary-color);
+  color: var(--primary-red);
   padding-left: 5px;
 }
 
 .newsletter-input {
   width: 100%;
-  padding: 12px 15px;
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #fff;
+  padding: 14px 18px;
+  background-color: #fcfcfc;
+  border: 1px solid #eee;
+  color: #1a1a1a;
   font-family: 'Inter', sans-serif;
   outline: none;
+  border-radius: 4px;
 }
 
 .newsletter-input:focus {
-  border-color: var(--secondary-color);
+  border-color: var(--primary-red);
 }
 
 .footer-bottom {
   text-align: center;
   padding-top: 25px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #666;
-  font-size: 0.85rem;
+  border-top: 1px solid #f0f0f0;
+  color: #999;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 @media (max-width: 992px) {

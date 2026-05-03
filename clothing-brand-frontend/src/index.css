@@ -6,17 +6,16 @@
 :root {
   --primary-red: #8B1D2E;
   --gold-primary: #D4AF37;
-  --gold-light: #F1E5AC;
+  --gold-light: #FBF7E9;
   --rose-gold: #B76E79;
   --luxury-dark: #121212;
   --sidebar-dark: #1A1A1A;
-  --text-primary: #1F1F1F;
-  --text-secondary: #4A4A4A;
-  --text-muted: #8E8E8E;
-  --bg-creme: #FDFBF9;
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(212, 175, 55, 0.15);
-  --neon-gold: 0 0 15px rgba(212, 175, 55, 0.3);
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --bg-white: #FFFFFF;
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.05);
 }
 
 .luxury-serif {
@@ -46,7 +45,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-creme);
+  background-color: var(--bg-white);
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
