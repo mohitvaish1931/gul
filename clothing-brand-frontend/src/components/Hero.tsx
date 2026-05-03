@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = () => {
@@ -31,8 +32,8 @@ const Hero = () => {
               Discover our latest collection of handcrafted bridal and festive wear
             </p>
             <div className="hero-actions animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <a href="#" className="btn btn-primary">Shop Collection</a>
-              <a href="#" className="btn btn-outline" style={{borderColor: '#fff', color: '#fff'}}>View Lookbook</a>
+              <Link to="/shop" className="hero-btn hero-btn-primary">EXPLORE COLLECTION</Link>
+              <Link to="/about" className="hero-btn hero-btn-outline">OUR HERITAGE</Link>
             </div>
           </div>
         </div>

@@ -66,16 +66,16 @@ const Header = () => {
   return (
     <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
       <div className="header-top-bar">
-        <div className="container flex justify-center items-center py-2">
+        <div className="container flex justify-center items-center">
           <span className="promo-text">FREE SHIPPING ON PREPAID ORDERS WITHIN INDIA</span>
         </div>
       </div>
       
-      <div className="header-main-middle bg-white">
-        <div className="container flex justify-between items-center py-5">
+      <div className="header-main-middle">
+        <div className="container header-grid">
           {/* Left: Search */}
-          <div className="search-container relative hidden-mobile flex-1">
-            <form onSubmit={submitSearch} className="flex items-center border-b border-gray-200 py-1 w-48">
+          <div className="header-left">
+            <form onSubmit={submitSearch} className="search-form">
               <input 
                 type="text" 
                 placeholder="SEARCH..." 
@@ -83,24 +83,24 @@ const Header = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={() => { if(searchTerm.length > 1) setShowSuggestions(true); }}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                className="bg-transparent border-none outline-none text-[10px] font-bold tracking-widest w-full"
+                className="search-input"
               />
-              <button type="submit" className="text-purple-900">
+              <button type="submit" className="search-btn">
                 <Search size={16} />
               </button>
             </form>
             {showSuggestions && suggestions.length > 0 && (
-              <div className="search-dropdown absolute bg-white shadow-2xl border border-purple-50 mt-4 left-0 w-80 z-[1100] rounded-lg overflow-hidden">
+              <div className="search-dropdown">
                 {suggestions.map(item => (
                   <Link 
                     key={item._id} 
                     to={`/product/${item._id}`} 
-                    className="flex items-center gap-4 p-4 hover:bg-purple-50 transition-colors border-b border-purple-50"
+                    className="suggestion-item"
                   >
-                    <img src={item.image} alt={item.name} className="w-12 h-16 object-cover rounded" />
+                    <img src={item.image} alt={item.name} />
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-gray-900">{item.name}</p>
-                      <span className="text-[9px] text-purple-700 uppercase font-bold tracking-widest">{item.category}</span>
+                      <p className="suggestion-name">{item.name}</p>
+                      <span className="suggestion-cat">{item.category}</span>
                     </div>
                   </Link>
                 ))}
@@ -109,99 +109,91 @@ const Header = () => {
           </div>
 
           <button 
-            className="mobile-menu-btn block lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
           >
             <Menu size={24} />
           </button>
 
-          {/* Center: Main Logo (Hidden on scroll maybe?) */}
-          <div className="logo-wrapper flex justify-center flex-1">
-            <Link to="/" className="flex items-center flex-col">
-              <div className="flex items-center">
-                <svg width="35" height="45" viewBox="0 0 100 120" style={{color: 'var(--primary-purple)'}} fill="currentColor">
+          {/* Center: Main Logo */}
+          <div className="header-center">
+            <Link to="/" className="main-logo">
+              <div className="logo-top">
+                <svg width="35" height="45" viewBox="0 0 100 120" className="logo-svg" fill="currentColor">
                   <circle cx="40" cy="15" r="7" />
                   <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
                 </svg>
-                <span className="logo-text-purple">Gul</span>
+                <span className="logo-text">Gul</span>
               </div>
-              <span className="logo-sub-text-purple">FASHION</span>
+              <span className="logo-sub">FASHION</span>
             </Link>
           </div>
 
           {/* Right: Icons */}
-          <div className="header-icons flex justify-end items-center gap-6 flex-1">
+          <div className="header-right">
             <Link to={user ? "/profile" : "/login"} className="header-icon-link">
               <User size={20} />
             </Link>
-            <Link to="/cart" className="header-icon-link relative">
+            <Link to="/cart" className="header-icon-link cart-link">
               <ShoppingBag size={20} />
-              {cart.length > 0 && <span className="cart-badge-purple">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>}
+              {cart.length > 0 && <span className="cart-badge">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>}
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Sticky Navigation with Logo */}
-      <nav className={`header-nav-bottom bg-white border-t border-b border-purple-50 hidden-mobile ${isScrolled ? 'nav-sticky' : ''}`}>
-        <div className="container flex items-center justify-center">
-          <div className={`nav-mini-logo ${isScrolled ? 'visible' : 'hidden'}`} style={{marginRight: 'auto'}}>
-             <Link to="/" className="flex items-center gap-2">
-                <svg width="25" height="30" viewBox="0 0 100 120" style={{color: 'var(--primary-purple)'}} fill="currentColor">
+      {/* Navigation */}
+      <nav className={`header-nav ${isScrolled ? 'nav-sticky' : ''}`}>
+        <div className="container nav-container">
+          {isScrolled && (
+            <Link to="/" className="mini-logo">
+               <svg width="25" height="30" viewBox="0 0 100 120" fill="currentColor">
                   <circle cx="40" cy="15" r="7" />
                   <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
                 </svg>
-                <span className="font-serif font-bold text-purple-900">Gul</span>
-             </Link>
-          </div>
+                <span className="mini-logo-text">Gul</span>
+            </Link>
+          )}
           
-          <ul className="flex justify-center gap-14 py-4 mx-auto">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <Link to={link.path} className="nav-link-item-purple flex items-center gap-2">
-                  {link.icon}
+          <ul className="nav-list">
+            {navLinks.map((link, idx) => (
+              <li key={idx}>
+                <Link to={link.path} className="nav-link">
+                  {link.icon && <span className="nav-icon">{link.icon}</span>}
                   {link.name}
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div className={`${isScrolled ? 'visible' : 'hidden'}`} style={{marginLeft: 'auto', width: '100px'}}></div>
+          {isScrolled && <div className="nav-spacer"></div>}
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Menu */}
       <div className={`mobile-nav-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}></div>
-      <nav className={`mobile-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        <div className="p-8">
-          <div className="flex justify-between items-center mb-10">
-            <div className="flex items-center gap-2">
-               <svg width="30" height="35" viewBox="0 0 100 120" style={{color: 'var(--primary-purple)'}} fill="currentColor">
-                  <circle cx="40" cy="15" r="7" />
-                  <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
-                </svg>
-                <span className="font-serif text-2xl text-purple-900">Gul</span>
-            </div>
-            <button onClick={() => setMobileMenuOpen(false)}><X size={24} /></button>
-          </div>
-          <ul className="space-y-8">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <Link 
-                  to={link.path} 
-                  className="text-xl font-medium block uppercase tracking-widest text-purple-950"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-4">
-                    {link.icon}
-                    {link.name}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <div className={`mobile-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
+        <div className="mobile-nav-header">
+           <span className="logo-text" style={{fontSize: '1.5rem'}}>Gul</span>
+           <button onClick={() => setMobileMenuOpen(false)}><X size={24} /></button>
         </div>
-      </nav>
+        <ul className="mobile-nav-list">
+          {navLinks.map((link, idx) => (
+            <li key={idx} onClick={() => setMobileMenuOpen(false)}>
+              <Link to={link.path} className="mobile-nav-link">
+                {link.icon}
+                <span>{link.name}</span>
+              </Link>
+            </li>
+          ))}
+          <li onClick={() => setMobileMenuOpen(false)}>
+            <Link to={user ? "/profile" : "/login"} className="mobile-nav-link">
+              <User size={20} />
+              <span>{user ? 'My Profile' : 'Login / Register'}</span>
+            </Link>
+          </li>
+        </ul>
+      </div>
     </header>
   );
 };
