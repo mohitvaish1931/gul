@@ -25,6 +25,7 @@ const orderSchema = mongoose.Schema(
       city: { type: String, required: true },
       postalCode: { type: String, required: true },
       country: { type: String, required: true },
+      phoneNumber: { type: String },
     },
     paymentMethod: {
       type: String,
@@ -66,6 +67,23 @@ const orderSchema = mongoose.Schema(
     },
     deliveredAt: {
       type: Date,
+    },
+    status: {
+      type: String,
+      required: true,
+      default: 'Pending',
+    },
+    shiprocketOrderId: {
+      type: String,
+    },
+    shiprocketShipmentId: {
+      type: String,
+    },
+    awbNumber: {
+      type: String,
+    },
+    trackingStatus: {
+      type: String,
     },
   },
   {
