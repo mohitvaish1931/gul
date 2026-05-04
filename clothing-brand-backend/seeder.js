@@ -15,7 +15,15 @@ const importData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
 
-    const createdUsers = await User.insertMany(users);
+    // Use admin credentials from .env if available
+    const adminData = { ...users[0] };
+    if (process.env.ADMIN_EMAIL) adminData.email = process.env.ADMIN_EMAIL;
+    if (process.env.ADMIN_PASSWORD) adminData.password = process.env.ADMIN_PASSWORD;
+
+    const usersToInsert = [...users];
+    usersToInsert[0] = adminData;
+
+    const createdUsers = await User.insertMany(usersToInsert);
     const adminUser = createdUsers[0]._id;
 
     const sampleProducts = products.map((product) => {
