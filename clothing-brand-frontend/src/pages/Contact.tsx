@@ -99,7 +99,7 @@ const Contact = () => {
                 <div className="item-icon-circle"><Phone size={20} /></div>
                 <div className="item-content">
                   <h3>CALL US</h3>
-                  <p>+91 78779 37350</p>
+                  <p>+91 93513 25459</p>
                   <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
                 </div>
               </div>
@@ -118,7 +118,7 @@ const Contact = () => {
                 <div className="item-content">
                   <h3>WHATSAPP</h3>
                   <p>Instant styling support available.</p>
-                  <a href="https://wa.me/917877937350" className="chat-link">
+                  <a href="https://wa.me/919351325459" className="chat-link">
                     Chat Now <ArrowRight size={14} />
                   </a>
                 </div>

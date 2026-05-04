@@ -48,7 +48,7 @@ const Accessibility = () => {
             <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">Contact Information</h2>
             <div className="mt-8 space-y-4 text-text-primary font-bold tracking-widest uppercase text-sm">
               <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Email:</span> gul.fashion.jaipur@gmail.com</p>
-              <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Phone:</span> +91 78779 37350</p>
+              <p><span className="text-text-secondary mr-2 font-normal lowercase tracking-normal">Phone:</span> +91 93513 25459</p>
             </div>
           </section>
         </div>

@@ -82,7 +82,7 @@ const ShippingPolicy = () => {
               </div>
               <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20">
                 <p className="text-[10px] text-text-muted mb-1 font-normal">WHATSAPP</p>
-                <a href="https://wa.me/917877937350" className="hover:text-primary-purple transition-all">+91 78779 37350</a>
+                <a href="https://wa.me/919351325459" className="hover:text-primary-purple transition-all">+91 93513 25459</a>
               </div>
             </div>
           </section>

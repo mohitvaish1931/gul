@@ -18,7 +18,7 @@ export const SEO_CONFIG = {
     priceRange: '₹₹₹',
     areaServed: 'IN',
     email: 'GUL FASHIONfashion@gmail.com',
-    phone: '+91 78779 37350',
+    phone: '+91 93513 25459',
     address: {
       streetAddress: 'Pahadiya chowk',
       addressLocality: 'Jaipur',

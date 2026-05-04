@@ -147,7 +147,7 @@ const PrivacyPolicy = () => {
                </div>
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
                   <p className="text-primary-purple mb-1">PHONE</p>
-                  <p className="text-sm">+91 78779 37350</p>
+                  <p className="text-sm">+91 93513 25459</p>
                </div>
                <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
                   <p className="text-primary-purple mb-1">ADDRESS</p>
