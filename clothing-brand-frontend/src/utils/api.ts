@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = import.meta.env.VITE_API_BASE ?? (import.meta.env.DEV ? 'http://localhost:5000' : 'https://moyaa-3kxy.onrender.com');
+export const API_BASE_URL = import.meta.env.VITE_API_BASE ?? (import.meta.env.DEV ? 'http://localhost:5000' : 'https://gul-275k.onrender.com');
 
 export const API_ENDPOINTS = {
   // Health Check
