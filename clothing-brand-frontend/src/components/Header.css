@@ -303,3 +303,18 @@
     font-size: 2.2rem;
   }
 }
+
+@media (max-width: 480px) {
+  .promo-text {
+    letter-spacing: 1px;
+    font-size: 0.5rem;
+    white-space: nowrap;
+  }
+  .logo-text {
+    font-size: 1.8rem;
+  }
+  .logo-sub {
+    letter-spacing: 3px;
+    margin-left: 5px;
+  }
+}
