@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { ShieldCheck, Globe, Award, Lock, RefreshCcw, Star } from 'lucide-react';
+import { ShieldCheck, Globe, Award, Lock, RefreshCcw } from 'lucide-react';
 
 const AboutUs = () => {
   useSEO({

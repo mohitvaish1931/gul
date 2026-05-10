@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Scale, FileText, ShieldAlert, Gavel, HelpCircle, Mail, ShieldCheck, Lock, RefreshCcw, Globe } from 'lucide-react';
+import { Scale, ShieldAlert, Gavel, Mail, ShieldCheck, Lock, RefreshCcw, Globe } from 'lucide-react';
 
 const TermsConditions = () => {
   useSEO({
