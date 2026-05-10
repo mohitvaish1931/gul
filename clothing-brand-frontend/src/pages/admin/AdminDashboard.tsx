@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   ShoppingBag, Users, Package, ArrowUp, ChevronRight, PieChart, TrendingUp, Settings,
-  Activity, Clock, Calendar as CalendarIcon, ArrowDownRight, Globe
+  Activity, Clock, Calendar as CalendarIcon, ArrowDownRight, Globe, Image as ImageIcon
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';

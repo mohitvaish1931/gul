@@ -3,7 +3,7 @@ import { useNavigate, Outlet, NavLink } from 'react-router-dom';
 import { 
   Package, Users, ShoppingBag, LayoutDashboard, Tag, Settings, 
   LogOut, Bell, Search, Menu, ChevronRight, Home, ExternalLink,
-  Ticket, Image as ImageIcon, X
+  Ticket, Image as ImageIcon
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
@@ -87,9 +87,13 @@ const AdminLayout = () => {
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <LayoutDashboard className={`w-5 h-5 shrink-0 transition-transform duration-500 group-hover:scale-110`} />
-                <span className="text-[13px] font-bold tracking-wide">Command Center</span>
-                {isActive && <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-primary-purple shadow-[0_0_10px_#A855F7]" />}
+                {({ isActive }) => (
+                  <>
+                    <LayoutDashboard className={`w-5 h-5 shrink-0 transition-transform duration-500 group-hover:scale-110`} />
+                    <span className="text-[13px] font-bold tracking-wide">Command Center</span>
+                    {isActive && <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-primary-purple shadow-[0_0_10px_#A855F7]" />}
+                  </>
+                )}
               </NavLink>
             </div>
           )}
@@ -112,11 +116,15 @@ const AdminLayout = () => {
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <link.icon className={`w-5 h-5 shrink-0 transition-transform duration-500 group-hover:scale-110`} />
-                    {isSidebarOpen && (
-                      <span className="text-[13px] font-bold tracking-wide">{link.name}</span>
+                    {({ isActive }) => (
+                      <>
+                        <link.icon className={`w-5 h-5 shrink-0 transition-transform duration-500 group-hover:scale-110`} />
+                        {isSidebarOpen && (
+                          <span className="text-[13px] font-bold tracking-wide">{link.name}</span>
+                        )}
+                        {isActive && isSidebarOpen && <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-primary-purple shadow-[0_0_10px_#A855F7]" />}
+                      </>
                     )}
-                    {isActive && isSidebarOpen && <div className="absolute right-4 w-1.5 h-1.5 rounded-full bg-primary-purple shadow-[0_0_10px_#A855F7]" />}
                   </NavLink>
                 ))}
               </div>
