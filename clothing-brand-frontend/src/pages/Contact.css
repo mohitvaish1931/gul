@@ -492,3 +492,31 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  .map-title {
+    font-size: 1.8rem;
+  }
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-group.full {
+    grid-column: span 1;
+  }
+  .trust-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-btns {
+    flex-direction: column;
+  }
+  .btn-book, .btn-whatsapp-outline {
+    width: 100%;
+    justify-content: center;
+  }
+  .contact-main-card {
+    margin-top: -20px;
+  }
+}

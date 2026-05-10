@@ -29,9 +29,9 @@ const MainLayout = () => {
   const isAdmin = location.pathname.startsWith('/admin');
 
   return (
-    <div className="app-container flex flex-col" style={{minHeight: '100vh', position: 'relative'}}>
+    <div className="app-container flex flex-col w-full" style={{minHeight: '100vh', position: 'relative'}}>
       {!isAdmin && <Header />}
-      <main style={{flex: 1}}>
+      <main className="w-full" style={{flex: 1}}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ProductListPage />} />

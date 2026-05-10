@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Search, Truck, AlertCircle, Loader2 } from 'lucide-react';
+import { Search, Truck, AlertCircle, Loader2, Package, Mail, Headphones, ShieldCheck, RefreshCcw, Globe, Lock } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import { API_ENDPOINTS, fetchJSON } from '../utils/api';
+import './TrackOrder.css';
 
 interface OrderTrackingResponse {
   success: boolean;
@@ -26,20 +27,6 @@ interface OrderTrackingResponse {
     }>;
     courierName?: string;
     awbNumber?: string;
-  };
-  trackingDetails?: {
-    shipment_track?: Array<{
-      current_status: string;
-      awb_code: string;
-      courier_name: string;
-      pickup_date: string;
-      delivered_date: string;
-      scans?: Array<{
-        date: string;
-        location: string;
-        activity: string;
-      }>;
-    }>;
   };
 }
 
@@ -84,122 +71,156 @@ const TrackOrder = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="track-order-page">
       {/* Hero Section */}
-      <div className="bg-purple-50/50 py-20 border-b border-purple-100">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <span className="small-gold-tag">REAL-TIME UPDATES</span>
-          <h1 className="text-5xl font-serif text-purple-950 mb-6 italic">Track Your Order</h1>
-          <p className="text-lg text-purple-800/70 font-medium">
+      <section className="track-hero text-center">
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <span className="small-gold-tag" style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: 'bold' }}>REAL-TIME UPDATES</span>
+          <h1 className="font-serif">Track Your Order</h1>
+          
+          <div className="flex justify-center items-center" style={{ margin: '20px 0' }}>
+            <div style={{ height: '1px', width: '60px', backgroundColor: '#D4AF37', opacity: 0.3 }}></div>
+            <div style={{ margin: '0 20px' }}><Truck size={24} color="#D4AF37" style={{ opacity: 0.5 }} /></div>
+            <div style={{ height: '1px', width: '60px', backgroundColor: '#D4AF37', opacity: 0.3 }}></div>
+          </div>
+
+          <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.8' }}>
             Enter your order details below to see the current status of your handcrafted apparel.
           </p>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="max-w-2xl mx-auto">
-          {/* Tracking Form */}
-          <div className="bg-white border border-purple-100 p-8 rounded-[2rem] shadow-sm mb-12">
-            <form onSubmit={handleTrackOrder} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Order ID</label>
-                  <input
-                    type="text"
-                    value={orderNumber}
-                    onChange={(e) => setOrderNumber(e.target.value)}
-                    className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none transition-all"
-                    placeholder="E.g. MOR-123456"
-                    required
-                  />
+      {/* Main Content */}
+      <div className="container" style={{ maxWidth: '700px', margin: '60px auto' }}>
+        {/* Tracking Card */}
+        <div className="tracking-card">
+          <form onSubmit={handleTrackOrder} className="flex flex-col" style={{ gap: '30px' }}>
+            <div className="input-group">
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '2px', color: '#2D0A4E', marginBottom: '10px', textTransform: 'uppercase' }}>Order ID</label>
+              <div className="relative" style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }}>
+                  <Package size={20} />
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-purple-900 uppercase tracking-widest mb-3">Email Address</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-5 py-4 bg-purple-50/30 border border-purple-100 rounded-xl focus:ring-2 focus:ring-purple-200 outline-none transition-all"
-                    placeholder="The email used during checkout"
-                    required
-                  />
+                <input
+                  type="text"
+                  value={orderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                  style={{ width: '100%', padding: '18px 20px 18px 55px', borderRadius: '15px', border: '1px solid #e0e0e0', backgroundColor: '#fafafa', outline: 'none', transition: 'all 0.3s' }}
+                  placeholder="e.g. MOR-123456"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '2px', color: '#2D0A4E', marginBottom: '10px', textTransform: 'uppercase' }}>Email Address</label>
+              <div className="relative" style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }}>
+                  <Mail size={20} />
                 </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{ width: '100%', padding: '18px 20px 18px 55px', borderRadius: '15px', border: '1px solid #e0e0e0', backgroundColor: '#fafafa', outline: 'none', transition: 'all 0.3s' }}
+                  placeholder="The email used during checkout"
+                  required
+                />
               </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-purple-900 text-white py-5 px-8 rounded-xl font-bold uppercase tracking-[0.2em] hover:bg-purple-800 transition-all shadow-xl shadow-purple-900/10 flex items-center justify-center space-x-3 disabled:opacity-70"
-              >
-                {loading ? <Loader2 className="animate-spin" /> : <Search size={18} />}
-                <span>{loading ? 'Locating...' : 'Track My Shipment'}</span>
-              </button>
-            </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn btn-primary"
+              style={{ width: '100%', padding: '20px', borderRadius: '15px', fontSize: '0.9rem', letterSpacing: '3px' }}
+            >
+              {loading ? <Loader2 className="animate-spin" /> : <Search size={20} style={{ marginRight: '10px' }} />}
+              {loading ? 'LOCATING...' : 'TRACK MY SHIPMENT'}
+            </button>
+          </form>
 
-            {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-center space-x-3 text-red-600">
-                <AlertCircle size={20} />
-                <p className="text-sm font-medium">{error}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Results Section */}
-          {trackingResult && (
-            <div className="animate-fade-in space-y-8">
-               <div className="bg-purple-900 text-white p-8 rounded-[2rem] shadow-2xl">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-70">Order Status</span>
-                      <h2 className="text-3xl font-serif mt-1">{trackingResult.order.status}</h2>
-                    </div>
-                    <div className="bg-white/20 p-4 rounded-2xl">
-                      <Truck size={32} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm opacity-90">
-                    <div className="p-3 bg-white/10 rounded-xl border border-white/10">
-                       <p className="text-[9px] uppercase tracking-widest mb-1 opacity-60">Order No</p>
-                       <p className="font-bold">{trackingResult.order.orderNumber}</p>
-                    </div>
-                    <div className="p-3 bg-white/10 rounded-xl border border-white/10">
-                       <p className="text-[9px] uppercase tracking-widest mb-1 opacity-60">Courier</p>
-                       <p className="font-bold">{trackingResult.order.courierName || 'In Transit'}</p>
-                    </div>
-                  </div>
-               </div>
-               
-               {/* Simplified Scan List */}
-               <div className="bg-white border border-purple-100 p-8 rounded-[2rem] shadow-sm">
-                  <h3 className="text-lg font-serif text-purple-950 mb-6">Shipment Timeline</h3>
-                  <div className="space-y-6">
-                    <div className="flex gap-4">
-                       <div className="flex flex-col items-center">
-                          <div className="w-4 h-4 bg-purple-900 rounded-full"></div>
-                          <div className="w-0.5 h-full bg-purple-100"></div>
-                       </div>
-                       <div>
-                          <p className="font-bold text-purple-950">Shipment Picked Up</p>
-                          <p className="text-xs text-gray-500">Jaipur Sorting Hub</p>
-                       </div>
-                    </div>
-                    <div className="flex gap-4 opacity-50">
-                       <div className="flex flex-col items-center">
-                          <div className="w-4 h-4 border-2 border-purple-200 rounded-full"></div>
-                       </div>
-                       <div>
-                          <p className="font-bold text-purple-950">Out for Delivery</p>
-                          <p className="text-xs text-gray-500">Local Distribution Center</p>
-                       </div>
-                    </div>
-                  </div>
-               </div>
+          {error && (
+            <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#FFF5F5', border: '1px solid #FED7D7', borderRadius: '15px', color: '#C53030', display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <AlertCircle size={20} />
+              <p style={{ fontSize: '0.9rem', fontWeight: '600' }}>{error}</p>
             </div>
           )}
+        </div>
+
+        {/* Result Card */}
+        {trackingResult && (
+          <div className="animate-fade-in" style={{ marginTop: '40px' }}>
+            <div className="result-card-container">
+              <div className="flex justify-between items-start flex-wrap" style={{ marginBottom: '30px', gap: '20px' }}>
+                <div>
+                  <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '3px', opacity: 0.6, textTransform: 'uppercase' }}>Shipment Status</span>
+                  <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px' }}>{trackingResult.order.status}</h2>
+                </div>
+                <div style={{ backgroundColor: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '20px' }}>
+                  <Truck size={36} color="#D4AF37" />
+                </div>
+              </div>
+
+              <div className="result-grid">
+                <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Order Number</span>
+                  <p style={{ fontSize: '1.2rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.orderNumber}</p>
+                </div>
+                <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Courier Partner</span>
+                  <p style={{ fontSize: '1.2rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.courierName || 'In Transit'}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Need Help Section */}
+        <div className="help-section text-center" style={{ marginTop: '100px' }}>
+          <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '50px' }}>Need Help?</h3>
+          
+          <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+            <HelpCard icon={<Headphones size={24} />} title="Contact Us" desc="Our support team is ready to assist you." />
+            <HelpCard icon={<Truck size={24} />} title="Shipping Info" desc="Everything you need to know about delivery." />
+            <HelpCard icon={<Package size={24} />} title="Returns" desc="Hassle-free 7-day exchange policy." />
+            <HelpCard icon={<ShieldCheck size={24} />} title="Secure Payments" desc="Your data is protected and encrypted." />
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Bar */}
+      <div style={{ backgroundColor: '#fff', borderTop: '1px solid #f0f0f0', padding: '60px 0', marginTop: '100px' }}>
+        <div className="container">
+           <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '40px', textAlign: 'center' }}>
+              <TrustItem icon={<ShieldCheck size={20} />} title="PREMIUM QUALITY" />
+              <TrustItem icon={<Lock size={20} />} title="SECURE PAYMENTS" />
+              <TrustItem icon={<RefreshCcw size={20} />} title="EASY RETURNS" />
+              <TrustItem icon={<Globe size={20} />} title="WORLDWIDE SHIPPING" />
+           </div>
         </div>
       </div>
     </div>
   );
 };
 
+const HelpCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
+  <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '25px', border: '1px solid #f0f0f0', textAlign: 'left', transition: 'all 0.3s' }}>
+    <div style={{ width: '50px', height: '50px', backgroundColor: '#f5f0ff', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyCenter: 'center', color: '#2D0A4E', marginBottom: '20px' }}>
+      <div style={{ margin: '0 auto' }}>{icon}</div>
+    </div>
+    <h4 className="font-serif" style={{ fontSize: '1.2rem', color: '#2D0A4E', marginBottom: '10px' }}>{title}</h4>
+    <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6', marginBottom: '15px' }}>{desc}</p>
+    <a href="#" style={{ fontSize: '0.7rem', fontWeight: '800', color: '#D4AF37', textDecoration: 'none', letterSpacing: '1px' }}>LEARN MORE →</a>
+  </div>
+);
+
+const TrustItem = ({ icon, title }: { icon: React.ReactNode, title: string }) => (
+  <div className="flex flex-col items-center" style={{ gap: '10px' }}>
+    <div style={{ color: '#D4AF37', marginBottom: '5px' }}>{icon}</div>
+    <h5 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '2px', color: '#2D0A4E' }}>{title}</h5>
+  </div>
+);
+
 export default TrackOrder;
+
