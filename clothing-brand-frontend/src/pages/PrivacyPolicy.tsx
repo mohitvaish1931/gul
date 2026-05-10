@@ -1,62 +1,62 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { ShieldCheck, Eye, Lock, FileText, Globe, Mail } from 'lucide-react';
+import { ShieldCheck, Eye, Lock, FileText, Globe, Mail, RefreshCcw } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   useSEO({
     title: 'Privacy Policy - GUL FASHION',
-    description: 'Learn how GUL FASHION protects your personal data.',
-    keywords: 'privacy policy, data protection, GUL FASHION privacy',
+    description: 'How we collect, use, and protect your personal information.',
+    keywords: 'privacy policy, data protection, security, GUL FASHION',
     url: 'https://gulfashion.com/privacy-policy',
     type: 'website'
   });
 
   const sections = [
     {
-      icon: <Eye size={30} />,
-      title: "INFORMATION WE COLLECT",
-      text: "We collect personal information such as your name, email address, phone number, and shipping address when you place an order. We also collect device data like IP addresses to improve site performance."
-    },
-    {
       icon: <FileText size={30} />,
-      title: "HOW WE USE YOUR DATA",
-      text: "Your data is used to process orders, provide tracking updates, and offer personalized styling recommendations. We may also use it to improve our website experience and customer service."
-    },
-    {
-      icon: <ShieldCheck size={30} />,
-      title: "DATA PROTECTION",
-      text: "We implement robust security measures to protect your personal information. Your data is stored on secure servers and only accessible by authorized personnel for order fulfillment."
+      title: "DATA COLLECTION",
+      text: "We collect information such as your name, email, and address when you place an order or interact with our site. This is used solely to provide a seamless shopping experience and fulfill your requests."
     },
     {
       icon: <Lock size={30} />,
-      title: "COOKIES",
-      text: "We use cookies to save your preferences for future visits and compile aggregate data about site traffic. This helps us offer better site experiences and tools in the future."
+      title: "SECURITY MEASURES",
+      text: "Your data is protected by industry-standard encryption and security protocols. We never share your personal details with third parties for marketing purposes."
     },
     {
-      icon: <Globe size={30} />,
-      title: "THIRD-PARTY DISCLOSURE",
-      text: "We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties except to trusted partners who assist us in operating our website and conducting our business."
+      icon: <Eye size={30} />,
+      title: "TRANSPARENCY",
+      text: "We are transparent about our data practices. You have the right to request access to or deletion of your personal information at any time by contacting our privacy team."
     }
   ];
 
   return (
     <div className="policy-page-v2" style={{ 
-      backgroundColor: '#fff', 
+      backgroundColor: '#fdfbff', 
       color: '#2d0a4e', 
       minHeight: '100vh', 
-      padding: '80px 20px',
-      fontFamily: "'Inter', sans-serif"
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative',
+      overflow: 'hidden'
     }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      {/* Background Patterns */}
+      <div style={{ position: 'absolute', top: '100px', left: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px' }} />
+      </div>
+      <div style={{ position: 'absolute', top: '150px', right: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px', transform: 'scaleX(-1)' }} />
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>PROTECTION</span>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Privacy Policy</h1>
-          <div style={{ width: '60px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>Learn how GUL FASHION protects your personal data and privacy.</p>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ fontSize: '1.1rem', color: '#666' }}>How we collect, use, and protect your personal information.</p>
         </div>
 
         {/* Sections */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '60px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '80px', maxWidth: '800px', margin: '0 auto 80px' }}>
           {sections.map((section, index) => (
             <div key={index} style={{ 
               display: 'flex', 
@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
               padding: '30px', 
               backgroundColor: '#fff', 
               borderRadius: '20px', 
-              boxShadow: '0 5px 25px rgba(0,0,0,0.03)',
+              boxShadow: '0 5px 25px rgba(0,0,0,0.02)',
               border: '1px solid #f8f8f8',
               alignItems: 'flex-start'
             }}>
@@ -72,7 +72,7 @@ const PrivacyPolicy = () => {
                 width: '70px', 
                 height: '70px', 
                 borderRadius: '50%', 
-                backgroundColor: '#FDF7F2', 
+                backgroundColor: '#F9F6FF', 
                 color: '#2d0a4e', 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -82,40 +82,49 @@ const PrivacyPolicy = () => {
                 {section.icon}
               </div>
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
                 <p style={{ color: '#555', lineHeight: '1.7', fontSize: '0.95rem' }}>{section.text}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Raise a Request */}
+        {/* Contact CTA */}
         <div style={{ 
           backgroundColor: '#F9F6FF', 
           borderRadius: '24px', 
           padding: '60px 40px', 
-          textAlign: 'center'
+          textAlign: 'center',
+          marginBottom: '80px'
         }}>
-          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '15px', color: '#2d0a4e' }}>PRIVACY CONCERNS?</h2>
-          <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ color: '#666', marginBottom: '40px' }}>Contact our privacy team for any questions regarding your data:</p>
+          <h2 className="font-serif" style={{ fontSize: '2.2rem', marginBottom: '10px', color: '#2d0a4e' }}>PRIVACY CONCERNS?</h2>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ color: '#666', marginBottom: '40px' }}>If you have any questions about your privacy, please contact us:</p>
           
           <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
             <ContactCard 
               icon={<Mail size={24} />} 
               label="EMAIL" 
-              value="privacy@gulfashion.com" 
-              href="mailto:privacy@gulfashion.com"
+              value="gul.fashion.jaipur@gmail.com" 
+              href="mailto:gul.fashion.jaipur@gmail.com"
             />
           </div>
+        </div>
+
+        {/* Trust Bar Footer */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '60px' }}>
+            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
           .policy-page-v2 h1 { font-size: 2.5rem !important; }
-          .policy-page-v2 h2 { font-size: 2rem !important; }
-          .policy-page-v2 > div > div:nth-child(2) > div { flex-direction: column; align-items: center; text-align: center; }
+          .policy-page-v2 h2 { font-size: 1.8rem !important; }
+          .policy-page-v2 > div > div:nth-child(3) { padding: 40px 20px !important; }
         }
       `}</style>
     </div>
@@ -142,6 +151,16 @@ const ContactCard = ({ icon, label, value, href }: { icon: React.ReactNode, labe
       <span style={{ fontSize: '1rem', fontWeight: '700' }}>{value}</span>
     </div>
   </a>
+);
+
+const TrustItem = ({ icon, title, sub }: { icon: React.ReactNode, title: string, sub: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+    <div style={{ color: '#2D0A4E', opacity: 0.8 }}>{icon}</div>
+    <div style={{ textAlign: 'left' }}>
+      <h5 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '2px' }}>{title}</h5>
+      <p style={{ fontSize: '0.65rem', color: '#888' }}>{sub}</p>
+    </div>
+  </div>
 );
 
 export default PrivacyPolicy;
