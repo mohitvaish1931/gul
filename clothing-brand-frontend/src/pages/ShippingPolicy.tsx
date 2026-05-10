@@ -1,95 +1,124 @@
-
+import React from 'react';
+import { Truck, Clock, ShieldCheck, MapPin, AlertCircle } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const ShippingPolicy = () => {
+  useSEO({
+    title: 'Shipping Policy - GUL FASHION',
+    description: 'Information about GUL FASHION shipping rates, delivery times, and order tracking.',
+    keywords: 'shipping policy, delivery time, shipping rates, track order, GUL FASHION',
+    url: 'https://gulfashion.com/shipping-policy',
+    type: 'website'
+  });
+
   return (
-    <div className="min-h-screen bg-white py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <h1 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
-            Shipping Policy
-          </h1>
-          <p className="text-text-secondary text-lg luxury-serif italic">
-            Learn about our delivery times, shipping costs, and order tracking.
+    <div className="policy-page" style={{ backgroundColor: '#FDFBFD', color: '#1a1a1a', minHeight: '100vh' }}>
+      {/* Header Section */}
+      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>LOGISTICS & DELIVERY</span>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>Shipping Policy</h1>
+          <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
+            We strive to deliver your handcrafted luxury apparel with the utmost care and efficiency.
           </p>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="prose max-w-none text-text-primary space-y-8 font-medium">
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Delivery Time</h2>
-            <p className="mb-4 text-text-secondary">
-              All orders are usually dispatched within 2-3 working days unless stated otherwise. Once 
-              dispatched, it takes 4-8 working days to deliver depending upon the location.
-            </p>
-            <p className="text-text-secondary">
-              However, the delivery time is subject to change based on shortage of an item, bad weather, 
-              transit time of your carrier, destination address, or COVID related restrictions, etc.
-            </p>
-          </section>
+      {/* Main Content */}
+      <section style={{ padding: '80px 0' }}>
+        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', marginBottom: '60px' }}>
+             <InfoCard 
+               icon={<Clock size={24} />} 
+               title="Dispatch Time" 
+               desc="Orders are usually dispatched within 2-3 working days. Hand-embroidered pieces may take 5-7 days."
+             />
+             <InfoCard 
+               icon={<Truck size={24} />} 
+               title="Delivery Time" 
+               desc="Once dispatched, delivery takes 4-8 working days depending on your location and courier partner."
+             />
+          </div>
 
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Shipping Cost</h2>
-            <p className="text-text-secondary">
-              We charge <span className="text-primary-purple font-bold">₹70 per order</span> and also offer 
-              <span className="text-primary-purple font-bold"> free shipping on all orders above ₹1499</span>.
-            </p>
-          </section>
+          <div className="policy-sections" style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+            <PolicySection 
+              title="Shipping Costs" 
+              content={
+                <p>
+                  We offer <strong>Free Shipping</strong> on all domestic prepaid orders within India. For orders below ₹1,499 or COD orders, a standard shipping fee of ₹70 applies.
+                </p>
+              } 
+            />
 
-          {/* RTO/Un-delivered section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">RTO/Un-delivered Shipment</h2>
-            <p className="mb-4 text-text-secondary">
-              We are not liable for undelivered shipment or RTO (Return to Origin) due to wrong address / 
-              misinformation provided while placing an order.
-            </p>
-            <p className="text-text-secondary">
-              In this case, customer has to pay the shipping charges again so we can re-ship the order.
-            </p>
-          </section>
+            <PolicySection 
+              title="Tracking Your Shipment" 
+              content={
+                <p>
+                  As soon as your order leaves our Jaipur atelier, we will send you a tracking number via email and SMS. You can also track your shipment directly on our <a href="/track-order" style={{ color: '#D4AF37', textDecoration: 'underline' }}>Track Order</a> page.
+                </p>
+              } 
+            />
 
-          {/* Tracking Order section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Tracking Your Order</h2>
-            <p className="text-text-secondary">
-              Once your order is shipped from our warehouse, you will receive an email including a tracking 
-              number to check the status.
-            </p>
-          </section>
+            <PolicySection 
+              title="Undelivered Shipments (RTO)" 
+              content={
+                <p>
+                  GUL FASHION is not liable for undelivered shipments due to incorrect address information provided during checkout. In the event of a Return to Origin (RTO), a re-shipping fee will be applicable.
+                </p>
+              } 
+            />
 
-          {/* Lost Shipment section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider">Lost Shipment</h2>
-            <p className="mb-4 text-text-secondary">
-              Incase your package gets lost during the transit, we shall re-ship your order.
-            </p>
-            <p className="text-text-secondary">
-              If any item of your order is out of stock, you can either wait for a restock or we will issue 
-              a credit note which can be used for future orders.
-            </p>
-          </section>
+            <PolicySection 
+              title="Lost or Damaged Items" 
+              content={
+                <p>
+                  If a package is lost in transit, we will immediately initiate a replacement shipment at no extra cost. For items damaged during transit, please record an unboxing video and contact our support team within 24 hours.
+                </p>
+              } 
+            />
 
-          {/* Contact section */}
-          <section className="pt-12 border-t-2 border-primary-purple/20 text-center">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider">Need Help with Your Order?</h2>
-            <p className="mb-8 text-text-secondary italic">
-              Feel free to reach us out on:
-            </p>
-            <div className="flex flex-col md:flex-row justify-center gap-8 text-text-primary font-bold tracking-widest text-sm">
-              <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20">
-                <p className="text-[10px] text-text-muted mb-1 font-normal">EMAIL</p>
-                <a href="mailto:gul.fashion.jaipur@gmail.com" className="hover:text-primary-purple transition-all">gul.fashion.jaipur@gmail.com</a>
-              </div>
-              <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20">
-                <p className="text-[10px] text-text-muted mb-1 font-normal">WHATSAPP</p>
-                <a href="https://wa.me/919351325459" className="hover:text-primary-purple transition-all">+91 93513 25459</a>
-              </div>
+            <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '20px', border: '1px solid #f0f0f0', marginTop: '40px', textAlign: 'center' }}>
+               <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Need Assistance?</h3>
+               <p style={{ color: '#666', marginBottom: '30px' }}>Our logistics concierge is available to help you with any queries regarding your delivery.</p>
+               <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                  <a href="mailto:gul.fashion.jaipur@gmail.com" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>EMAIL SUPPORT</a>
+                  <a href="https://wa.me/919351325459" style={{ padding: '15px 30px', border: '1.5px solid #2D0A4E', color: '#2D0A4E', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>WHATSAPP US</a>
+               </div>
             </div>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
+      
+      <style>{`
+        @media (max-width: 768px) {
+          .policy-page h1 {
+            font-size: 2.5rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
 
+const InfoCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
+  <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0', display: 'flex', gap: '20px', alignItems: 'center' }}>
+    <div style={{ backgroundColor: '#F8F5FF', color: '#2D0A4E', padding: '15px', borderRadius: '15px' }}>{icon}</div>
+    <div>
+      <h4 style={{ fontWeight: '800', color: '#2D0A4E', fontSize: '0.9rem', marginBottom: '5px' }}>{title}</h4>
+      <p style={{ color: '#666', fontSize: '0.8rem', lineHeight: '1.4' }}>{desc}</p>
+    </div>
+  </div>
+);
+
+const PolicySection = ({ title, content }: { title: string, content: React.ReactNode }) => (
+  <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+    <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>{title}</h3>
+    <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+      {content}
+    </div>
+  </div>
+);
+
 export default ShippingPolicy;
+

@@ -30,7 +30,6 @@ const LoginScreen = () => {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
-      // Backend returns { token, id, name, email, isAdmin }
       dispatch({ 
         type: 'SET_USER', 
         payload: { 
@@ -41,7 +40,6 @@ const LoginScreen = () => {
         } 
       });
 
-      // Navigate based on role
       if (data.isAdmin) {
         navigate('/admin');
       } else {
@@ -55,54 +53,116 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className="container page-top-padding flex justify-center items-center" style={{minHeight: '80vh'}}>
-      <div style={{width: '100%', maxWidth: '400px', padding: '40px', background: '#fff', borderRadius: '4px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)'}}>
-        <h1 className="font-serif text-center" style={{fontSize: '2rem', marginBottom: '10px', color: 'var(--primary-color)'}}>Sign In</h1>
-        <p className="text-center" style={{color: '#666', marginBottom: '30px'}}>Access your GUL FASHION account</p>
+    <div className="login-page" style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      backgroundColor: '#FDFBFD',
+      padding: '40px 20px'
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '450px',
+        backgroundColor: '#fff',
+        padding: '50px',
+        borderRadius: '24px',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.04)',
+        border: '1px solid #f0f0f0',
+        textAlign: 'center'
+      }}>
+        <span style={{ 
+          color: '#D4AF37', 
+          letterSpacing: '4px', 
+          fontWeight: '800', 
+          fontSize: '0.7rem', 
+          textTransform: 'uppercase', 
+          display: 'block', 
+          marginBottom: '15px' 
+        }}>WELCOME BACK</span>
+        
+        <h1 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '10px', color: '#2D0A4E' }}>Sign In</h1>
+        <p style={{ color: '#666', marginBottom: '40px', fontSize: '0.95rem' }}>Experience the heritage of GUL FASHION</p>
 
         {error && (
-          <div style={{ padding: '12px', background: '#fff5f5', border: '1px solid #feb2b2', color: '#c53030', borderRadius: '4px', marginBottom: '20px', fontSize: '0.85rem', textAlign: 'center' }}>
+          <div style={{ 
+            padding: '15px', 
+            backgroundColor: '#FFF5F5', 
+            color: '#C53030', 
+            borderRadius: '12px', 
+            marginBottom: '25px', 
+            fontSize: '0.85rem',
+            border: '1px solid #FED7D7'
+          }}>
             {error}
           </div>
         )}
 
-        <form onSubmit={submitHandler}>
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: '#444'}}>Email Address</label>
+        <form onSubmit={submitHandler} style={{ textAlign: 'left' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>EMAIL ADDRESS</label>
             <input 
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email"
+              placeholder="e.g. name@luxury.com"
               required
-              style={{width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '2px', outline: 'none'}}
+              style={{ 
+                width: '100%', 
+                padding: '15px 20px', 
+                border: '1.5px solid #eee', 
+                borderRadius: '12px', 
+                outline: 'none',
+                fontSize: '0.95rem',
+                transition: 'border-color 0.3s'
+              }}
             />
           </div>
 
-          <div style={{marginBottom: '30px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: '#444'}}>Password</label>
+          <div style={{ marginBottom: '30px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>PASSWORD</label>
             <input 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
+              placeholder="••••••••"
               required
-              style={{width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '2px', outline: 'none'}}
+              style={{ 
+                width: '100%', 
+                padding: '15px 20px', 
+                border: '1.5px solid #eee', 
+                borderRadius: '12px', 
+                outline: 'none',
+                fontSize: '0.95rem',
+                transition: 'border-color 0.3s'
+              }}
             />
           </div>
 
           <button 
             type="submit" 
-            className={`btn btn-primary w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
-            style={{padding: '14px'}}
             disabled={isLoading}
+            style={{ 
+              width: '100%', 
+              padding: '18px', 
+              backgroundColor: '#2D0A4E', 
+              color: '#fff', 
+              border: 'none', 
+              borderRadius: '12px', 
+              fontWeight: '800', 
+              letterSpacing: '2px', 
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.7 : 1,
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              boxShadow: '0 10px 20px rgba(45, 10, 78, 0.1)'
+            }}
           >
-            {isLoading ? 'Signing In...' : 'Sign In'}
+            {isLoading ? 'AUTHENTICATING...' : 'SIGN IN'}
           </button>
         </form>
 
-        <div className="text-center" style={{marginTop: '20px', fontSize: '0.9rem'}}>
-          New Customer? <Link to="/register" style={{color: 'var(--primary-color)', fontWeight: '500'}}>Register</Link>
+        <div style={{ marginTop: '30px', fontSize: '0.9rem', color: '#666' }}>
+          New to Gul Fashion? <Link to="/register" style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Create Account</Link>
         </div>
       </div>
     </div>

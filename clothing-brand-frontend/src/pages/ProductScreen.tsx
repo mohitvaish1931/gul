@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
+import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-react';
 
 const ProductScreen = () => {
   const { id } = useParams();
@@ -34,71 +35,132 @@ const ProductScreen = () => {
   };
 
   return (
-    <div className="container page-top-padding" style={{padding: '50px 5%'}}>
-      <Link to="/shop" className="btn btn-outline" style={{marginBottom: '30px'}}>
-        Go Back
-      </Link>
-      
-      {loading ? (
-        <h2 className="text-center font-serif">Loading...</h2>
-      ) : error ? (
-        <div className="error-box text-center"><p>{error}</p></div>
-      ) : (
-        <div className="product-screen-grid flex flex-col pt-4" style={{justifyContent: 'space-between'}}>
-          <div className="product-screen-image">
-            <img src={product.image} alt={product.name} style={{width: '100%', borderRadius: '4px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)'}} />
+    <div className="product-page-detail" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', padding: '60px 20px 100px' }}>
+      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <Link to="/shop" style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: '10px', 
+          color: '#2D0A4E', 
+          textDecoration: 'none', 
+          fontWeight: '800', 
+          fontSize: '0.75rem', 
+          letterSpacing: '2px', 
+          marginBottom: '40px',
+          textTransform: 'uppercase'
+        }}>
+          <ArrowLeft size={16} /> BACK TO COLLECTION
+        </Link>
+        
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+             <div className="loader-spinner" style={{ border: '3px solid #f3f3f3', borderTop: '3px solid #2D0A4E', borderRadius: '50%', width: '40px', height: '40px', animation: 'spin 1s linear infinite', margin: '0 auto' }}></div>
           </div>
-          
-          <div className="product-screen-info">
-            <h1 className="font-serif" style={{fontSize: '2.5rem', marginBottom: '10px', color: 'var(--primary-purple)'}}>{product.name}</h1>
-            <h3 style={{fontSize: '1rem', color: '#666', borderBottom: '1px solid #eee', paddingBottom: '20px', marginBottom: '20px'}}>
-              Brand: {product.brand} | Category: {product.category}
-            </h3>
-            
-            <div className="description" style={{marginBottom: '30px', lineHeight: '1.8', color: '#444'}}>
-              <p>{product.description}</p>
+        ) : error ? (
+          <div style={{ textAlign: 'center', padding: '50px', backgroundColor: '#FFF5F5', borderRadius: '24px', border: '1px solid #FED7D7' }}>
+             <p style={{ color: '#C53030' }}>{error}</p>
+          </div>
+        ) : (
+          <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
+            {/* Image Section */}
+            <div className="product-image-section">
+              <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
+                 <img src={product.image} alt={product.name} style={{ width: '100%', display: 'block' }} />
+                 {product.countInStock === 0 && (
+                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
+                   </div>
+                 )}
+              </div>
             </div>
             
-            <div className="price-card" style={{padding: '20px', backgroundColor: '#f9f9f9', border: '1px solid #eee', borderRadius: '4px'}}>
-              <div className="flex justify-between" style={{marginBottom: '10px', fontSize: '1.25rem', fontWeight: 'bold'}}>
-                <span>Price:</span>
-                <span>₹{product.price ? product.price.toLocaleString('en-IN') : 0}</span>
-              </div>
+            {/* Info Section */}
+            <div className="product-info-section">
+              <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '15px' }}>{product.category}</span>
+              <h1 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: '15px', lineHeight: '1.2' }}>{product.name}</h1>
               
-              <div className="flex justify-between" style={{marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '10px'}}>
-                <span>Status:</span>
-                <span style={{color: product.countInStock > 0 ? 'green' : 'red'}}>
-                  {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
-                </span>
+              <div style={{ marginBottom: '30px' }}>
+                 <span style={{ fontSize: '2rem', fontWeight: '800', color: '#2D0A4E' }}>₹{product.price?.toLocaleString('en-IN')}</span>
+                 <span style={{ marginLeft: '15px', color: '#999', fontSize: '0.9rem', textDecoration: 'line-through' }}>₹{(product.price * 1.2).toLocaleString('en-IN')}</span>
               </div>
 
-              {product.countInStock > 0 && (
-                <div className="flex justify-between" style={{marginBottom: '20px'}}>
-                  <span>Quantity:</span>
-                  <select 
-                    value={qty} 
-                    onChange={(e) => setQty(Number(e.target.value))}
-                    style={{padding: '5px 10px', border: '1px solid #ccc'}}
-                  >
-                    {[...Array(product.countInStock).keys()].map(x => (
-                      <option key={x + 1} value={x + 1}>{x + 1}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              
-              <button 
-                onClick={addToCartHandler}
-                disabled={product.countInStock === 0}
-                className="btn btn-primary" 
-                style={{width: '100%', opacity: product.countInStock === 0 ? 0.5 : 1}}
-              >
-                Add To Cart
-              </button>
+              <div style={{ color: '#666', lineHeight: '1.8', fontSize: '1.05rem', marginBottom: '40px', borderBottom: '1px solid #f0f0f0', paddingBottom: '30px' }}>
+                <p>{product.description}</p>
+              </div>
+
+              {/* Purchase Card */}
+              <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0', marginBottom: '40px' }}>
+                 {product.countInStock > 0 ? (
+                   <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+                      <span style={{ fontWeight: '800', color: '#2D0A4E', fontSize: '0.85rem', letterSpacing: '1px' }}>SELECT QUANTITY</span>
+                      <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #eee', borderRadius: '8px', overflow: 'hidden' }}>
+                        <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ padding: '10px 15px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '800' }}>-</button>
+                        <span style={{ padding: '10px 20px', backgroundColor: '#f9f9f9', minWidth: '40px', textAlign: 'center', fontWeight: '800' }}>{qty}</span>
+                        <button onClick={() => setQty(Math.min(product.countInStock, qty + 1))} style={{ padding: '10px 15px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '800' }}>+</button>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={addToCartHandler}
+                      style={{ 
+                        width: '100%', 
+                        padding: '20px', 
+                        backgroundColor: '#2D0A4E', 
+                        color: '#fff', 
+                        border: 'none', 
+                        borderRadius: '12px', 
+                        fontWeight: '800', 
+                        letterSpacing: '2px', 
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '12px',
+                        boxShadow: '0 10px 30px rgba(45,10,78,0.1)'
+                      }}
+                    >
+                      <ShoppingCart size={20} /> ADD TO COLLECTION
+                    </button>
+                   </>
+                 ) : (
+                   <div style={{ textAlign: 'center', padding: '10px 0' }}>
+                      <p style={{ color: '#C53030', fontWeight: '800', letterSpacing: '1px' }}>WE ARE CURRENTLY OUT OF STOCK</p>
+                      <button disabled style={{ width: '100%', padding: '18px', backgroundColor: '#eee', color: '#999', border: 'none', borderRadius: '12px', marginTop: '15px', fontWeight: '800' }}>NOTIFY ME</button>
+                   </div>
+                 )}
+              </div>
+
+              {/* USP Section */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '20px' }}>
+                 <div style={{ textAlign: 'center' }}>
+                    <ShieldCheck size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
+                    <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>SECURE PAYMENT</p>
+                 </div>
+                 <div style={{ textAlign: 'center' }}>
+                    <Truck size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
+                    <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>FREE DELIVERY</p>
+                 </div>
+                 <div style={{ textAlign: 'center' }}>
+                    <RefreshCcw size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
+                    <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>EASY EXCHANGE</p>
+                 </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+          .product-page-detail h1 {
+            font-size: 2.2rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

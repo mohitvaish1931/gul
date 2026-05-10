@@ -1,95 +1,89 @@
-
+import React from 'react';
+import { Scale, FileText, ShieldAlert, Gavel, HelpCircle } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const TermsConditions = () => {
+  useSEO({
+    title: 'Terms & Conditions - GUL FASHION',
+    description: 'Read the terms and conditions for using the GUL FASHION website and purchasing our luxury collections.',
+    keywords: 'terms and conditions, legal, GUL FASHION terms, user agreement',
+    url: 'https://gulfashion.com/terms-conditions',
+    type: 'website'
+  });
+
   return (
-    <div className="min-h-screen bg-white py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <h1 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
-            Terms & Conditions
-          </h1>
-          <p className="text-text-secondary text-lg luxury-serif italic">
-            Please read these terms and conditions carefully before using our website.
+    <div className="policy-page" style={{ backgroundColor: '#FDFBFD', color: '#1a1a1a', minHeight: '100vh' }}>
+      {/* Header Section */}
+      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>LEGAL FRAMEWORK</span>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>Terms & Conditions</h1>
+          <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
+            Please read these terms carefully before using our website or placing an order.
           </p>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="prose max-w-none text-text-primary space-y-8 font-medium">
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">1. Acceptance of Terms</h2>
-            <p className="text-text-secondary font-bold">
-              By accessing and using this website, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our website.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">2. Intellectual Property</h2>
-            <p className="text-text-secondary font-bold">
-              All content on this website, including but not limited to text, graphics, logos, images, and software, is the property of GUL FASHION and is protected by intellectual property laws. You may not reproduce, distribute, or create derivative works from this content without our express written permission.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">3. Product Descriptions</h2>
-            <p className="text-text-secondary leading-relaxed font-bold">
-              We strive to provide accurate descriptions and images of our products. However, we do not warrant that the product descriptions or other content are error-free, complete, or current. Colors may vary depending on your monitor settings.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">4. Pricing and Payment</h2>
-            <p className="text-text-secondary font-bold">
-              All prices are listed in Indian Rupees (₹) and are subject to change without notice. We reserve the right to refuse or cancel any order if there is an error in pricing or availability.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">5. Shipping and Delivery</h2>
-            <p className="text-text-secondary font-bold">
-              Shipping and delivery are subject to our <a href="/shipping-policy" className="text-primary-purple hover:text-text-primary underline font-bold transition-all">Shipping Policy</a>. We are not responsible for delays caused by third-party carriers or customs.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">6. Returns and Refunds</h2>
-            <p className="text-text-secondary font-bold">
-              Returns and refunds are subject to our <a href="/refund-policy" className="text-primary-purple hover:text-text-primary underline font-bold transition-all">Refund Policy</a>.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">7. Limitation of Liability</h2>
-            <p className="text-text-secondary font-bold">
-              GUL FASHION shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use our products or website.
-            </p>
-          </section>
-
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm transition-all hover:bg-white/40 group">
-            <h2 className="luxury-serif text-3xl text-text-primary mb-4 uppercase tracking-wider font-black group-hover:text-primary-purple transition-all duration-300">8. Governing Law</h2>
-            <p className="text-text-secondary font-bold">
-              These Terms and Conditions shall be governed by and construed in accordance with the laws of India, and any disputes shall be subject to the exclusive jurisdiction of the courts in Jaipur, Rajasthan.
-            </p>
-          </section>
-
-          <section className="pt-12 border-t-2 border-primary-purple/20 text-center">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider font-bold">Contact Information</h2>
-            <p className="mb-8 text-text-secondary italic">
-              If you have any questions about these Terms and Conditions, please contact us at:
-            </p>
-            <div className="flex flex-col md:flex-row justify-center gap-8 text-text-primary font-bold tracking-widest text-sm">
-              <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20 shadow-sm">
-                <p className="text-[10px] text-text-muted mb-1 font-normal uppercase">Email</p>
-                <a href="mailto:gul.fashion.jaipur@gmail.com" className="hover:text-primary-purple transition-all">gul.fashion.jaipur@gmail.com</a>
-              </div>
-              <div className="bg-white/40 px-8 py-4 rounded-xl border border-gold-primary/20 shadow-sm">
-                <p className="text-[10px] text-text-muted mb-1 font-normal uppercase">WhatsApp</p>
-                <a href="https://wa.me/919351325459" className="hover:text-primary-purple transition-all">+91 93513 25459</a>
+      {/* Main Content */}
+      <section style={{ padding: '80px 0' }}>
+        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+          
+          <div className="policy-sections" style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Acceptance of Terms</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  By accessing and using this website, you agree to be bound by these Terms and Conditions and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
+                </p>
               </div>
             </div>
-          </section>
+
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Product Representation</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  We make every effort to display as accurately as possible the colors and images of our products. However, we cannot guarantee that your computer monitor's display of any color will be accurate. Handcrafted items may have slight variations in embroidery or weave, which are hallmarks of authenticity.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Intellectual Property</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  All content included on this site, such as text, graphics, logos, images, and software, is the property of GUL FASHION or its content suppliers and protected by international copyright laws. Any unauthorized use of the content is strictly prohibited.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Pricing & Payments</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service without notice. We shall not be liable to you or to any third-party for any modification, price change, or suspension of the Service.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Governing Law</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  These terms and conditions are governed by and construed in accordance with the laws of Rajasthan, India, and you irrevocably submit to the exclusive jurisdiction of the courts in Jaipur.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '20px', border: '1px solid #f0f0f0', marginTop: '40px', textAlign: 'center' }}>
+               <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Legal Questions?</h3>
+               <p style={{ color: '#666', marginBottom: '30px' }}>If you have any questions about our Terms & Conditions, please reach out to our legal department.</p>
+               <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                  <a href="mailto:legal@gulfashion.com" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>CONTACT LEGAL TEAM</a>
+               </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

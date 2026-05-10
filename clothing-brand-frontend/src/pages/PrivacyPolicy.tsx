@@ -1,162 +1,87 @@
-
+import React from 'react';
+import { Lock, Eye, ShieldCheck, FileText, Globe } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const PrivacyPolicy = () => {
+  useSEO({
+    title: 'Privacy Policy - GUL FASHION',
+    description: 'Learn how GUL FASHION protects your personal data and ensures a secure shopping experience.',
+    keywords: 'privacy policy, data protection, secure shopping, GUL FASHION privacy',
+    url: 'https://gulfashion.com/privacy-policy',
+    type: 'website'
+  });
+
   return (
-    <div className="min-h-screen bg-white py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <h1 className="luxury-serif text-5xl md:text-6xl text-text-primary mb-6">
-            Privacy Policy
-          </h1>
-          <p className="text-text-secondary text-lg luxury-serif italic">
-            Your privacy is important to us. Learn how we protect your data.
+    <div className="policy-page" style={{ backgroundColor: '#FDFBFD', color: '#1a1a1a', minHeight: '100vh' }}>
+      {/* Header Section */}
+      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>TRUST & SECURITY</span>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>Privacy Policy</h1>
+          <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
+            We are committed to protecting your privacy and ensuring your personal information is handled with care.
           </p>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="prose max-w-none text-text-primary space-y-8 font-medium">
-          {/* Who we are section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider font-bold">Who We Are</h2>
-            <p className="text-text-secondary">
-              GUL FASHION is a luxury clothing brand committed to protecting your privacy. 
-              Our website address is available upon request.
-            </p>
-          </section>
+      {/* Main Content */}
+      <section style={{ padding: '80px 0' }}>
+        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+          
+          <div className="policy-sections" style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Information We Collect</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>When you visit GUL FASHION, we collect certain information to provide you with a personalized experience:</p>
+                <ul style={{ listStyle: 'disc', marginLeft: '20px', marginTop: '10px' }}>
+                  <li><strong>Personal Details:</strong> Name, email address, phone number, and shipping address provided during checkout.</li>
+                  <li><strong>Device Information:</strong> IP address, browser type, and operating system to improve our website performance.</li>
+                  <li><strong>Transaction Details:</strong> History of products purchased (we do not store credit card details).</li>
+                </ul>
+              </div>
+            </div>
 
-          {/* Comments section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-4 uppercase tracking-wider font-bold">Comments</h2>
-            <p className="mb-4 text-text-secondary">
-              When visitors leave comments on the site we collect the data shown in the comments form, 
-              and also the visitor's IP address and browser user agent string to help spam detection.
-            </p>
-            <p className="text-text-secondary">
-              An anonymized string created from your email address (also called a hash) may be provided 
-              to the Gravatar service to see if you are using it. The Gravatar service privacy policy is 
-              available at <a href="https://automattic.com/privacy/" className="text-primary-purple hover:text-text-primary transition-colors underline">https://automattic.com/privacy/</a>. 
-              After approval of your comment, your profile picture is visible to the public in the context 
-              of your comment.
-            </p>
-          </section>
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>How We Use Your Data</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>Your data helps us serve you better in the following ways:</p>
+                <ul style={{ listStyle: 'disc', marginLeft: '20px', marginTop: '10px' }}>
+                  <li>To process and fulfill your orders efficiently.</li>
+                  <li>To send order updates and tracking information.</li>
+                  <li>To provide personalized styling recommendations and exclusive offers.</li>
+                  <li>To improve our website's user interface and overall experience.</li>
+                </ul>
+              </div>
+            </div>
 
-          {/* Media section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Media</h2>
-            <p>
-              If you upload images to the website, you should avoid uploading images with embedded 
-              location data (EXIF GPS) included. Visitors to the website can download and extract any 
-              location data from images on the website.
-            </p>
-          </section>
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Data Protection</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  We implement a variety of security measures to maintain the safety of your personal information. Your data is stored on secure servers and is accessible only by a limited number of persons who have special access rights to such systems.
+                </p>
+              </div>
+            </div>
 
-          {/* Cookies section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Cookies</h2>
-            <p className="mb-4">
-              If you leave a comment on our site you may opt-in to saving your name, email address and 
-              website in cookies. These are for your convenience so that you do not have to fill in your 
-              details again when you leave another comment. These cookies will last for one year.
-            </p>
-            <p className="mb-4">
-              If you visit our login page, we will set a temporary cookie to determine if your browser 
-              accepts cookies. This cookie contains no personal data and is discarded when you close your browser.
-            </p>
-            <p className="mb-4">
-              When you log in, we will also set up several cookies to save your login information and your 
-              screen display choices. Login cookies last for two days, and screen options cookies last for a 
-              year. If you select "Remember Me", your login will persist for two weeks. If you log out of your 
-              account, the login cookies will be removed.
-            </p>
-            <p>
-              If you edit or publish an article, an additional cookie will be saved in your browser. This 
-              cookie includes no personal data and simply indicates the post ID of the article you just edited. 
-              It expires after 1 day.
-            </p>
-          </section>
+            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
+              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Cookies</h3>
+              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p>
+                  We use cookies to understand and save your preferences for future visits and compile aggregate data about site traffic and site interaction so that we can offer better site experiences and tools in the future.
+                </p>
+              </div>
+            </div>
 
-          {/* Embedded content section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Embedded Content from Other Websites</h2>
-            <p className="mb-4">
-              Articles on this site may include embedded content (e.g. videos, images, articles, etc.). 
-              Embedded content from other websites behaves in the exact same way as if the visitor has 
-              visited the other website.
-            </p>
-            <p>
-              These websites may collect data about you, use cookies, embed additional third-party tracking, 
-              and monitor your interaction with that embedded content, including tracking your interaction with 
-              the embedded content if you have an account and are logged in to that website.
-            </p>
-          </section>
-
-          {/* Data sharing section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Who We Share Your Data With</h2>
-            <p>
-              If you request a password reset, your IP address will be included in the reset email.
-            </p>
-          </section>
-
-          {/* Data retention section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">How Long We Retain Your Data</h2>
-            <p className="mb-4">
-              If you leave a comment, the comment and its metadata are retained indefinitely. This is so we 
-              can recognize and approve any follow-up comments automatically instead of holding them in a 
-              moderation queue.
-            </p>
-            <p>
-              For users that register on our website (if any), we also store the personal information they 
-              provide in their user profile. All users can see, edit, or delete their personal information at 
-              any time (except they cannot change their username). Website administrators can also see and 
-              edit that information.
-            </p>
-          </section>
-
-          {/* Data rights section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">What Rights You Have Over Your Data</h2>
-            <p>
-              If you have an account on this site, or have left comments, you can request to receive an 
-              exported file of the personal data we hold about you, including any data you have provided to us. 
-              You can also request that we erase any personal data we hold about you. This does not include any 
-              data we are obliged to keep for administrative, legal, or security purposes.
-            </p>
-          </section>
-
-          {/* Data transfer section */}
-          <section>
-            <h2 className="luxury-serif text-3xl text-gold-primary mb-4">Where We Send Your Data</h2>
-            <p>
-              Visitor comments may be checked through an automated spam detection service.
-            </p>
-          </section>
-
-          {/* Contact section */}
-          <section className="bg-white/30 p-8 rounded-2xl border border-gold-primary/20 shadow-sm relative overflow-hidden group">
-            <h2 className="luxury-serif text-3xl text-primary-purple mb-6 uppercase tracking-wider font-black">Contact Us</h2>
-            <p className="text-text-secondary font-medium leading-relaxed mb-8">
-              If you have any questions about our privacy policy or how we handle your data, please contact us at:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-text-primary font-bold tracking-widest uppercase text-[10px]">
-               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-purple mb-1">EMAIL</p>
-                  <p className="text-sm">gul.fashion.jaipur@gmail.com</p>
-               </div>
-               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-purple mb-1">PHONE</p>
-                  <p className="text-sm">+91 93513 25459</p>
-               </div>
-               <div className="bg-white/40 p-4 rounded-xl border border-gold-primary/10">
-                  <p className="text-primary-purple mb-1">ADDRESS</p>
-                  <p className="text-sm">Pahadiya chowk, Jaipur 302002</p>
+            <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '20px', border: '1px solid #f0f0f0', marginTop: '40px', textAlign: 'center' }}>
+               <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Privacy Concerns?</h3>
+               <p style={{ color: '#666', marginBottom: '30px' }}>If you have any questions regarding this privacy policy, you may contact us using the information below.</p>
+               <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                  <a href="mailto:privacy@gulfashion.com" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>CONTACT PRIVACY TEAM</a>
                </div>
             </div>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
