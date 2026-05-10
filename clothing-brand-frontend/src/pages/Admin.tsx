@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, 
-  TrendingUp, ArrowUp, ArrowDown, LayoutDashboard, Tag, Settings, 
+  TrendingUp, ArrowUp, LayoutDashboard, Tag, Settings, 
   LogOut, Bell, Search, Menu, ChevronRight, PieChart, Video, 
-  Image as ImageIcon, Ticket, User, Home, ExternalLink
+  Image as ImageIcon, Ticket, Home, ExternalLink
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
