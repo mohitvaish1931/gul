@@ -1,64 +1,67 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Package, RefreshCcw, Box, HelpCircle, Clock, Mail, MessageCircle } from 'lucide-react';
+import { RotateCcw, ShieldAlert, CheckCircle, HelpCircle, Mail, MessageCircle, Headphones, ShieldCheck, Lock, Globe, RefreshCcw } from 'lucide-react';
 
 const RefundPolicy = () => {
   useSEO({
     title: 'Refund Policy - GUL FASHION',
-    description: 'Understand our returns, refunds, and exchange process.',
-    keywords: 'refund policy, return policy, exchange, GUL FASHION',
+    description: 'Understand our return and exchange process for your luxury ethnic wear.',
+    keywords: 'refund policy, returns, exchanges, GUL FASHION policies',
     url: 'https://gulfashion.com/refund-policy',
     type: 'website'
   });
 
   const sections = [
     {
-      icon: <Package size={30} />,
-      title: "RETURNS",
-      text: "We accept returns only if you've received a damaged product or we have sent a different product accidentally, provided that you must have a proof of unboxing video from the start clearly showing the damage in the product. In this case, we shall arrange a pickup from your location and issue a credit note for the same which can be used for your future orders."
+      icon: <RotateCcw size={30} />,
+      title: "7-DAY EXCHANGE POLICY",
+      text: "We offer a 7-day size exchange policy for all unworn garments with original tags attached. If the size you ordered doesn't fit perfectly, we'll happily exchange it for the right one."
     },
     {
-      icon: <RefreshCcw size={30} />,
-      title: "REFUND",
-      text: "We do not provide refunds at any cost. In some cases, you might be eligible for a credit note."
+      icon: <ShieldAlert size={30} />,
+      title: "DAMAGED PRODUCTS",
+      text: "In the rare event that you receive a damaged product, we offer a full refund or replacement. An unboxing video is mandatory to process damage-related requests."
     },
     {
-      icon: <Box size={30} />,
-      title: "MISSING ITEM",
-      text: "Incase a product is missing from your package, you can raise an issue for the same & we will ship it to you at the earliest. You must have a proof of unboxing video from the start clearly showing all the products in the package.",
-      note: "Please note, we don't provide refund for the missing item. You may be eligible for a credit note if the missing item is out of stock."
+      icon: <CheckCircle size={30} />,
+      title: "QUALITY ASSURANCE",
+      text: "Every GUL FASHION garment undergoes multiple quality checks before being dispatched to ensure you receive only the finest handcrafted quality."
     },
     {
       icon: <HelpCircle size={30} />,
-      title: "EXCHANGE",
-      text: "We provide size exchange only for finger rings. Shipping charges of ₹200 (to & fro) will be borne by the customer. Exchange will be picked up and delivered at the same address as the original delivery address.",
-      note: "Please note that the exchange process takes around 12-15 days."
-    },
-    {
-      icon: <Clock size={30} />,
-      title: "TIME LIMIT",
-      text: "You need to raise a return/exchange request within a period of 3 days from the delivery date. Post this period of 3 days, your order shall become final sale, and would not be eligible for any return request."
+      title: "HOW TO RAISE A REQUEST",
+      text: "To initiate an exchange or report a damage, please contact our support team via Email or WhatsApp with your order number and relevant details."
     }
   ];
 
   return (
     <div className="policy-page-v2" style={{ 
-      backgroundColor: '#fff', 
+      backgroundColor: '#fdfbff', 
       color: '#2d0a4e', 
       minHeight: '100vh', 
-      padding: '80px 20px',
-      fontFamily: "'Inter', sans-serif"
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative',
+      overflow: 'hidden'
     }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      {/* Background Patterns */}
+      <div style={{ position: 'absolute', top: '100px', left: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px' }} />
+      </div>
+      <div style={{ position: 'absolute', top: '150px', right: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px', transform: 'scaleX(-1)' }} />
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>SERVICE</span>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Refund Policy</h1>
-          <div style={{ width: '60px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>Understand our returns, refunds, and exchange process.</p>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ fontSize: '1.1rem', color: '#666' }}>Understand our return and exchange process for your luxury ethnic wear.</p>
         </div>
 
         {/* Sections */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '60px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '80px', maxWidth: '800px', margin: '0 auto 80px' }}>
           {sections.map((section, index) => (
             <div key={index} style={{ 
               display: 'flex', 
@@ -66,7 +69,7 @@ const RefundPolicy = () => {
               padding: '30px', 
               backgroundColor: '#fff', 
               borderRadius: '20px', 
-              boxShadow: '0 5px 25px rgba(0,0,0,0.03)',
+              boxShadow: '0 5px 25px rgba(0,0,0,0.02)',
               border: '1px solid #f8f8f8',
               alignItems: 'flex-start'
             }}>
@@ -84,26 +87,29 @@ const RefundPolicy = () => {
                 {section.icon}
               </div>
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
                 <p style={{ color: '#555', lineHeight: '1.7', fontSize: '0.95rem' }}>{section.text}</p>
-                {section.note && (
-                  <p style={{ color: '#777', fontStyle: 'italic', fontSize: '0.85rem', marginTop: '10px' }}>{section.note}</p>
-                )}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Raise a Request */}
+        {/* Contact CTA */}
         <div style={{ 
           backgroundColor: '#F9F6FF', 
           borderRadius: '24px', 
           padding: '60px 40px', 
-          textAlign: 'center'
+          textAlign: 'center',
+          marginBottom: '80px'
         }}>
-          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '15px', color: '#2d0a4e' }}>RAISE A REQUEST</h2>
-          <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ color: '#666', marginBottom: '40px' }}>You can raise a return/exchange request through the following channels:</p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+             <div style={{ width: '60px', height: '60px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(45,10,78,0.05)' }}>
+                <Headphones size={28} color="#2d0a4e" strokeWidth={1.5} />
+             </div>
+          </div>
+          <h2 className="font-serif" style={{ fontSize: '2.2rem', marginBottom: '10px', color: '#2d0a4e' }}>RAISE A REQUEST</h2>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ color: '#666', marginBottom: '40px' }}>Feel free to reach us out on:</p>
           
           <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
             <ContactCard 
@@ -120,13 +126,21 @@ const RefundPolicy = () => {
             />
           </div>
         </div>
+
+        {/* Trust Bar Footer */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '60px' }}>
+            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+        </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
           .policy-page-v2 h1 { font-size: 2.5rem !important; }
-          .policy-page-v2 h2 { font-size: 2rem !important; }
-          .policy-page-v2 > div > div:nth-child(2) > div { flex-direction: column; align-items: center; text-align: center; }
+          .policy-page-v2 h2 { font-size: 1.8rem !important; }
+          .policy-page-v2 > div > div:nth-child(3) { padding: 40px 20px !important; }
         }
       `}</style>
     </div>
@@ -153,6 +167,16 @@ const ContactCard = ({ icon, label, value, href }: { icon: React.ReactNode, labe
       <span style={{ fontSize: '1rem', fontWeight: '700' }}>{value}</span>
     </div>
   </a>
+);
+
+const TrustItem = ({ icon, title, sub }: { icon: React.ReactNode, title: string, sub: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+    <div style={{ color: '#2D0A4E', opacity: 0.8 }}>{icon}</div>
+    <div style={{ textAlign: 'left' }}>
+      <h5 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '2px' }}>{title}</h5>
+      <p style={{ fontSize: '0.65rem', color: '#888' }}>{sub}</p>
+    </div>
+  </div>
 );
 
 export default RefundPolicy;

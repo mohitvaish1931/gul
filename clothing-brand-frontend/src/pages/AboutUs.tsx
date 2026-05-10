@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Heart, ShieldCheck, Globe, Star, Award, Users } from 'lucide-react';
+import { Heart, ShieldCheck, Globe, Star, Award, Users, Lock, RefreshCcw } from 'lucide-react';
 
 const AboutUs = () => {
   useSEO({
@@ -43,8 +43,8 @@ const AboutUs = () => {
       </section>
 
       {/* Our Heritage Section */}
-      <section style={{ padding: '100px 0' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center' }}>
+      <section style={{ padding: '100px 20px' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '80px', alignItems: 'center', maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ position: 'relative' }}>
             <div style={{ 
               width: '100%', 
@@ -100,7 +100,7 @@ const AboutUs = () => {
 
       {/* Stats Section */}
       <section style={{ backgroundColor: '#fff', padding: '80px 0', borderY: '1px solid #f0f0f0' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', textAlign: 'center' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
           <StatItem number="100K+" label="Happy Patrons" />
           <StatItem number="2000+" label="Unique Designs" />
           <StatItem number="50+" label="Global Stores" />
@@ -109,13 +109,13 @@ const AboutUs = () => {
       </section>
 
       {/* Values Section */}
-      <section style={{ padding: '100px 0', backgroundColor: '#F8F5FF' }}>
-        <div className="container text-center" style={{ marginBottom: '60px' }}>
+      <section style={{ padding: '100px 20px', backgroundColor: '#F8F5FF' }}>
+        <div className="container text-center" style={{ marginBottom: '60px', maxWidth: '1200px', margin: '0 auto 60px' }}>
           <span className="small-gold-tag">THE GUL ETHOS</span>
           <h2 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E' }}>What We Stand For</h2>
         </div>
         
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           <ValueCard 
             icon={<Award size={32} />} 
             title="Premium Quality" 
@@ -134,17 +134,15 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* Founders Section or Quote */}
-      <section style={{ padding: '120px 0', textAlign: 'center', backgroundColor: '#fff' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '40px', color: '#D4AF37' }}>
-            <Star size={40} fill="#D4AF37" />
+      {/* Trust Bar Footer */}
+      <section style={{ backgroundColor: '#fff', borderTop: '1px solid #eee', padding: '80px 20px' }}>
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
+              <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
+              <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
+              <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+              <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
           </div>
-          <h2 className="font-serif italic" style={{ fontSize: '2.5rem', lineHeight: '1.6', color: '#2D0A4E', marginBottom: '40px' }}>
-            "Fashion is a language that tells the story of who you are. At Gul Fashion, we want that story to be one of elegance, grace, and timeless beauty."
-          </h2>
-          <div style={{ height: '2px', width: '60px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ fontWeight: '800', letterSpacing: '4px', color: '#2D0A4E' }}>THE GUL FAMILY</p>
         </div>
       </section>
       
@@ -177,5 +175,14 @@ const ValueCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string
   </div>
 );
 
-export default AboutUs;
+const TrustItem = ({ icon, title, sub }: { icon: React.ReactNode, title: string, sub: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+    <div style={{ color: '#2D0A4E', opacity: 0.8 }}>{icon}</div>
+    <div style={{ textAlign: 'left' }}>
+      <h5 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '2px' }}>{title}</h5>
+      <p style={{ fontSize: '0.65rem', color: '#888' }}>{sub}</p>
+    </div>
+  </div>
+);
 
+export default AboutUs;
