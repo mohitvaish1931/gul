@@ -4,7 +4,7 @@ import {
   Plus, Edit, Trash2, Eye, Package, Users, ShoppingBag, 
   TrendingUp, ArrowUp, ArrowDown, LayoutDashboard, Tag, Settings, 
   LogOut, Bell, Search, Menu, ChevronRight, PieChart, Video, 
-  Image as ImageIcon, Ticket, User
+  Image as ImageIcon, Ticket, User, Home, ExternalLink
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
@@ -1539,7 +1539,18 @@ const Admin = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all text-gray-600 border border-transparent hover:border-gray-200 group"
+            >
+              <Home className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-bold uppercase tracking-widest">View Store</span>
+              <ExternalLink className="w-3 h-3 opacity-50" />
+            </button>
+
+            <div className="w-px h-6 bg-gray-100 mx-2"></div>
+
             <button className="p-2.5 relative bg-gray-50 hover:bg-gray-100 rounded-xl transition-all text-gray-500">
               <Bell className="w-5 h-5" />
               <span className="absolute top-2.5 right-2.5 w-4 h-4 bg-primary-purple rounded-full border-2 border-white text-[8px] font-bold text-white flex items-center justify-center">3</span>
