@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Search, Truck, AlertCircle, Loader2, Package, Mail, Headphones, ShieldCheck, RefreshCcw, Globe, Lock } from 'lucide-react';
+import { Search, Truck, AlertCircle, Loader2, Package, Mail, Headphones, ShieldCheck, RefreshCcw, Globe, Lock, ChevronRight } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import { API_ENDPOINTS, fetchJSON } from '../utils/api';
-import './TrackOrder.css';
 
 interface OrderTrackingResponse {
   success: boolean;
@@ -71,50 +70,58 @@ const TrackOrder = () => {
   };
 
   return (
-    <div className="track-order-page-v2" style={{ 
-      backgroundColor: '#FDFBFD', 
+    <div className="track-order-page-v3" style={{ 
+      backgroundColor: '#fdfbff', 
       minHeight: '100vh', 
       paddingBottom: '100px',
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%'
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative',
+      overflow: 'hidden'
     }}>
-      {/* Hero Section */}
-      <section style={{ 
-        backgroundColor: '#fff', 
-        borderBottom: '1px solid #f0f0f0', 
-        padding: '100px 20px', 
-        textAlign: 'center',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center'
-      }}>
-        <div style={{ maxWidth: '800px', width: '100%' }}>
+      {/* Background Floral Patterns */}
+      <div style={{ position: 'absolute', top: '100px', left: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px' }} />
+      </div>
+      <div style={{ position: 'absolute', top: '150px', right: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px', transform: 'scaleX(-1)' }} />
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
+        {/* Header Section */}
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
           <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>REAL-TIME UPDATES</span>
-          <h1 className="font-serif" style={{ fontSize: '3.5rem', color: '#2D0A4E', marginBottom: '20px' }}>Track Your Order</h1>
-          <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.8', maxWidth: '600px', margin: '0 auto' }}>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', color: '#2D0A4E', marginBottom: '15px' }}>Track Your Order</h1>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
+             <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37' }}></div>
+          </div>
+          <p style={{ color: '#666', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
             Enter your order details below to see the current status of your handcrafted apparel.
           </p>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', padding: '0 20px' }}>
-        <div style={{ maxWidth: '600px', width: '100%', margin: '60px 0' }}>
-          {/* Tracking Card */}
-          <div style={{ backgroundColor: '#fff', padding: '50px', borderRadius: '30px', boxShadow: '0 20px 60px rgba(0,0,0,0.05)', border: '1px solid #f0f0f0' }}>
-            <form onSubmit={handleTrackOrder} style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+        {/* Tracking Card */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '80px' }}>
+          <div style={{ 
+            backgroundColor: '#fff', 
+            padding: '50px', 
+            borderRadius: '24px', 
+            boxShadow: '0 20px 60px rgba(0,0,0,0.03)', 
+            border: '1px solid #f8f8f8',
+            maxWidth: '700px',
+            width: '100%'
+          }}>
+            <form onSubmit={handleTrackOrder} style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
               <div className="form-group">
-                <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '2px', color: '#2D0A4E', marginBottom: '10px', textTransform: 'uppercase' }}>ORDER ID</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '10px' }}>ORDER ID</label>
                 <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }}>
-                    <Package size={20} />
+                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#2D0A4E' }}>
+                    <Package size={20} strokeWidth={1.5} />
                   </div>
                   <input
                     type="text"
                     value={orderNumber}
                     onChange={(e) => setOrderNumber(e.target.value)}
-                    style={{ width: '100%', padding: '18px 20px 18px 55px', borderRadius: '15px', border: '1.5px solid #eee', backgroundColor: '#fafafa', outline: 'none', transition: 'all 0.3s' }}
+                    style={{ width: '100%', padding: '15px 20px 15px 55px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none' }}
                     placeholder="e.g. MOR-123456"
                     required
                   />
@@ -122,16 +129,16 @@ const TrackOrder = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '2px', color: '#2D0A4E', marginBottom: '10px', textTransform: 'uppercase' }}>EMAIL ADDRESS</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '10px' }}>EMAIL ADDRESS</label>
                 <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#D4AF37' }}>
-                    <Mail size={20} />
+                  <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#2D0A4E' }}>
+                    <Mail size={20} strokeWidth={1.5} />
                   </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{ width: '100%', padding: '18px 20px 18px 55px', borderRadius: '15px', border: '1.5px solid #eee', backgroundColor: '#fafafa', outline: 'none', transition: 'all 0.3s' }}
+                    style={{ width: '100%', padding: '15px 20px 15px 55px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none' }}
                     placeholder="The email used during checkout"
                     required
                   />
@@ -143,68 +150,149 @@ const TrackOrder = () => {
                 disabled={loading}
                 style={{ 
                   width: '100%', 
-                  padding: '20px', 
+                  padding: '18px', 
                   backgroundColor: '#2D0A4E', 
                   color: '#fff', 
                   border: 'none', 
-                  borderRadius: '15px', 
-                  fontWeight: '800', 
+                  borderRadius: '12px', 
+                  fontWeight: '700', 
+                  fontSize: '0.9rem',
                   letterSpacing: '2px', 
                   cursor: loading ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
-                  boxShadow: '0 10px 30px rgba(45,10,78,0.1)'
+                  marginTop: '10px'
                 }}
               >
-                {loading ? <Loader2 size={20} className="animate-spin" /> : <Search size={20} />}
-                {loading ? 'LOCATING...' : 'TRACK MY SHIPMENT'}
+                {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
+                TRACK MY SHIPMENT
               </button>
             </form>
 
             {error && (
-              <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#FFF5F5', border: '1px solid #FED7D7', borderRadius: '15px', color: '#C53030', display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <AlertCircle size={20} />
-                <p style={{ fontSize: '0.9rem', fontWeight: '600' }}>{error}</p>
+              <div style={{ marginTop: '25px', padding: '15px', backgroundColor: '#FFF5F5', borderRadius: '12px', color: '#C53030', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <AlertCircle size={18} />
+                <p style={{ fontSize: '0.85rem', fontWeight: '600' }}>{error}</p>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Result Card */}
-          {trackingResult && (
-            <div style={{ marginTop: '40px', backgroundColor: '#2D0A4E', color: '#fff', padding: '40px', borderRadius: '30px', boxShadow: '0 30px 60px rgba(45,10,78,0.2)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '30px' }}>
-                  <div>
-                    <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '3px', opacity: 0.6, textTransform: 'uppercase' }}>Shipment Status</span>
-                    <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '10px' }}>{trackingResult.order.status}</h2>
+        {/* Tracking Result View */}
+        {trackingResult && (
+           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '80px' }}>
+              <div style={{ 
+                backgroundColor: '#2D0A4E', 
+                color: '#fff', 
+                padding: '40px', 
+                borderRadius: '24px', 
+                boxShadow: '0 30px 60px rgba(45,10,78,0.2)',
+                maxWidth: '700px',
+                width: '100%'
+              }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '30px' }}>
+                    <div>
+                      <span style={{ fontSize: '0.6rem', fontWeight: '700', letterSpacing: '3px', opacity: 0.6, textTransform: 'uppercase' }}>Shipment Status</span>
+                      <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '5px' }}>{trackingResult.order.status}</h2>
+                    </div>
+                    <Truck size={40} color="#D4AF37" />
                   </div>
-                  <Truck size={40} color="#D4AF37" />
-                </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                  <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Order Number</span>
-                    <p style={{ fontSize: '1.2rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.orderNumber}</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Order Number</span>
+                      <p style={{ fontSize: '1.1rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.orderNumber}</p>
+                    </div>
+                    <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Courier Partner</span>
+                      <p style={{ fontSize: '1.1rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.courierName || 'In Transit'}</p>
+                    </div>
                   </div>
-                  <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span style={{ fontSize: '0.55rem', fontWeight: '700', letterSpacing: '2px', opacity: 0.5, textTransform: 'uppercase' }}>Courier Partner</span>
-                    <p style={{ fontSize: '1.2rem', fontWeight: '500', marginTop: '5px' }}>{trackingResult.order.courierName || 'In Transit'}</p>
-                  </div>
-                </div>
-            </div>
-          )}
+              </div>
+           </div>
+        )}
+
+        {/* Need Help Section */}
+        <div style={{ backgroundColor: '#F9F6FF', borderRadius: '24px', padding: '60px 40px', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '10px' }}>Need Help?</h3>
+            <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto' }}></div>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '25px' }}>
+            <HelpCard 
+              icon={<Headphones size={24} />} 
+              title="Contact Us" 
+              desc="Our support team is here to help you." 
+              linkText="Get in Touch" 
+              href="/contact"
+            />
+            <HelpCard 
+              icon={<Truck size={24} />} 
+              title="Shipping Info" 
+              desc="Learn more about our shipping & delivery." 
+              linkText="View Details" 
+              href="/shipping-policy"
+            />
+            <HelpCard 
+              icon={<RefreshCcw size={24} />} 
+              title="Returns & Exchange" 
+              desc="Hassle-free returns for your peace of mind." 
+              linkText="Learn More" 
+              href="/refund-policy"
+            />
+            <HelpCard 
+              icon={<ShieldCheck size={24} />} 
+              title="Secure & Safe" 
+              desc="Your information is 100% secure with us." 
+              linkText="Privacy Policy" 
+              href="/privacy-policy"
+            />
+          </div>
+        </div>
+
+        {/* Trust Bar */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '40px' }}>
+            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .track-order-page-v2 h1 { font-size: 2.5rem !important; }
-          .track-order-page-v2 > div:nth-child(2) > div { padding: 40px 20px !important; }
+          .track-order-page-v3 h1 { font-size: 2.5rem !important; }
+          .track-order-page-v3 > div > div:nth-child(2) { padding: 40px 20px !important; }
         }
       `}</style>
     </div>
   );
 };
+
+const HelpCard = ({ icon, title, desc, linkText, href }: { icon: React.ReactNode, title: string, desc: string, linkText: string, href: string }) => (
+  <div style={{ backgroundColor: 'transparent', textAlign: 'left' }}>
+    <div style={{ width: '50px', height: '50px', backgroundColor: '#FDF7F2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2D0A4E', marginBottom: '20px', border: '1px solid rgba(45,10,78,0.05)' }}>
+      {icon}
+    </div>
+    <h4 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#2D0A4E', marginBottom: '8px' }}>{title}</h4>
+    <p style={{ fontSize: '0.8rem', color: '#666', lineHeight: '1.6', marginBottom: '12px' }}>{desc}</p>
+    <a href={href} style={{ fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+      {linkText} <ChevronRight size={14} />
+    </a>
+  </div>
+);
+
+const TrustItem = ({ icon, title, sub }: { icon: React.ReactNode, title: string, sub: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+    <div style={{ color: '#2D0A4E', opacity: 0.8 }}>{icon}</div>
+    <div style={{ textAlign: 'left' }}>
+      <h5 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '2px' }}>{title}</h5>
+      <p style={{ fontSize: '0.65rem', color: '#888' }}>{sub}</p>
+    </div>
+  </div>
+);
 
 export default TrackOrder;
