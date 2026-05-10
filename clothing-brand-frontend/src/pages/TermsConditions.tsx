@@ -1,91 +1,147 @@
 import React from 'react';
-import { Scale, FileText, ShieldAlert, Gavel, HelpCircle } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
+import { Scale, FileText, ShieldAlert, Gavel, HelpCircle, Mail, MessageCircle } from 'lucide-react';
 
 const TermsConditions = () => {
   useSEO({
     title: 'Terms & Conditions - GUL FASHION',
-    description: 'Read the terms and conditions for using the GUL FASHION website and purchasing our luxury collections.',
-    keywords: 'terms and conditions, legal, GUL FASHION terms, user agreement',
+    description: 'Read the terms and conditions for using the GUL FASHION website.',
+    keywords: 'terms and conditions, legal, GUL FASHION terms',
     url: 'https://gulfashion.com/terms-conditions',
     type: 'website'
   });
 
+  const sections = [
+    {
+      icon: <Scale size={30} />,
+      title: "ACCEPTANCE OF TERMS",
+      text: "By accessing and using this website, you agree to be bound by these Terms and Conditions and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this site."
+    },
+    {
+      icon: <FileText size={30} />,
+      title: "PRODUCT REPRESENTATION",
+      text: "We make every effort to display product colors and images as accurately as possible. However, we cannot guarantee your monitor's display will be accurate. Handcrafted items may have slight variations, which are hallmarks of authenticity."
+    },
+    {
+      icon: <ShieldAlert size={30} />,
+      title: "INTELLECTUAL PROPERTY",
+      text: "All content on this site, including text, graphics, logos, and images, is the property of GUL FASHION. Any unauthorized use or reproduction of this content is strictly prohibited."
+    },
+    {
+      icon: <Gavel size={30} />,
+      title: "PRICING & PAYMENTS",
+      text: "Prices for our products are subject to change without notice. We reserve the right to modify or discontinue the Service at any time. We are not liable for any price changes or suspensions."
+    },
+    {
+      icon: <HelpCircle size={30} />,
+      title: "GOVERNING LAW",
+      text: "These terms and conditions are governed by and construed in accordance with the laws of Rajasthan, India. You irrevocably submit to the exclusive jurisdiction of the courts in Jaipur."
+    }
+  ];
+
   return (
-    <div className="policy-page" style={{ backgroundColor: '#FDFBFD', color: '#1a1a1a', minHeight: '100vh' }}>
-      {/* Header Section */}
-      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>LEGAL FRAMEWORK</span>
-          <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>Terms & Conditions</h1>
-          <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
-            Please read these terms carefully before using our website or placing an order.
-          </p>
+    <div className="policy-page-v2" style={{ 
+      backgroundColor: '#fff', 
+      color: '#2d0a4e', 
+      minHeight: '100vh', 
+      padding: '80px 20px',
+      fontFamily: "'Inter', sans-serif"
+    }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Terms & Conditions</h1>
+          <div style={{ width: '60px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ fontSize: '1.1rem', color: '#666' }}>Please read these terms carefully before using our website or placing an order.</p>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section style={{ padding: '80px 0' }}>
-        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Sections */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '60px' }}>
+          {sections.map((section, index) => (
+            <div key={index} style={{ 
+              display: 'flex', 
+              gap: '30px', 
+              padding: '30px', 
+              backgroundColor: '#fff', 
+              borderRadius: '20px', 
+              boxShadow: '0 5px 25px rgba(0,0,0,0.03)',
+              border: '1px solid #f8f8f8',
+              alignItems: 'flex-start'
+            }}>
+              <div style={{ 
+                width: '70px', 
+                height: '70px', 
+                borderRadius: '50%', 
+                backgroundColor: '#FDF7F2', 
+                color: '#2d0a4e', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                {section.icon}
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
+                <p style={{ color: '#555', lineHeight: '1.7', fontSize: '0.95rem' }}>{section.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Raise a Request */}
+        <div style={{ 
+          backgroundColor: '#F9F6FF', 
+          borderRadius: '24px', 
+          padding: '60px 40px', 
+          textAlign: 'center'
+        }}>
+          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '15px', color: '#2d0a4e' }}>LEGAL QUESTIONS?</h2>
+          <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <p style={{ color: '#666', marginBottom: '40px' }}>If you have any questions about our Terms & Conditions, please reach out to our legal team:</p>
           
-          <div className="policy-sections" style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
-            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
-              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Acceptance of Terms</h3>
-              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                <p>
-                  By accessing and using this website, you agree to be bound by these Terms and Conditions and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
-              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Product Representation</h3>
-              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                <p>
-                  We make every effort to display as accurately as possible the colors and images of our products. However, we cannot guarantee that your computer monitor's display of any color will be accurate. Handcrafted items may have slight variations in embroidery or weave, which are hallmarks of authenticity.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
-              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Intellectual Property</h3>
-              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                <p>
-                  All content included on this site, such as text, graphics, logos, images, and software, is the property of GUL FASHION or its content suppliers and protected by international copyright laws. Any unauthorized use of the content is strictly prohibited.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
-              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Pricing & Payments</h3>
-              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                <p>
-                  Prices for our products are subject to change without notice. We reserve the right at any time to modify or discontinue the Service without notice. We shall not be liable to you or to any third-party for any modification, price change, or suspension of the Service.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ borderLeft: '3px solid #D4AF37', paddingLeft: '30px' }}>
-              <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Governing Law</h3>
-              <div style={{ color: '#444', lineHeight: '1.8', fontSize: '1.05rem' }}>
-                <p>
-                  These terms and conditions are governed by and construed in accordance with the laws of Rajasthan, India, and you irrevocably submit to the exclusive jurisdiction of the courts in Jaipur.
-                </p>
-              </div>
-            </div>
-
-            <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '20px', border: '1px solid #f0f0f0', marginTop: '40px', textAlign: 'center' }}>
-               <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '20px' }}>Legal Questions?</h3>
-               <p style={{ color: '#666', marginBottom: '30px' }}>If you have any questions about our Terms & Conditions, please reach out to our legal department.</p>
-               <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-                  <a href="mailto:legal@gulfashion.com" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>CONTACT LEGAL TEAM</a>
-               </div>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
+            <ContactCard 
+              icon={<Mail size={24} />} 
+              label="EMAIL" 
+              value="legal@gulfashion.com" 
+              href="mailto:legal@gulfashion.com"
+            />
           </div>
         </div>
-      </section>
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .policy-page-v2 h1 { font-size: 2.5rem !important; }
+          .policy-page-v2 h2 { font-size: 2rem !important; }
+          .policy-page-v2 > div > div:nth-child(2) > div { flex-direction: column; align-items: center; text-align: center; }
+        }
+      `}</style>
     </div>
   );
 };
+
+const ContactCard = ({ icon, label, value, href }: { icon: React.ReactNode, label: string, value: string, href: string }) => (
+  <a href={href} style={{ 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '20px', 
+    padding: '25px 40px', 
+    backgroundColor: '#fff', 
+    borderRadius: '16px', 
+    textDecoration: 'none', 
+    color: '#2d0a4e',
+    boxShadow: '0 10px 20px rgba(0,0,0,0.02)',
+    minWidth: '320px',
+    border: '1px solid #f0f0f0'
+  }}>
+    <div style={{ color: '#2d0a4e', backgroundColor: '#F9F6FF', padding: '12px', borderRadius: '12px' }}>{icon}</div>
+    <div style={{ textAlign: 'left' }}>
+      <span style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999', display: 'block' }}>{label}</span>
+      <span style={{ fontSize: '1rem', fontWeight: '700' }}>{value}</span>
+    </div>
+  </a>
+);
 
 export default TermsConditions;
