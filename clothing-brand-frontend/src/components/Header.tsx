@@ -3,6 +3,7 @@ import { Search, ShoppingBag, User, Menu, X, Phone, Truck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
+import { getImageUrl } from '../utils/mediaHelper';
 import './Header.css';
 
 const Header = () => {
@@ -100,7 +101,7 @@ const Header = () => {
                       to={`/product/${item._id}`} 
                       className="suggestion-item"
                     >
-                      <img src={item.image} alt={item.name} />
+                      <img src={getImageUrl(item.image)} alt={item.name} />
                       <div>
                         <p className="suggestion-name">{item.name}</p>
                         <span className="suggestion-cat">{item.category}</span>
