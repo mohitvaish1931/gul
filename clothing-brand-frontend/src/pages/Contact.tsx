@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   Mail, Phone, MapPin, Send, MessageCircle, 
   Calendar, Star, Sun, Truck, ShieldCheck, 
-  RefreshCcw, Globe, ExternalLink, ChevronRight
+  RefreshCcw, Globe, ExternalLink
 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
+import './Contact.css';
 
 const Contact = () => {
   useSEO({
@@ -38,226 +39,297 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-page-v2" style={{ backgroundColor: '#fff', color: '#2d0a4e', minHeight: '100vh', paddingBottom: '100px' }}>
-      {/* Hero Header */}
-      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>GET IN TOUCH</span>
-          <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>Let's Create Something <br /><i>Beautiful Together</i></h1>
-          <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
-            From custom tailoring to styling guidance — we're here for you.
-          </p>
+    <div className="contact-page">
+      {/* Hero Section */}
+      <section className="contact-hero">
+        <div className="container">
+          <div className="contact-hero-grid">
+            <div className="contact-hero-content animate-fade-in">
+              <span className="hero-tag">WE'D LOVE TO HEAR FROM YOU</span>
+              <h1 className="hero-title font-serif">
+                Let's Create Something <br />
+                <i>Beautiful Together</i>
+              </h1>
+              <p className="hero-desc">
+                From custom tailoring to styling guidance — we're here for you.
+              </p>
+              <div className="hero-btns">
+                <button className="btn-book">
+                  <Calendar size={18} />
+                  BOOK CONSULTATION
+                </button>
+                <button className="btn-whatsapp-outline">
+                  <MessageCircle size={18} />
+                  CHAT ON WHATSAPP
+                </button>
+              </div>
+            </div>
+            <div className="contact-hero-img-wrap animate-fade-in" style={{animationDelay: '0.2s'}}>
+              <img 
+                src="/images/clothing_rack_hero.png" 
+                alt="Gul Fashion Atelier" 
+                className="contact-hero-img"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="container" style={{ maxWidth: '1200px', margin: '60px auto 0', padding: '0 20px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '60px' }}>
-          
-          {/* Left Side: Contact Info Cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <ContactInfoCard 
-              icon={<Mail size={24} />} 
-              title="EMAIL" 
-              value="gul.fashion.jaipur@gmail.com" 
-              sub="We reply within 24 hours"
-            />
-            <ContactInfoCard 
-              icon={<Phone size={24} />} 
-              title="CALL US" 
-              value="+91 93513 25459" 
-              sub="Mon – Sat | 10AM – 7PM"
-            />
-            <ContactInfoCard 
-              icon={<MapPin size={24} />} 
-              title="OUR STUDIO" 
-              value="455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002" 
-              sub="Mon – Sat | 10AM – 7PM"
-            />
-            
-            <div style={{ backgroundColor: '#F9F6FF', padding: '40px', borderRadius: '24px', textAlign: 'center', marginTop: '20px' }}>
-               <MessageCircle size={40} color="#2d0a4e" style={{ marginBottom: '20px' }} />
-               <h3 className="font-serif" style={{ fontSize: '1.5rem', marginBottom: '10px' }}>WhatsApp Support</h3>
-               <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '25px' }}>Instant styling support available for our patrons.</p>
-               <a href="https://wa.me/919351325459" style={{ 
-                 display: 'inline-flex', 
-                 alignItems: 'center', 
-                 gap: '10px', 
-                 backgroundColor: '#2d0a4e', 
-                 color: '#fff', 
-                 padding: '15px 30px', 
-                 borderRadius: '12px', 
-                 textDecoration: 'none', 
-                 fontWeight: '800', 
-                 fontSize: '0.8rem',
-                 letterSpacing: '1px'
-               }}>
-                 CHAT NOW <ChevronRight size={16} />
-               </a>
+      {/* Main Form Section */}
+      <section className="contact-main-section container">
+        <div className="contact-main-card">
+          {/* Left: Get in Touch */}
+          <div className="contact-info-side">
+            <div className="section-title-wrap">
+              <h2 className="font-serif">Get in Touch</h2>
+              <div className="gold-divider"></div>
+            </div>
+
+            <div className="contact-items-list">
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><Mail size={20} /></div>
+                <div className="item-content">
+                  <h3>EMAIL</h3>
+                  <p>gul.fashion.jaipur@gmail.com</p>
+                  <p className="sub-info">We reply within 24 hours</p>
+                </div>
+              </div>
+
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><Phone size={20} /></div>
+                <div className="item-content">
+                  <h3>CALL US</h3>
+                  <p>+91 93513 25459</p>
+                  <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
+                </div>
+              </div>
+
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><MapPin size={20} /></div>
+                <div className="item-content">
+                  <h3>OUR STUDIO</h3>
+                  <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002, Rajasthan, India</p>
+                  <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
+                </div>
+              </div>
+
+              <div className="contact-item-box">
+                <div className="item-icon-circle"><MessageCircle size={20} /></div>
+                <div className="item-content">
+                  <h3>WHATSAPP</h3>
+                  <p>Instant styling support available.</p>
+                  <a href="https://wa.me/919351325459" className="chat-link">
+                    Chat Now <ArrowRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="availability-banner">
+              <div className="icon"><Sun size={20} /></div>
+              <p>Available Mon – Sat | 10 AM – 7 PM <br /> <span style={{opacity: 0.6, fontSize: '0.75rem'}}>We're closed on Sundays</span></p>
             </div>
           </div>
 
-          {/* Right Side: Contact Form */}
-          <div style={{ backgroundColor: '#fff', padding: '50px', borderRadius: '24px', boxShadow: '0 20px 50px rgba(0,0,0,0.04)', border: '1px solid #f8f8f8' }}>
-             <h2 className="font-serif" style={{ fontSize: '2rem', marginBottom: '10px', color: '#2d0a4e' }}>Send us a Message</h2>
-             <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', marginBottom: '40px' }}></div>
+          {/* Right: Form */}
+          <div className="contact-form-side">
+            <div className="section-title-wrap">
+              <h2 className="font-serif">Send us a Message</h2>
+              <div className="gold-divider"></div>
+            </div>
 
-             <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                   <label style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999' }}>YOUR NAME *</label>
-                   <input 
-                     type="text" 
-                     name="name"
-                     value={formData.name}
-                     onChange={handleInputChange}
-                     placeholder="Anjali Sharma" 
-                     required
-                     style={{ padding: '15px 20px', border: '1.5px solid #eee', borderRadius: '12px', outline: 'none' }}
-                   />
+            <form onSubmit={handleSubmit}>
+              <div className="contact-form-grid">
+                <div className="form-group">
+                  <label>YOUR NAME <span>*</span></label>
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="E.g. Anjali Sharma" 
+                    className="form-input" 
+                    required
+                  />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                   <label style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999' }}>EMAIL ADDRESS *</label>
-                   <input 
-                     type="email" 
-                     name="email"
-                     value={formData.email}
-                     onChange={handleInputChange}
-                     placeholder="email@example.com" 
-                     required
-                     style={{ padding: '15px 20px', border: '1.5px solid #eee', borderRadius: '12px', outline: 'none' }}
-                   />
+                <div className="form-group">
+                  <label>EMAIL ADDRESS <span>*</span></label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="email@example.com" 
+                    className="form-input" 
+                    required
+                  />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', gridColumn: 'span 2' }}>
-                   <label style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999' }}>PHONE NUMBER *</label>
-                   <input 
-                     type="tel" 
-                     name="phone"
-                     value={formData.phone}
-                     onChange={handleInputChange}
-                     placeholder="+91 98765 43210" 
-                     required
-                     style={{ padding: '15px 20px', border: '1.5px solid #eee', borderRadius: '12px', outline: 'none' }}
-                   />
+                <div className="form-group full">
+                  <label>PHONE NUMBER <span>*</span></label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="E.g. +91 98765 43210" 
+                    className="form-input" 
+                    required
+                  />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', gridColumn: 'span 2' }}>
-                   <label style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999' }}>SUBJECT *</label>
-                   <select 
-                     name="subject"
-                     value={formData.subject}
-                     onChange={handleInputChange}
-                     required
-                     style={{ padding: '15px 20px', border: '1.5px solid #eee', borderRadius: '12px', outline: 'none', appearance: 'none', backgroundColor: '#fff' }}
-                   >
-                     <option value="">Select a subject</option>
-                     <option value="custom">Custom Tailoring Inquiry</option>
-                     <option value="order">Order Tracking / Issues</option>
-                     <option value="styling">Virtual Styling Consultation</option>
-                     <option value="other">Other</option>
-                   </select>
+                <div className="form-group full">
+                  <label>SUBJECT <span>*</span></label>
+                  <select 
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    className="form-select" 
+                    required
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="custom">Custom Tailoring Inquiry</option>
+                    <option value="order">Order Tracking / Issues</option>
+                    <option value="styling">Virtual Styling Consultation</option>
+                    <option value="wholesale">Wholesale / Business Inquiry</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', gridColumn: 'span 2' }}>
-                   <label style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#999' }}>YOUR MESSAGE *</label>
-                   <textarea 
-                     name="message"
-                     value={formData.message}
-                     onChange={handleInputChange}
-                     placeholder="How can we help you?" 
-                     required
-                     rows={5}
-                     style={{ padding: '15px 20px', border: '1.5px solid #eee', borderRadius: '12px', outline: 'none', resize: 'none' }}
-                   ></textarea>
+                <div className="form-group full">
+                  <label>YOUR MESSAGE <span>*</span></label>
+                  <textarea 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Tell us about your requirements or any questions you have..." 
+                    className="form-textarea" 
+                    rows={5}
+                    required
+                  ></textarea>
                 </div>
-                <button type="submit" style={{ 
-                  gridColumn: 'span 2', 
-                  padding: '20px', 
-                  backgroundColor: '#2d0a4e', 
-                  color: '#fff', 
-                  border: 'none', 
-                  borderRadius: '12px', 
-                  fontWeight: '800', 
-                  letterSpacing: '2px', 
-                  cursor: 'pointer',
-                  boxShadow: '0 10px 30px rgba(45,10,78,0.1)'
-                }}>
-                  SEND MESSAGE
-                </button>
-             </form>
+              </div>
+
+              <button type="submit" className="btn-submit-consult">
+                <Send size={18} />
+                START YOUR STYLE CONSULTATION
+              </button>
+            </form>
+
+            <div className="quick-help-wrap">
+              <h4>Need quick help?</h4>
+              <div className="quick-help-btns">
+                <button className="btn-quick"><Phone size={14} /> CALL NOW</button>
+                <button className="btn-quick"><MessageCircle size={14} /> WHATSAPP</button>
+                <button className="btn-quick"><MapPin size={14} /> VISIT STUDIO</button>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Map Section */}
-        <div style={{ marginTop: '80px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.04)', border: '1px solid #f8f8f8', display: 'grid', gridTemplateColumns: '1.5fr 1fr' }}>
-           <div style={{ height: '500px' }}>
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.518683501712!2d75.8364!3d26.9175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db6fd7a44f77b%3A0xe74e797c558c4f0!2sJaipur!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={true} 
-                loading="lazy"
-              ></iframe>
-           </div>
-           <div style={{ padding: '60px', backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>VISIT OUR STUDIO</span>
-              <h2 className="font-serif" style={{ fontSize: '2.5rem', color: '#2d0a4e', marginBottom: '20px', lineHeight: '1.2' }}>Experience Our <br />Heritage in Person</h2>
-              <p style={{ color: '#666', lineHeight: '1.8', marginBottom: '30px' }}>
-                Step into our Jaipur atelier and explore our exclusive handcrafted collections. Get personalized styling, custom fittings, and a truly royal experience.
-              </p>
-              <a href="https://maps.google.com" target="_blank" rel="noreferrer" style={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '10px', 
-                color: '#2d0a4e', 
-                fontWeight: '800', 
-                textDecoration: 'none', 
-                fontSize: '0.85rem' 
-              }}>
-                GET DIRECTIONS <ChevronRight size={18} />
-              </a>
-           </div>
+      {/* Map Section */}
+      <section className="contact-map-section container">
+        <div className="map-card">
+          <div className="map-iframe-wrap">
+            {/* Using a placeholder for map, in production use Google Maps iframe */}
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.518683501712!2d75.8364!3d26.9175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db6fd7a44f77b%3A0xe74e797c558c4f0!2sJaipur!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy"
+              title="Gul Fashion Studio Location"
+            ></iframe>
+          </div>
+          <div className="map-content">
+            <span className="map-tag">VISIT OUR STUDIO</span>
+            <h2 className="map-title font-serif">Experience Our Collections <br /> in Person</h2>
+            <p className="map-desc">
+              Step into our Jaipur studio and explore our exclusive ethnic wear collections. Get personalized styling, custom fittings, and a truly memorable experience.
+            </p>
+            <button className="btn-directions">
+              <ExternalLink size={18} />
+              GET DIRECTIONS
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <style>{`
-        @media (max-width: 992px) {
-          .contact-page-v2 > div > div:first-child { grid-template-columns: 1fr !important; }
-          .contact-page-v2 > div > div:last-child { grid-template-columns: 1fr !important; }
-          .contact-page-v2 h1 { font-size: 2.5rem !important; }
-        }
-      `}</style>
+      {/* Testimonials */}
+      <section className="contact-testimonials container">
+        <div className="section-title-wrap">
+          <h2 className="font-serif">Loved by 1000+ Customers</h2>
+          <div className="gold-divider"></div>
+        </div>
+
+        <div className="testimonials-grid">
+          {[
+            { name: 'Neha Sharma', text: 'Amazing collection and perfect fitting. The staff is so friendly and helpful!' },
+            { name: 'Priya Aggarwal', text: 'Best ethnic wear in Jaipur. Highly recommended for bridal shopping!' },
+            { name: 'Riya Kapoor', text: 'Loved the custom stitching. Exactly what I wanted for my sister\'s wedding!' }
+          ].map((test, idx) => (
+            <div key={idx} className="test-card">
+              <div className="stars">
+                {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="var(--gold-primary)" />)}
+              </div>
+              <p className="test-text">"{test.text}"</p>
+              <h5 className="test-author">— {test.name}</h5>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Trust Bar */}
+      <section className="trust-bar">
+        <div className="container trust-grid">
+          <div className="trust-item">
+            <ShieldCheck className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>PREMIUM QUALITY</h5>
+              <p>Finest fabrics & craftsmanship</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <Truck className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>SECURE PAYMENTS</h5>
+              <p>100% secure & trusted</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <RefreshCcw className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>EASY RETURNS</h5>
+              <p>Hassle-free returns</p>
+            </div>
+          </div>
+          <div className="trust-item">
+            <Globe className="trust-icon" size={32} />
+            <div className="trust-content">
+              <h5>WORLDWIDE SHIPPING</h5>
+              <p>Delivering worldwide</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-const ContactInfoCard = ({ icon, title, value, sub }: { icon: React.ReactNode, title: string, value: string, sub: string }) => (
-  <div style={{ 
-    display: 'flex', 
-    gap: '25px', 
-    padding: '30px', 
-    backgroundColor: '#fff', 
-    borderRadius: '20px', 
-    boxShadow: '0 5px 25px rgba(0,0,0,0.02)',
-    border: '1px solid #f8f8f8',
-    alignItems: 'flex-start'
-  }}>
-    <div style={{ 
-      width: '60px', 
-      height: '60px', 
-      borderRadius: '16px', 
-      backgroundColor: '#FDF7F2', 
-      color: '#2d0a4e', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      flexShrink: 0
-    }}>
-      {icon}
-    </div>
-    <div>
-      <h3 style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '8px', color: '#999' }}>{title}</h3>
-      <p style={{ color: '#2d0a4e', fontWeight: '700', fontSize: '1.05rem', marginBottom: '5px' }}>{value}</p>
-      <p style={{ color: '#aaa', fontSize: '0.8rem' }}>{sub}</p>
-    </div>
-  </div>
-);
-
 export default Contact;
+
+const ArrowRight = ({ size, className }: { size?: number, className?: string }) => (
+  <svg 
+    width={size || 24} 
+    height={size || 24} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
