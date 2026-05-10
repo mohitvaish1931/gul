@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-react';
+import { API_ENDPOINTS } from '../utils/api';
 
 const ProductScreen = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const ProductScreen = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

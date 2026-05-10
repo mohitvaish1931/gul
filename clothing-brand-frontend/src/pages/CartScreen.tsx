@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from '../utils/api';
 
 const CartScreen = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const CartScreen = () => {
     if (id) {
       const fetchItem = async () => {
         try {
-          const res = await fetch(`/api/products/${id}`);
+          const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
           const data = await res.json();
           // Add to local cart state for demo
           setCartItems([{...data, qty}]);

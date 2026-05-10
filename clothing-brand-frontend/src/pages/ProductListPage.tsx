@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { API_ENDPOINTS } from '../utils/api';
 import './ProductStyles.css';
 
 const ProductListPage = () => {
@@ -13,7 +14,7 @@ const ProductListPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/products?keyword=${keyword}`);
+        const response = await fetch(`${API_ENDPOINTS.PRODUCTS}?keyword=${keyword}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

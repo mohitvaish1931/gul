@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, ShoppingBag, User, Menu, X, Phone, Truck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { API_ENDPOINTS } from '../utils/api';
 import './Header.css';
 
 const Header = () => {
@@ -18,7 +19,7 @@ const Header = () => {
     const fetchSuggestions = async () => {
       if (searchTerm.trim().length > 1) {
         try {
-          const res = await fetch(`/api/products?keyword=${searchTerm}`);
+          const res = await fetch(`${API_ENDPOINTS.PRODUCTS}?keyword=${searchTerm}`);
           const data = await res.json();
           setSuggestions(Array.isArray(data) ? data.slice(0, 4) : []);
           setShowSuggestions(true);
