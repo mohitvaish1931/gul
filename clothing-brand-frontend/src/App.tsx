@@ -11,8 +11,17 @@ import ProfileScreen from './pages/ProfileScreen';
 import ScrollToTop from './components/ScrollToTop';
 import { AppProvider } from './context/AppContext';
 
-import Admin from './pages/Admin';
-import EditProduct from './pages/EditProduct';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminAddProduct from './pages/admin/AdminAddProduct';
+import AdminEditProduct from './pages/admin/AdminEditProduct';
+import AdminInventory from './pages/admin/AdminInventory';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminBanners from './pages/admin/AdminBanners';
+import AdminPromotions from './pages/admin/AdminPromotions';
+import AdminSettings from './pages/admin/AdminSettings';
 import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import AboutUs from './pages/AboutUs';
@@ -40,8 +49,18 @@ const MainLayout = () => {
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/product/:id/edit" element={<EditProduct />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="products/add" element={<AdminAddProduct />} />
+            <Route path="products/:id/edit" element={<AdminEditProduct />} />
+            <Route path="inventory" element={<AdminInventory />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="customers" element={<AdminCustomers />} />
+            <Route path="banners" element={<AdminBanners />} />
+            <Route path="promotions" element={<AdminPromotions />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
           <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />

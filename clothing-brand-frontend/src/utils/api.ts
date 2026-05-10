@@ -4,6 +4,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE ?? (import.meta.env.DE
 export const API_ENDPOINTS = {
   // Health Check
   HEALTH: `${API_BASE_URL}/api/health`,
+  USERS: `${API_BASE_URL}/api/users`,
 
   // Products
   PRODUCTS: `${API_BASE_URL}/api/products`,
