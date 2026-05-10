@@ -1595,7 +1595,10 @@ const Admin = () => {
                 </div>
               </div>
               {/* Decorative background element */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gold-primary/5 rounded-full -mr-32 -mt-32 blur-3xl">            {/* Stats Grid */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gold-primary/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+            </div>
+
+            {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
               {stats.map((stat) => (
                 <div 
@@ -1622,7 +1625,6 @@ const Admin = () => {
                   </div>
                 </div>
               ))}
-            </div>       ))}
             </div>
 
             {/* Dashboard Bottom Section */}
