@@ -1,42 +1,45 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Truck, Clock, IndianRupee, AlertTriangle, Search, Mail, MessageCircle } from 'lucide-react';
+import { Truck, Tag, RefreshCcw, MapPin, Box, Headphones, Mail, MessageCircle } from 'lucide-react';
 
 const ShippingPolicy = () => {
   useSEO({
     title: 'Shipping Policy - GUL FASHION',
     description: 'Learn about our delivery times, shipping costs, and order tracking.',
-    keywords: 'shipping policy, delivery time, shipping rates, track order, GUL FASHION',
+    keywords: 'shipping policy, delivery time, shipping rates, GUL FASHION',
     url: 'https://gulfashion.com/shipping-policy',
     type: 'website'
   });
 
   const sections = [
     {
-      icon: <Clock size={30} />,
+      icon: <Truck size={30} />,
       title: "DELIVERY TIME",
-      text: "All orders are usually dispatched within 2-3 working days unless stated otherwise. Once dispatched, it takes 4-8 working days to deliver depending upon the location.",
-      note: "However, the delivery time is subject to change based on shortage of an item, bad weather, transit time of your carrier, destination address, etc."
+      text: "All orders are usually dispatched within 2-3 working days unless stated otherwise. Once dispatched, it takes 4-8 working days to deliver depending upon the location. However, the delivery time is subject to change based on shortage of an item, bad weather, transit time of your carrier, destination address, or COVID related restrictions, etc."
     },
     {
-      icon: <IndianRupee size={30} />,
+      icon: <Tag size={30} />,
       title: "SHIPPING COST",
-      text: "We charge ₹70 per order and also offer free shipping on all orders above ₹1499. This applies to domestic shipping within India."
+      text: (
+        <>
+          We charge ₹70 per order and also offer <strong style={{color: '#2d0a4e'}}>free shipping on all orders above ₹1499.</strong>
+        </>
+      )
     },
     {
-      icon: <AlertTriangle size={30} />,
-      title: "RTO / UN-DELIVERED SHIPMENT",
+      icon: <RefreshCcw size={30} />,
+      title: "RTO/UN-DELIVERED SHIPMENT",
       text: "We are not liable for undelivered shipment or RTO (Return to Origin) due to wrong address / misinformation provided while placing an order. In this case, customer has to pay the shipping charges again so we can re-ship the order."
     },
     {
-      icon: <Search size={30} />,
+      icon: <MapPin size={30} />,
       title: "TRACKING YOUR ORDER",
-      text: "Once your order is shipped from our warehouse, you will receive an email including a tracking number to check the status. You can also use our Track Order page for real-time updates."
+      text: "Once your order is shipped from our warehouse, you will receive an email including a tracking number to check the status."
     },
     {
-      icon: <Truck size={30} />,
+      icon: <Box size={30} />,
       title: "LOST SHIPMENT",
-      text: "Incase your package gets lost during the transit, we shall re-ship your order. If any item of your order is out of stock, you can either wait for a restock or we will issue a credit note."
+      text: "Incase your package gets lost during the transit, we shall re-ship your order. If any item of your order is out of stock, you can either wait for a restock or we will issue a credit note which can be used for future orders."
     }
   ];
 
@@ -46,9 +49,19 @@ const ShippingPolicy = () => {
       color: '#2d0a4e', 
       minHeight: '100vh', 
       padding: '80px 20px',
-      fontFamily: "'Inter', sans-serif"
+      fontFamily: "'Inter', sans-serif",
+      position: 'relative',
+      overflow: 'hidden'
     }}>
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      {/* Optional: Floral Watermarks (simulated) */}
+      <div style={{ position: 'absolute', top: '-50px', left: '-50px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '300px', transform: 'rotate(-45deg)' }} />
+      </div>
+      <div style={{ position: 'absolute', top: '20%', right: '-100px', opacity: 0.05, pointerEvents: 'none' }}>
+         <img src="/images/floral-pattern.png" alt="" style={{ width: '400px' }} />
+      </div>
+
+      <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Shipping Policy</h1>
@@ -70,10 +83,10 @@ const ShippingPolicy = () => {
               alignItems: 'flex-start'
             }}>
               <div style={{ 
-                width: '70px', 
-                height: '70px', 
-                borderRadius: '50%', 
-                backgroundColor: '#FDF7F2', 
+                width: '75px', 
+                height: '75px', 
+                borderRadius: '15px', 
+                backgroundColor: '#F9F6FF', 
                 color: '#2d0a4e', 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -85,9 +98,6 @@ const ShippingPolicy = () => {
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '12px', color: '#2d0a4e' }}>{section.title}</h3>
                 <p style={{ color: '#555', lineHeight: '1.7', fontSize: '0.95rem' }}>{section.text}</p>
-                {section.note && (
-                  <p style={{ color: '#777', fontStyle: 'italic', fontSize: '0.85rem', marginTop: '10px' }}>{section.note}</p>
-                )}
               </div>
             </div>
           ))}
@@ -100,9 +110,14 @@ const ShippingPolicy = () => {
           padding: '60px 40px', 
           textAlign: 'center'
         }}>
-          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '15px', color: '#2d0a4e' }}>NEED HELP?</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+             <div style={{ width: '60px', height: '60px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 5px 15px rgba(0,0,0,0.03)' }}>
+                <Headphones size={30} color="#2d0a4e" strokeWidth={1.5} />
+             </div>
+          </div>
+          <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '10px', color: '#2d0a4e' }}>NEED HELP WITH YOUR ORDER?</h2>
           <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
-          <p style={{ color: '#666', marginBottom: '40px' }}>Feel free to reach us out for any shipping related queries:</p>
+          <p style={{ color: '#666', marginBottom: '40px' }}>Feel free to reach us out on:</p>
           
           <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
             <ContactCard 
@@ -125,7 +140,7 @@ const ShippingPolicy = () => {
         @media (max-width: 768px) {
           .policy-page-v2 h1 { font-size: 2.5rem !important; }
           .policy-page-v2 h2 { font-size: 2rem !important; }
-          .policy-page-v2 > div > div:nth-child(2) > div { flex-direction: column; align-items: center; text-align: center; }
+          .policy-page-v2 > div > div:nth-child(3) > div { flex-direction: column; align-items: center; text-align: center; }
         }
       `}</style>
     </div>
