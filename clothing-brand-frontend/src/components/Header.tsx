@@ -94,12 +94,16 @@ const Header = () => {
                 </button>
               </form>
               {showSuggestions && suggestions.length > 0 && (
-                <div className="search-dropdown">
+                <div className="search-dropdown" onMouseDown={(e) => e.preventDefault()}>
                   {suggestions.map(item => (
                     <Link 
                       key={item._id} 
                       to={`/product/${item._id}`} 
                       className="suggestion-item"
+                      onClick={() => {
+                        setShowSuggestions(false);
+                        setSearchTerm('');
+                      }}
                     >
                       <img src={getImageUrl(item.image)} alt={item.name} />
                       <div>
