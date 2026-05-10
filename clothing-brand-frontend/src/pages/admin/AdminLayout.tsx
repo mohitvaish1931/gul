@@ -3,7 +3,7 @@ import { useNavigate, Outlet, NavLink } from 'react-router-dom';
 import { 
   Package, Users, ShoppingBag, LayoutDashboard, Tag, Settings, 
   LogOut, Bell, Search, Menu, ChevronRight, Home, ExternalLink,
-  Ticket, Image as ImageIcon
+  Ticket, Image as ImageIcon, X
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
@@ -41,10 +41,10 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen bg-[#FDFBF9] flex overflow-hidden">
       {/* Mobile Sidebar Overlay */}
-      {!isSidebarOpen && (
+      {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-500"
-          onClick={() => setIsSidebarOpen(true)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 lg:hidden transition-all duration-500"
+          onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
@@ -55,7 +55,7 @@ const AdminLayout = () => {
         }`}
       >
         {/* Sidebar Header */}
-        <div className={`flex items-center transition-all duration-500 ${isSidebarOpen ? 'p-10' : 'p-6 justify-center'}`}>
+        <div className={`flex items-center justify-between transition-all duration-500 ${isSidebarOpen ? 'p-10' : 'p-6 justify-center'}`}>
           <div className="flex items-center gap-4">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-primary-purple to-pink-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
@@ -72,6 +72,15 @@ const AdminLayout = () => {
               </div>
             )}
           </div>
+          
+          {isSidebarOpen && (
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden p-2 rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
