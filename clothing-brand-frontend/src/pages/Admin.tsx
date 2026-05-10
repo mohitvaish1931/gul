@@ -59,40 +59,44 @@ const Admin = () => {
 
   const stats = [
     { 
-      name: 'Total Products', 
+      name: 'TOTAL PRODUCTS', 
       value: state.products.length, 
       icon: Package, 
-      color: 'from-blue-500/20 to-blue-600/20', 
-      iconColor: 'text-blue-600',
-      change: '+12%',
-      isPositive: true
+      color: 'bg-purple-100/50', 
+      iconColor: 'text-purple-600',
+      change: '12%',
+      isPositive: true,
+      barColor: 'bg-purple-400'
     },
     { 
-      name: 'Total Orders', 
+      name: 'TOTAL ORDERS', 
       value: orders.length, 
       icon: ShoppingBag, 
-      color: 'from-emerald-500/20 to-emerald-600/20', 
+      color: 'bg-emerald-100/50', 
       iconColor: 'text-emerald-600',
-      change: '+8%',
-      isPositive: true
+      change: '8%',
+      isPositive: true,
+      barColor: 'bg-emerald-400'
     },
     { 
-      name: 'Total Customers', 
+      name: 'TOTAL CUSTOMERS', 
       value: new Set(orders.map(o => o.user?._id || o.user)).size, 
       icon: Users, 
-      color: 'from-purple-500/20 to-purple-600/20', 
-      iconColor: 'text-purple-600',
-      change: '+5%',
-      isPositive: true
+      color: 'bg-indigo-100/50', 
+      iconColor: 'text-indigo-600',
+      change: '5%',
+      isPositive: true,
+      barColor: 'bg-indigo-400'
     },
     { 
-      name: 'Revenue', 
+      name: 'REVENUE', 
       value: `₹${totalRevenue.toLocaleString()}`, 
       icon: TrendingUp, 
-      color: 'from-primary-purple/10 to-primary-purple/20', 
-      iconColor: 'text-primary-purple',
-      change: '+15%',
-      isPositive: true
+      color: 'bg-fuchsia-100/50', 
+      iconColor: 'text-fuchsia-600',
+      change: '15%',
+      isPositive: true,
+      barColor: 'bg-fuchsia-400'
     },
   ];
 
@@ -1410,70 +1414,106 @@ const Admin = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const sidebarLinks = [
-    { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard },
-    { id: 'products', name: 'Products', icon: ShoppingBag },
-    { id: 'inventory', name: 'Inventory', icon: Package },
-    { id: 'content', name: 'Content', icon: Video },
-    { id: 'orders', name: 'Orders', icon: Ticket },
-    { id: 'customers', name: 'Customers', icon: Users },
+  const sidebarGroups = [
+    {
+      title: 'MANAGEMENT',
+      links: [
+        { id: 'products', name: 'Products', icon: ShoppingBag },
+        { id: 'inventory', name: 'Inventory', icon: Package },
+        { id: 'orders', name: 'Orders', icon: Ticket },
+        { id: 'customers', name: 'Customers', icon: Users },
+      ]
+    },
+    {
+      title: 'STORE',
+      links: [
+        { id: 'content', name: 'Banners', icon: ImageIcon },
+        { id: 'promotions', name: 'Promotions', icon: Tag },
+        { id: 'settings', name: 'Store Settings', icon: Settings },
+      ]
+    }
   ];
 
   return (
     <div className="min-h-screen bg-[#FDFBF9] flex">
       {/* Sidebar */}
       <aside 
-        className={`bg-sidebar-dark transition-all duration-500 flex flex-col z-30 ${
+        className={`bg-white transition-all duration-500 flex flex-col z-30 ${
           isSidebarOpen ? 'w-72' : 'w-24'
-        } fixed inset-y-0 left-0 border-r border-gold-primary/5 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.3)]`}
+        } fixed inset-y-0 left-0 border-r border-gray-100 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.02)]`}
       >
-        <div className={`flex items-center gap-4 transition-all duration-500 border-b border-gold-primary/5 ${isSidebarOpen ? 'p-8' : 'p-6 justify-center'}`}>
-          <div className="w-12 h-12 bg-gradient-to-tr from-primary-purple to-rose-gold rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[0_8px_20px_-6px_rgba(139,29,46,0.6)] rotate-3 hover:rotate-0 transition-all duration-500">
-            <span className="font-serif text-2xl font-bold italic">G</span>
+        <div className={`flex items-center gap-4 transition-all duration-500 ${isSidebarOpen ? 'p-8' : 'p-6 justify-center'}`}>
+          <div className="w-12 h-12 bg-gradient-to-tr from-primary-purple to-indigo-900 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg transition-all duration-500">
+            <svg width="24" height="24" viewBox="0 0 100 120" fill="currentColor">
+              <circle cx="40" cy="15" r="7" />
+              <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
+            </svg>
           </div>
           {isSidebarOpen && (
             <div className="flex flex-col animate-in fade-in slide-in-from-left-4 duration-700">
-              <span className="font-serif text-2xl font-black text-white tracking-tight leading-none">Gul</span>
-              <span className="text-[10px] font-black tracking-[0.5em] text-gold-primary uppercase opacity-80">Fashion</span>
+              <span className="font-serif text-2xl font-black text-primary-purple tracking-tight leading-none">Gul</span>
+              <span className="text-[10px] font-black tracking-[0.4em] text-gray-400 uppercase">Fashion</span>
             </div>
           )}
         </div>
 
-        <nav className={`flex-1 px-4 py-10 space-y-4 overflow-y-auto custom-scrollbar ${!isSidebarOpen && 'flex flex-col items-center'}`}>
-          {sidebarLinks.map((link) => (
+        <nav className={`flex-1 px-6 py-6 space-y-8 overflow-y-auto custom-scrollbar ${!isSidebarOpen && 'flex flex-col items-center'}`}>
+          <div>
             <button
-              key={link.id}
-              onClick={() => setActiveTab(link.id)}
-              className={`flex items-center transition-all duration-500 group relative ${
-                isSidebarOpen ? 'w-full gap-5 px-6 py-4 rounded-2xl' : 'w-14 h-14 justify-center rounded-2xl'
+              onClick={() => setActiveTab('dashboard')}
+              className={`flex items-center transition-all duration-300 group relative ${
+                isSidebarOpen ? 'w-full gap-4 px-4 py-3 rounded-2xl' : 'w-12 h-12 justify-center rounded-2xl'
               } ${
-                activeTab === link.id
-                  ? 'bg-gradient-to-r from-gold-primary/20 to-transparent text-gold-primary border-l-4 border-gold-primary'
-                  : 'text-text-muted hover:text-white hover:bg-white/5'
+                activeTab === 'dashboard'
+                  ? 'bg-primary-purple/5 text-primary-purple'
+                  : 'text-gray-500 hover:text-primary-purple hover:bg-gray-50'
               }`}
             >
-              <link.icon className={`w-5 h-5 shrink-0 transition-transform duration-500 ${activeTab === link.id ? 'scale-110' : 'group-hover:scale-110'}`} />
+              <LayoutDashboard className={`w-5 h-5 shrink-0`} />
               {isSidebarOpen && (
-                <span className={`text-[11px] font-black tracking-[0.2em] uppercase ${activeTab === link.id ? 'text-gold-primary' : ''}`}>
-                  {link.name}
-                </span>
-              )}
-              {activeTab === link.id && !isSidebarOpen && (
-                <div className="absolute right-0 w-1 h-8 bg-gold-primary rounded-l-full shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
+                <span className="text-sm font-semibold">Dashboard</span>
               )}
             </button>
+          </div>
+
+          {sidebarGroups.map((group) => (
+            <div key={group.title} className="space-y-3">
+              {isSidebarOpen && (
+                <p className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">{group.title}</p>
+              )}
+              <div className="space-y-1">
+                {group.links.map((link) => (
+                  <button
+                    key={link.id}
+                    onClick={() => setActiveTab(link.id)}
+                    className={`flex items-center transition-all duration-300 group relative ${
+                      isSidebarOpen ? 'w-full gap-4 px-4 py-3 rounded-2xl' : 'w-12 h-12 justify-center rounded-2xl'
+                    } ${
+                      activeTab === link.id
+                        ? 'bg-primary-purple/5 text-primary-purple shadow-sm'
+                        : 'text-gray-500 hover:text-primary-purple hover:bg-gray-50'
+                    }`}
+                  >
+                    <link.icon className={`w-5 h-5 shrink-0`} />
+                    {isSidebarOpen && (
+                      <span className="text-sm font-semibold">{link.name}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
 
-        <div className="p-6 border-t border-gold-primary/5">
+        <div className="p-6 border-t border-gray-50">
           <button 
             onClick={() => navigate('/')}
-            className={`flex items-center transition-all duration-500 hover:text-primary-purple group ${
-              isSidebarOpen ? 'w-full gap-5 px-6 py-4 text-text-muted rounded-2xl' : 'w-14 h-14 justify-center mx-auto text-text-muted rounded-2xl'
-            } hover:bg-red-500/5`}
+            className={`flex items-center transition-all duration-300 group ${
+              isSidebarOpen ? 'w-full gap-4 px-6 py-4 text-gray-500 rounded-2xl' : 'w-12 h-12 justify-center mx-auto text-gray-500 rounded-2xl'
+            } hover:bg-red-50 hover:text-red-600`}
           >
-            <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            {isSidebarOpen && <span className="text-[11px] font-black tracking-[0.2em] uppercase">Log out</span>}
+            <LogOut className="w-5 h-5" />
+            {isSidebarOpen && <span className="text-sm font-semibold">Log out</span>}
           </button>
         </div>
       </aside>
@@ -1481,50 +1521,37 @@ const Admin = () => {
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? 'ml-72' : 'ml-24'}`}>
         {/* Top Header */}
-        <header className="h-24 bg-white/60 backdrop-blur-xl border-b border-gold-primary/5 sticky top-0 z-20 flex items-center justify-between px-10">
+        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-20 flex items-center justify-between px-10">
           <div className="flex items-center gap-6">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-text-muted group"
+              className="p-2.5 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all text-gray-500"
             >
               <Menu className={`w-5 h-5 transition-transform duration-500 ${!isSidebarOpen && 'rotate-90'}`} />
             </button>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">
-                <span>Management</span>
-                <ChevronRight className="w-3 h-3 text-gold-primary" />
-                <span className="text-gold-primary">{activeTab}</span>
-              </div>
-              <h2 className="text-xl font-black text-text-primary luxury-serif capitalize tracking-wider">
-                {activeTab} Overview
-              </h2>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-8">
-            <div className="relative hidden xl:block group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted group-focus-within:text-gold-primary transition-colors" />
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input 
                 type="text" 
                 placeholder="Search resources..." 
-                className="bg-white/[0.03] border border-gold-primary/5 rounded-2xl py-3 pl-14 pr-8 text-[11px] font-bold tracking-widest uppercase focus:ring-4 focus:ring-gold-primary/10 focus:bg-white w-96 transition-all outline-none"
+                className="bg-gray-50 border border-transparent rounded-xl py-2.5 pl-12 pr-6 text-sm focus:bg-white focus:border-primary-purple/20 w-80 transition-all outline-none"
               />
             </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <button className="p-2.5 relative bg-gray-50 hover:bg-gray-100 rounded-xl transition-all text-gray-500">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-2.5 right-2.5 w-4 h-4 bg-primary-purple rounded-full border-2 border-white text-[8px] font-bold text-white flex items-center justify-center">3</span>
+            </button>
             
-            <div className="flex items-center gap-4">
-              <button className="p-3 relative bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-text-muted">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary-purple rounded-full border-2 border-white animate-pulse"></span>
-              </button>
-              <div className="w-px h-8 bg-gold-primary/10 mx-2"></div>
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <div className="text-right hidden sm:block">
-                  <p className="text-xs font-black text-text-primary uppercase tracking-widest leading-none mb-1">Admin</p>
-                  <p className="text-[10px] text-gold-primary font-bold tracking-tighter uppercase opacity-70">Master Store</p>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-gold-primary/10 flex items-center justify-center text-gold-primary group-hover:bg-gold-primary group-hover:text-white transition-all duration-500 shadow-inner">
-                  <User className="w-6 h-6" />
-                </div>
+            <div className="flex items-center gap-3 pl-6 border-l border-gray-100 group cursor-pointer">
+              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-primary-purple font-bold text-sm">
+                A
+              </div>
+              <div className="text-left hidden sm:block">
+                <p className="text-sm font-bold text-gray-800 uppercase leading-none mb-1">Admin</p>
+                <p className="text-[10px] text-yellow-600 font-bold uppercase opacity-80">Master Store</p>
               </div>
             </div>
           </div>
@@ -1557,164 +1584,175 @@ const Admin = () => {
                 </div>
               </div>
               {/* Decorative background element */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gold-primary/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-              {stats.map((stat, i) => (
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gold-primary/5 rounded-full -mr-32 -mt-32 blur-3xl">            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+              {stats.map((stat) => (
                 <div 
                   key={stat.name} 
-                  className="bg-white p-8 rounded-[2.5rem] border border-gold-primary/10 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] hover:shadow-2xl hover:shadow-gold-primary/5 transition-all duration-700 group relative overflow-hidden"
-                  style={{ transitionDelay: `${i * 100}ms` }}
+                  className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm hover:shadow-md transition-all group"
                 >
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-[0.03] group-hover:opacity-[0.08] transition-opacity rounded-bl-[5rem]`}></div>
+                  <div className="flex items-center justify-between mb-8">
+                    <div className={`w-12 h-12 rounded-2xl ${stat.color} ${stat.iconColor} flex items-center justify-center shadow-sm`}>
+                      <stat.icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-500">
+                      <ArrowUp className="w-3 h-3" />
+                      {stat.change}
+                    </div>
+                  </div>
                   
-                  <div className="relative z-10 flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                      <div className={`w-14 h-14 rounded-2xl bg-white/5 ${stat.iconColor} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}>
-                        <stat.icon className="w-7 h-7" />
-                      </div>
-                      <div className={`flex items-center gap-1.5 text-[11px] font-black px-3 py-1.5 rounded-full shadow-sm ${
-                        stat.isPositive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
-                      }`}>
-                        {stat.isPositive ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                        {stat.change}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <p className="text-[11px] font-black tracking-[0.2em] text-text-muted uppercase mb-2">{stat.name}</p>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-black text-text-primary luxury-serif tabular-nums tracking-tighter">
-                          {stat.value}
-                        </span>
-                      </div>
-                    </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.name}</p>
+                    <p className="text-3xl font-bold text-gray-800 tracking-tight">{stat.value}</p>
+                  </div>
 
-                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mt-2">
-                      <div className={`h-full bg-gradient-to-r ${stat.color} w-3/4 opacity-80 group-hover:w-full transition-all duration-1000`}></div>
-                    </div>
+                  <div className="w-full h-1 bg-gray-50 rounded-full overflow-hidden mt-6">
+                    <div className={`h-full ${stat.barColor} w-2/3 opacity-40 group-hover:w-full transition-all duration-1000`}></div>
                   </div>
                 </div>
               ))}
+            </div>       ))}
             </div>
 
             {/* Dashboard Bottom Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Recent Orders Table */}
-              <div className="lg:col-span-2 bg-white border border-gold-primary/10 rounded-3xl shadow-sm overflow-hidden flex flex-col">
-                <div className="px-8 py-6 border-b border-gold-primary/5 flex items-center justify-between bg-white/50">
+              <div className="lg:col-span-2 bg-white border border-gray-50 rounded-3xl shadow-sm overflow-hidden flex flex-col">
+                <div className="px-8 py-6 border-b border-gray-50 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-6 bg-primary-purple rounded-full"></div>
-                    <h3 className="text-xs font-black text-text-primary tracking-[0.2em] uppercase">Recent Activity</h3>
+                    <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-primary-purple">
+                      <ShoppingBag className="w-5 h-5" />
+                    </div>
+                    <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest">RECENT ACTIVITY</h3>
                   </div>
                   <button 
                     onClick={() => setActiveTab('orders')}
-                    className="flex items-center gap-1 text-[10px] font-black text-gold-primary hover:text-primary-purple transition-all tracking-widest uppercase"
+                    className="text-xs font-bold text-yellow-600 hover:text-primary-purple transition-all tracking-widest uppercase flex items-center gap-1"
                   >
-                    All Orders <ChevronRight className="w-3 h-3" />
+                    ALL ORDERS <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
                 <div className="overflow-x-auto flex-1">
                   <table className="min-w-full">
                     <thead>
-                      <tr className="bg-[#FDFBF9]">
-                        <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Order ID</th>
-                        <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Customer</th>
-                        <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Product</th>
-                        <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Amount</th>
-                        <th className="px-8 py-4 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Status</th>
+                      <tr className="bg-gray-50/50">
+                        <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">ORDER ID</th>
+                        <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">CUSTOMER</th>
+                        <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">PRODUCT</th>
+                        <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">AMOUNT</th>
+                        <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">STATUS</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gold-primary/5">
-                      {recentOrders.map((order) => (
-                        <tr key={order.id} className="hover:bg-white/10 transition-colors">
-                          <td className="px-8 py-4 whitespace-nowrap text-sm font-bold text-text-primary tabular-nums">
+                    <tbody className="divide-y divide-gray-50">
+                      {recentOrders.length > 0 ? recentOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-semibold text-gray-600">
                             {order.orderNumber}
                           </td>
-                          <td className="px-8 py-4 whitespace-nowrap">
+                          <td className="px-8 py-5 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-primary-purple/10 flex items-center justify-center text-primary-purple text-xs font-bold">
-                                {order.customer.charAt(0)}
+                              <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-[10px] font-bold">
+                                {order.customer.split(' ').map((n: string) => n[0]).join('')}
                               </div>
-                              <span className="text-sm text-text-secondary font-medium">{order.customer}</span>
+                              <span className="text-xs text-gray-700 font-semibold">{order.customer}</span>
                             </div>
                           </td>
-                          <td className="px-8 py-4 whitespace-nowrap text-sm text-text-secondary">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs text-gray-500">
                             {order.product}
                           </td>
-                          <td className="px-8 py-4 whitespace-nowrap text-sm text-text-primary font-bold">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs text-gray-800 font-bold tabular-nums">
                             {order.amount}
                           </td>
-                          <td className="px-8 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-full shadow-sm ${
-                              order.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                              order.status === 'Processing' ? 'bg-orange-50 text-orange-700 border border-orange-100' :
-                              order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                              'bg-gray-100 text-gray-700'
+                          <td className="px-8 py-5 whitespace-nowrap">
+                            <span className={`px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-full ${
+                              order.status === 'Paid' || order.status === 'Delivered' ? 'bg-emerald-50 text-emerald-600' :
+                              order.status === 'Processing' ? 'bg-yellow-50 text-yellow-600' :
+                              order.status === 'Shipped' ? 'bg-blue-50 text-blue-600' :
+                              'bg-gray-50 text-gray-400'
                             }`}>
                               {order.status}
                             </span>
                           </td>
                         </tr>
-                      ))}
+                      )) : (
+                        <tr>
+                          <td colSpan={5} className="px-8 py-10 text-center text-gray-400 text-sm italic">No recent orders yet</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
+                <div className="p-4 border-t border-gray-50 text-center">
+                  <button onClick={() => setActiveTab('orders')} className="text-primary-purple text-xs font-bold hover:underline flex items-center justify-center gap-2 mx-auto">
+                    View All Orders <ChevronRight className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
 
-              {/* Quick Actions / Activity Feed */}
-              <div className="bg-white border border-gold-primary/10 rounded-3xl shadow-sm p-8">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-1.5 h-6 bg-gold-primary rounded-full"></div>
-                  <h3 className="text-sm font-black text-text-primary tracking-[0.2em] uppercase">QUICK ACTIONS</h3>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <button 
-                    onClick={() => setShowAddProduct(true)}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-primary-purple group-hover:scale-110 transition-transform">
-                      <Plus className="w-5 h-5" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-sm font-bold text-text-primary">Add Product</p>
-                      <p className="text-[10px] text-text-muted">Create a new luxury item</p>
-                    </div>
-                  </button>
-
-                  <button 
-                    onClick={() => setActiveTab('content')}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-gold-primary group-hover:scale-110 transition-transform">
-                      <ImageIcon className="w-5 h-5" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-sm font-bold text-text-primary">Manage Banners</p>
-                      <p className="text-[10px] text-text-muted">Update store promotions</p>
-                    </div>
-                  </button>
-
-                  <button className="flex items-center gap-4 p-4 rounded-2xl bg-white/20 border border-gold-primary/10 hover:border-gold-primary/30 transition-all group">
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm text-blue-600 group-hover:scale-110 transition-transform">
-                      <Settings className="w-5 h-5" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-sm font-bold text-text-primary">Store Settings</p>
-                      <p className="text-[10px] text-text-muted">Configure your platform</p>
-                    </div>
-                  </button>
-                </div>
-
-                <div className="mt-8 pt-8 border-t border-gold-primary/10 text-center">
-                  <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-2">Storage Status</p>
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
-              <div className="w-3/4 h-full bg-gold-primary"></div>
+              {/* Quick Actions */}
+              <div className="space-y-8">
+                <div className="bg-white border border-gray-50 rounded-3xl shadow-sm p-8">
+                  <div className="flex items-center gap-3 mb-8">
+                    <TrendingUp className="w-5 h-5 text-gray-800" />
+                    <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest">QUICK ACTIONS</h3>
                   </div>
-                  <p className="text-xs font-medium text-text-secondary">75% of 5GB used</p>
+                  
+                  <div className="grid grid-cols-1 gap-4">
+                    <button 
+                      onClick={() => setShowAddProduct(true)}
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-md transition-all group border border-transparent hover:border-purple-100"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
+                        <Plus className="w-5 h-5" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-gray-800">Add Product</p>
+                        <p className="text-[10px] text-gray-400">Create a new luxury item</p>
+                      </div>
+                    </button>
+
+                    <button 
+                      onClick={() => setActiveTab('content')}
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-md transition-all group border border-transparent hover:border-yellow-100"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center text-yellow-600">
+                        <ImageIcon className="w-5 h-5" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-gray-800">Manage Banners</p>
+                        <p className="text-[10px] text-gray-400">Update store promotions</p>
+                      </div>
+                    </button>
+
+                    <button 
+                      onClick={() => setActiveTab('settings')}
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-md transition-all group border border-transparent hover:border-blue-100"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                        <Settings className="w-5 h-5" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-gray-800">Store Settings</p>
+                        <p className="text-[10px] text-gray-400">Configure your platform</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Storage Status */}
+                <div className="bg-white border border-gray-50 rounded-3xl shadow-sm p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Package className="w-5 h-5 text-gray-800" />
+                    <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest">STORAGE STATUS</h3>
+                  </div>
+                  
+                  <div className="w-full h-3 bg-gray-50 rounded-full overflow-hidden mb-3">
+                    <div className="w-3/4 h-full bg-yellow-500 rounded-full shadow-sm"></div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-gray-800">75% of 5GB used</p>
+                    <p className="text-[10px] font-bold text-gray-400">3.75 GB / 5 GB</p>
+                  </div>
                 </div>
               </div>
             </div>
