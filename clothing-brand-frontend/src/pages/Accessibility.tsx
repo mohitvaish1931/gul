@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Eye, ShieldCheck, Globe, Users, Headphones, Mail } from 'lucide-react';
+import { Eye, Globe, Users, Headphones, Mail } from 'lucide-react';
 
 const Accessibility = () => {
   useSEO({

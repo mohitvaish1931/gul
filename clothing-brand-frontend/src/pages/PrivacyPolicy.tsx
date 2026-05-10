@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { ShieldCheck, Eye, Lock, FileText, Globe, Mail, MessageCircle } from 'lucide-react';
+import { ShieldCheck, Eye, Lock, FileText, Globe, Mail } from 'lucide-react';
 
 const PrivacyPolicy = () => {
   useSEO({

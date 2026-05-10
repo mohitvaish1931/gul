@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSEO } from '../utils/useSEO';
-import { Heart, ShieldCheck, Globe, Star, Award, Users, Lock, RefreshCcw } from 'lucide-react';
+import { ShieldCheck, Globe, Award } from 'lucide-react';
 
 const AboutUs = () => {
   useSEO({
@@ -99,7 +99,7 @@ const AboutUs = () => {
       </section>
 
       {/* Stats Section */}
-      <section style={{ backgroundColor: '#fff', padding: '80px 0', borderY: '1px solid #f0f0f0' }}>
+      <section style={{ backgroundColor: '#fff', padding: '80px 0', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0' }}>
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
           <StatItem number="100K+" label="Happy Patrons" />
           <StatItem number="2000+" label="Unique Designs" />

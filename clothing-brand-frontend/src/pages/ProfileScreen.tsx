@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
-import { User, Package, Settings, LogOut, ShoppingBag } from 'lucide-react';
+import { ShoppingBag, LogOut, Package, Settings } from 'lucide-react';
 
 const ProfileScreen = () => {
   const navigate = useNavigate();
