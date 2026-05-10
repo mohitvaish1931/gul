@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
+import { API_ENDPOINTS } from '../utils/api';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -10,7 +11,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch(API_ENDPOINTS.PRODUCTS);
         const data = await res.json();
         setProducts(data);
       } catch (e) {
