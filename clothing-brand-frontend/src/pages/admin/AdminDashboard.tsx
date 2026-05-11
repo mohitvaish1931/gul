@@ -36,6 +36,63 @@ const AdminDashboard = () => {
 
   const uniqueCustomers = new Set(orders.map(o => o.user?._id || o.user || o.shippingAddress?.email || o.shippingAddress?.name)).size;
 
+  const getDayName = (dateStr: string) => new Date(dateStr).toLocaleDateString('en-US', { weekday: 'short' });
+
+  const weeklyRevenue = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+  const weeklyOrders = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+  const weeklyCustomers: Record<string, Set<string>> = { Mon: new Set(), Tue: new Set(), Wed: new Set(), Thu: new Set(), Fri: new Set(), Sat: new Set(), Sun: new Set() };
+  
+  orders.forEach(order => {
+    if (order.createdAt) {
+      const day = getDayName(order.createdAt);
+      if (weeklyOrders[day as keyof typeof weeklyOrders] !== undefined) {
+        weeklyOrders[day as keyof typeof weeklyOrders]++;
+        
+        if (order.paymentStatus === 'Paid' || order.isPaid) {
+          weeklyRevenue[day as keyof typeof weeklyRevenue] += (order.totalPrice || order.totalAmount || 0);
+        }
+        
+        const customerId = order.user?._id || order.user || order.shippingAddress?.email || order.shippingAddress?.name;
+        if (customerId) {
+          weeklyCustomers[day].add(customerId);
+        }
+      }
+    }
+  });
+
+  const revenueData = Object.values(weeklyRevenue);
+  const orderData = Object.values(weeklyOrders);
+  const customerData = Object.values(weeklyCustomers).map(set => set.size);
+  const productData = [0, 0, 0, 0, 0, 0, state.products.length]; 
+
+  const createSmoothPath = (x: number[], y: number[]) => {
+    if (x.length === 0) return '';
+    let d = `M${x[0]},${y[0]}`;
+    for (let i = 0; i < x.length - 1; i++) {
+      const xMid = (x[i] + x[i + 1]) / 2;
+      d += ` C${xMid},${y[i]} ${xMid},${y[i+1]} ${x[i+1]},${y[i+1]}`;
+    }
+    return d;
+  };
+
+  const getSparklinePath = (data: number[]) => {
+    const max = Math.max(...data, 1);
+    const xPoints = [0, 16.66, 33.33, 50, 66.66, 83.33, 100];
+    const yPoints = data.map(val => 25 - ((val / max) * 20));
+    return {
+      path: createSmoothPath(xPoints, yPoints),
+      points: xPoints.map((x, i) => ({x, y: yPoints[i]}))
+    };
+  };
+
+  const maxRevenue = Math.max(...revenueData, 1);
+  const yAxisMax = Math.max(Math.ceil(maxRevenue / 20000) * 20000, 80000);
+  
+  const mainGraphX = [0, 16.66, 33.33, 50, 66.66, 83.33, 100];
+  const mainGraphY = revenueData.map(val => 100 - ((val / yAxisMax) * 100));
+  const mainLinePath = createSmoothPath(mainGraphX, mainGraphY);
+  const mainAreaPath = `${mainLinePath} L100,100 L0,100 Z`;
+
   const stats = [
     {
       title: 'Total Revenue',
@@ -45,7 +102,8 @@ const AdminDashboard = () => {
       color: 'text-purple-600',
       bg: 'bg-purple-100',
       line: '#9333ea',
-      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500'
+      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500',
+      spark: getSparklinePath(revenueData)
     },
     {
       title: 'Total Orders',
@@ -55,7 +113,8 @@ const AdminDashboard = () => {
       color: 'text-emerald-600',
       bg: 'bg-emerald-100',
       line: '#10b981',
-      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500'
+      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500',
+      spark: getSparklinePath(orderData)
     },
     {
       title: 'Total Customers',
@@ -65,7 +124,8 @@ const AdminDashboard = () => {
       color: 'text-blue-600',
       bg: 'bg-blue-100',
       line: '#3b82f6',
-      changeColor: uniqueCustomers > 0 ? 'text-green-500' : 'text-gray-500'
+      changeColor: uniqueCustomers > 0 ? 'text-green-500' : 'text-gray-500',
+      spark: getSparklinePath(customerData)
     },
     {
       title: 'Total Products',
@@ -75,7 +135,8 @@ const AdminDashboard = () => {
       color: 'text-orange-600',
       bg: 'bg-orange-100',
       line: '#f97316',
-      changeColor: state.products.length > 0 ? 'text-green-500' : 'text-gray-500'
+      changeColor: state.products.length > 0 ? 'text-green-500' : 'text-gray-500',
+      spark: getSparklinePath(productData)
     }
   ];
 
@@ -176,13 +237,10 @@ const AdminDashboard = () => {
               {/* SVG Sparkline */}
               <div className="h-10 w-full overflow-hidden mt-1">
                 <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="w-full h-full">
-                  <path d="M0,20 Q10,10 20,15 T40,5 T60,20 T80,10 T100,15" fill="none" stroke={stat.line} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="100" cy="15" r="2" fill={stat.line} />
-                  <circle cx="0" cy="20" r="2" fill={stat.line} />
-                  <circle cx="20" cy="15" r="2" fill={stat.line} />
-                  <circle cx="40" cy="5" r="2" fill={stat.line} />
-                  <circle cx="60" cy="20" r="2" fill={stat.line} />
-                  <circle cx="80" cy="10" r="2" fill={stat.line} />
+                  <path d={stat.spark.path} fill="none" stroke={stat.line} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  {stat.spark.points.map((pt, i) => (
+                    <circle key={i} cx={pt.x} cy={pt.y} r="2" fill={stat.line} />
+                  ))}
                 </svg>
               </div>
             </div>
@@ -273,10 +331,10 @@ const AdminDashboard = () => {
             <div className="h-64 w-full relative">
               {/* Y-Axis Labels */}
               <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-[11px] font-medium text-gray-400">
-                <span>₹80K</span>
-                <span>₹60K</span>
-                <span>₹40K</span>
-                <span>₹20K</span>
+                <span>₹{(yAxisMax).toLocaleString()}</span>
+                <span>₹{(yAxisMax * 0.75).toLocaleString()}</span>
+                <span>₹{(yAxisMax * 0.5).toLocaleString()}</span>
+                <span>₹{(yAxisMax * 0.25).toLocaleString()}</span>
                 <span>₹0</span>
               </div>
               {/* Chart Area */}
@@ -296,15 +354,13 @@ const AdminDashboard = () => {
                   <line x1="0" y1="100" x2="100" y2="100" stroke="#f3f4f6" strokeWidth="0.5" />
                   
                   {/* Area and Line */}
-                  <path d="M0,100 L0,80 Q15,70 30,50 T60,20 T80,70 T100,50 L100,100 Z" fill="url(#gradientArea)" />
-                  <path d="M0,80 Q15,70 30,50 T60,20 T80,70 T100,50" fill="none" stroke="#6B21A8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d={mainAreaPath} fill="url(#gradientArea)" />
+                  <path d={mainLinePath} fill="none" stroke="#6B21A8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   
                   {/* Points */}
-                  <circle cx="0" cy="80" r="1.5" fill="#6B21A8" />
-                  <circle cx="30" cy="50" r="1.5" fill="#6B21A8" />
-                  <circle cx="60" cy="20" r="1.5" fill="#6B21A8" />
-                  <circle cx="80" cy="70" r="1.5" fill="#6B21A8" />
-                  <circle cx="100" cy="50" r="1.5" fill="#6B21A8" />
+                  {mainGraphX.map((x, i) => (
+                    <circle key={i} cx={x} cy={mainGraphY[i]} r="1.5" fill="#6B21A8" />
+                  ))}
                 </svg>
               </div>
               {/* X-Axis Labels */}
