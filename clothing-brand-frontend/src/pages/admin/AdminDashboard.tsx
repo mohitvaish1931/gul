@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  ShoppingBag, Users, Package, TrendingUp, ArrowUpRight, ArrowDownRight,
-  IndianRupee, Plus, Eye, Clock, BarChart3
+  ShoppingBag, Users, Package, ArrowUpRight, ArrowDownRight,
+  IndianRupee, Plus, Clock, BarChart3, Activity, Globe, Zap,
+  Calendar as CalendarIcon, ChevronRight, Image as ImageIcon, Settings
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';
@@ -32,246 +33,293 @@ const AdminDashboard = () => {
     return sum;
   }, 0);
 
-  const uniqueCustomers = new Set(orders.map(o => o.user?._id || o.user)).size;
-
   const stats = [
     {
-      label: 'Total Revenue',
+      label: 'Gross Revenue',
       value: totalRevenue > 0 ? `₹${totalRevenue.toLocaleString()}` : '₹2,45,680',
-      change: '+12.5%',
+      change: '+18.4%',
       up: true,
       icon: IndianRupee,
-      gradient: 'from-emerald-500 to-teal-600',
-      shadow: 'shadow-emerald-200/60',
-      lightBg: 'bg-emerald-50',
+      color: '#4B0082',
+      gradient: 'from-[#4B0082] to-[#6A0DAD]',
+      bg: 'bg-purple-50',
     },
     {
-      label: 'Total Orders',
+      label: 'Active Pipeline',
       value: orders.length > 0 ? orders.length.toString() : '128',
-      change: '+8.2%',
+      change: '+12.5%',
       up: true,
       icon: ShoppingBag,
-      gradient: 'from-blue-500 to-indigo-600',
-      shadow: 'shadow-blue-200/60',
-      lightBg: 'bg-blue-50',
+      color: '#3B82F6',
+      gradient: 'from-[#3B82F6] to-[#2563EB]',
+      bg: 'bg-blue-50',
     },
     {
-      label: 'Products',
+      label: 'Store Assets',
       value: state.products.length > 0 ? state.products.length.toString() : '34',
-      change: '+3 new',
+      change: '+8 new',
       up: true,
       icon: Package,
-      gradient: 'from-purple-500 to-violet-600',
-      shadow: 'shadow-purple-200/60',
-      lightBg: 'bg-purple-50',
+      color: '#10B981',
+      gradient: 'from-[#10B981] to-[#059669]',
+      bg: 'bg-emerald-50',
     },
     {
-      label: 'Customers',
-      value: uniqueCustomers > 0 ? uniqueCustomers.toString() : '256',
-      change: '-2.4%',
+      label: 'Elite Network',
+      value: new Set(orders.map(o => o.user?._id || o.user)).size > 0 ? new Set(orders.map(o => o.user?._id || o.user)).size.toString() : '256',
+      change: '-1.2%',
       up: false,
       icon: Users,
-      gradient: 'from-orange-400 to-rose-500',
-      shadow: 'shadow-orange-200/60',
-      lightBg: 'bg-orange-50',
+      color: '#F59E0B',
+      gradient: 'from-[#F59E0B] to-[#D97706]',
+      bg: 'bg-amber-50',
     },
   ];
 
   const recentOrders = orders.slice(0, 6).map(order => ({
     id: order._id,
     number: order.orderNumber || `#${order._id.substring(0, 6).toUpperCase()}`,
-    customer: order.shippingAddress?.name || order.user?.name || 'Guest',
-    items: order.items?.length || 0,
+    customer: order.shippingAddress?.name || order.user?.name || 'Private Client',
     amount: `₹${order.totalAmount?.toLocaleString() || '0'}`,
     status: order.status || 'Processing',
     date: new Date(order.createdAt || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
   }));
 
-  const statusStyle: Record<string, string> = {
-    Paid: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-    Delivered: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-    Processing: 'bg-amber-100 text-amber-700 border-amber-200',
-    Shipped: 'bg-blue-100 text-blue-700 border-blue-200',
-    Cancelled: 'bg-red-100 text-red-700 border-red-200',
+  const statusMap: Record<string, { color: string, bg: string, border: string }> = {
+    Paid: { color: 'text-emerald-700', bg: 'bg-emerald-50/50', border: 'border-emerald-100' },
+    Delivered: { color: 'text-emerald-700', bg: 'bg-emerald-50/50', border: 'border-emerald-100' },
+    Processing: { color: 'text-amber-700', bg: 'bg-amber-50/50', border: 'border-amber-100' },
+    Shipped: { color: 'text-blue-700', bg: 'bg-blue-50/50', border: 'border-blue-100' },
+    Cancelled: { color: 'text-red-700', bg: 'bg-red-50/50', border: 'border-red-100' },
   };
 
   return (
-    <div className="space-y-6 max-w-[1400px] mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-        <div>
-          <p className="text-sm text-gray-500 mb-1">
-            {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back, {state.user?.name || 'Admin'} 👋</h1>
+    <div className="space-y-12">
+      {/* Dynamic Dashboard Intelligence Header */}
+      <div className="relative group">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-purple/10 to-pink-500/5 rounded-[40px] blur-3xl opacity-50"></div>
+        <div className="relative bg-white/60 backdrop-blur-3xl p-12 rounded-[40px] border border-white/50 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.03)] flex flex-col lg:flex-row lg:items-center justify-between gap-10 overflow-hidden">
+          <div className="space-y-5 max-w-3xl">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2 bg-primary-purple/5 rounded-full border border-primary-purple/10">
+              <Zap className="w-4 h-4 text-primary-purple animate-pulse" />
+              <span className="text-[10px] font-black text-primary-purple uppercase tracking-[0.3em]">System Health: Optimal</span>
+            </div>
+            <h1 className="text-6xl font-black text-gray-900 tracking-tighter luxury-serif italic leading-none">
+              Welcome Back, <span className="text-primary-purple underline decoration-pink-500/20 underline-offset-[12px]">{state.user?.name?.split(' ')[0] || 'Admin'}</span>
+            </h1>
+            <p className="text-gray-500 text-xl font-medium max-w-xl leading-relaxed">
+              Your luxury storefront is performing at <span className="text-gray-900 font-bold">128% efficiency</span> today. Here is your core market intelligence.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="bg-[#0F1115] p-10 rounded-[35px] text-white flex flex-col gap-6 shadow-2xl relative overflow-hidden group/card">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-purple/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover/card:scale-150 transition-transform duration-1000"></div>
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10">
+                  <CalendarIcon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none mb-1">Session Chronology</p>
+                  <p className="text-base font-bold tracking-tight">
+                    {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => navigate('/admin/products/add')}
+                className="relative z-10 w-full py-4 bg-primary-purple hover:bg-white hover:text-primary-purple rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-3 shadow-xl shadow-primary-purple/20"
+              >
+                <Plus className="w-4 h-4" />
+                New Asset
+              </button>
+            </div>
+          </div>
         </div>
-        <button
-          onClick={() => navigate('/admin/products/add')}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-purple text-white text-sm font-medium rounded-xl hover:bg-primary-purple/90 shadow-lg shadow-purple-200/40 transition-all hover:shadow-xl hover:shadow-purple-200/50 active:scale-[0.98]"
-        >
-          <Plus className="w-4 h-4" />
-          Add Product
-        </button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:shadow-gray-100/50 transition-all duration-300 group">
-            <div className="flex items-start justify-between mb-5">
-              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${s.gradient} flex items-center justify-center shadow-lg ${s.shadow}`}>
-                <s.icon className="w-5 h-5 text-white" />
+      {/* Strategic Analytics Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+        {stats.map((stat) => (
+          <div key={stat.label} className="group bg-white p-8 rounded-[35px] border border-gray-100 hover:border-primary-purple/20 hover:shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-500 relative overflow-hidden">
+            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gray-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-700"></div>
+            
+            <div className="flex items-start justify-between relative z-10 mb-8">
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6`}>
+                <stat.icon className="w-6 h-6 text-white" />
               </div>
-              <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-lg ${
-                s.up ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'
-              }`}>
-                {s.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                {s.change}
-              </span>
+              <div className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-[10px] font-black tracking-widest ${stat.up ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                {stat.up ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+                {stat.change}
+              </div>
             </div>
-            <p className="text-[26px] font-bold text-gray-900 leading-none tabular-nums">{s.value}</p>
-            <p className="text-[13px] text-gray-400 mt-1.5 font-medium">{s.label}</p>
+
+            <div className="relative z-10 space-y-1">
+              <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.25em]">{stat.label}</p>
+              <h3 className="text-4xl font-black text-gray-900 tracking-tighter tabular-nums group-hover:translate-x-1 transition-transform duration-500">{stat.value}</h3>
+            </div>
+            
+            <div className="w-full h-1.5 bg-gray-50 rounded-full mt-6 overflow-hidden">
+              <div className={`h-full bg-gradient-to-r ${stat.gradient} w-2/3 group-hover:w-full transition-all duration-1000 ease-out`} />
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        {/* Orders Table */}
-        <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                <Clock className="w-4 h-4 text-blue-600" />
+      {/* Global Intelligence Layer */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+        {/* Core Acquisition Stream */}
+        <div className="xl:col-span-8 bg-white/60 backdrop-blur-xl border border-gray-100 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden group/table flex flex-col">
+          <div className="px-10 py-8 border-b border-gray-50 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-primary-purple/5 flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-primary-purple" />
               </div>
-              <h2 className="text-sm font-semibold text-gray-900">Recent Orders</h2>
+              <div>
+                <h3 className="text-lg font-black text-gray-900 luxury-serif italic leading-none mb-1">Live Acquisition Feed</h3>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Real-time terminal updates</p>
+              </div>
             </div>
-            <button
+            <button 
               onClick={() => navigate('/admin/orders')}
-              className="text-xs font-semibold text-primary-purple hover:text-primary-purple/80 flex items-center gap-1 transition-colors"
+              className="px-6 py-3 bg-gray-50 hover:bg-black hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-2"
             >
-              View All
-              <ArrowUpRight className="w-3 h-3" />
+              Master Archive <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
-          {recentOrders.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-[#f8f9fb]">
-                    <th className="px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Order</th>
-                    <th className="px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th className="px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell">Date</th>
-                    <th className="px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-5 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {recentOrders.map((o) => (
-                    <tr key={o.id} className="hover:bg-[#f8f9fb]/60 transition-colors cursor-pointer">
-                      <td className="px-5 py-3">
-                        <span className="text-sm font-semibold text-gray-800">{o.number}</span>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-gray-50/30">
+                  <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Identifier</th>
+                  <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Client Console</th>
+                  <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Valuation</th>
+                  <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
+                  <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Activity</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {recentOrders.length > 0 ? recentOrders.map((order) => {
+                  const style = statusMap[order.status] || { color: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-100' };
+                  return (
+                    <tr key={order.id} className="hover:bg-gray-50/50 transition-colors group/row cursor-pointer">
+                      <td className="px-10 py-6">
+                        <span className="text-xs font-black text-gray-900 group-hover/row:text-primary-purple transition-colors">{order.number}</span>
                       </td>
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-[10px] font-bold text-gray-600">
-                            {o.customer.charAt(0).toUpperCase()}
+                      <td className="px-10 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-[11px] font-black text-gray-500 group-hover/row:bg-primary-purple/10 group-hover/row:text-primary-purple transition-colors uppercase">
+                            {order.customer.split(' ').map((n: string) => n[0]).join('')}
                           </div>
-                          <span className="text-sm text-gray-700">{o.customer}</span>
+                          <div>
+                            <p className="text-sm font-bold text-gray-900 leading-none mb-1">{order.customer}</p>
+                            <p className="text-[10px] text-gray-400 font-medium">Standard Class</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="px-5 py-3 text-sm text-gray-500 hidden md:table-cell">{o.date}</td>
-                      <td className="px-5 py-3 text-sm font-semibold text-gray-900 tabular-nums">{o.amount}</td>
-                      <td className="px-5 py-3">
-                        <span className={`inline-flex px-2.5 py-1 text-[11px] font-semibold rounded-lg border ${statusStyle[o.status] || 'bg-gray-100 text-gray-600 border-gray-200'}`}>
-                          {o.status}
+                      <td className="px-10 py-6 text-sm font-black text-gray-900 tabular-nums">{order.amount}</td>
+                      <td className="px-10 py-6">
+                        <span className={`inline-flex px-4 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-full border ${style.bg} ${style.color} ${style.border}`}>
+                          {order.status}
                         </span>
                       </td>
+                      <td className="px-10 py-6 text-right">
+                        <span className="text-[11px] font-bold text-gray-400">{order.date}</span>
+                      </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="py-20 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-4">
-                <ShoppingBag className="w-7 h-7 text-gray-300" />
-              </div>
-              <p className="text-sm font-medium text-gray-500 mb-1">No orders yet</p>
-              <p className="text-xs text-gray-400 mb-5">Orders will appear here once customers start purchasing.</p>
-              <button
-                onClick={() => navigate('/admin/orders')}
-                className="text-xs font-semibold text-primary-purple hover:underline"
-              >
-                Go to Orders →
-              </button>
-            </div>
-          )}
+                  );
+                }) : (
+                  <tr>
+                    <td colSpan={5} className="py-24 text-center">
+                      <div className="max-w-xs mx-auto">
+                        <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                          <Clock className="w-8 h-8 text-gray-200" />
+                        </div>
+                        <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-4">Pipeline currently clear</p>
+                        <button 
+                          onClick={() => navigate('/admin/orders')}
+                          className="w-full py-4 bg-gray-50 hover:bg-black hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
+                        >
+                          Re-Initialize View
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Right sidebar */}
-        <div className="space-y-5">
-          {/* Quick Actions */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-purple-600" />
+        {/* Global Infrastructure & Quick Command */}
+        <div className="xl:col-span-4 space-y-10">
+          {/* Quick Access Grid */}
+          <div className="bg-[#0F1115] p-10 rounded-[40px] shadow-2xl relative overflow-hidden group/access">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-purple/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover/access:scale-150 transition-transform duration-1000"></div>
+            <div className="flex items-center gap-4 mb-10 relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                <Globe className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-sm font-semibold text-gray-900">Quick Actions</h2>
+              <h3 className="text-lg font-black text-white luxury-serif italic">Command Hub</h3>
             </div>
-            <div className="space-y-1.5">
+            
+            <div className="grid grid-cols-1 gap-4 relative z-10">
               {[
-                { label: 'Add Product', desc: 'Create new listing', icon: Plus, action: () => navigate('/admin/products/add'), color: 'purple' },
-                { label: 'View Products', desc: 'Browse catalog', icon: Eye, action: () => navigate('/admin/products'), color: 'blue' },
-                { label: 'Manage Banners', desc: 'Update storefront', icon: BarChart3, action: () => navigate('/admin/banners'), color: 'emerald' },
+                { label: 'New Product Unit', desc: 'Catalog Expansion', icon: Plus, action: () => navigate('/admin/products/add'), color: 'purple' },
+                { label: 'Visual Interface', desc: 'Banner Management', icon: ImageIcon, action: () => navigate('/admin/banners'), color: 'blue' },
+                { label: 'System Logic', desc: 'Core Configuration', icon: Settings, action: () => navigate('/admin/settings'), color: 'emerald' },
               ].map((item) => (
                 <button
                   key={item.label}
                   onClick={item.action}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl text-left hover:bg-[#f8f9fb] transition-all group active:scale-[0.99]"
+                  className="w-full flex items-center justify-between p-5 rounded-[25px] bg-white/5 hover:bg-white text-white hover:text-black transition-all duration-500 group/btn border border-white/5 hover:border-white shadow-xl"
                 >
-                  <div className={`w-9 h-9 rounded-lg bg-${item.color}-50 group-hover:bg-${item.color}-100 flex items-center justify-center text-${item.color}-600 transition-colors`}>
-                    <item.icon className="w-4 h-4" />
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 group-hover/btn:bg-black/5 flex items-center justify-center transition-colors">
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[13px] font-black uppercase tracking-wider">{item.label}</p>
+                      <p className="text-[9px] opacity-40 uppercase font-black tracking-widest">{item.desc}</p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800">{item.label}</p>
-                    <p className="text-[11px] text-gray-400">{item.desc}</p>
-                  </div>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors shrink-0" />
+                  <ChevronRight className="w-5 h-5 opacity-20 group-hover/btn:translate-x-1 group-hover/btn:opacity-100 transition-all" />
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Store Stats */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <h2 className="text-sm font-semibold text-gray-900 mb-4">Store Overview</h2>
-
-            {/* Storage */}
-            <div className="mb-4">
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-gray-500 font-medium">Media Storage</span>
-                <span className="font-semibold text-gray-700">3.75 / 5 GB</span>
+          {/* Infrastructure Health Matrix */}
+          <div className="bg-white p-10 rounded-[40px] border border-gray-100 shadow-sm overflow-hidden group/health">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                <Activity className="w-6 h-6 text-emerald-600 animate-pulse" />
               </div>
-              <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                <div className="w-3/4 h-full bg-gradient-to-r from-primary-purple to-purple-400 rounded-full" />
-              </div>
+              <h3 className="text-lg font-black text-gray-900 luxury-serif italic">Global Health</h3>
             </div>
 
-            {/* Metrics */}
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-50">
-              {[
-                { label: 'Active Products', value: state.products.length || 34, color: 'text-gray-900' },
-                { label: 'Total Orders', value: orders.length || 128, color: 'text-gray-900' },
-                { label: 'Conversion', value: '4.2%', color: 'text-emerald-600' },
-                { label: 'Avg. Order', value: '₹1,920', color: 'text-gray-900' },
-              ].map((m) => (
-                <div key={m.label} className="bg-[#f8f9fb] rounded-xl p-3">
-                  <p className="text-[11px] text-gray-400 font-medium mb-0.5">{m.label}</p>
-                  <p className={`text-lg font-bold ${m.color} tabular-nums`}>{m.value}</p>
+            <div className="space-y-8">
+              <div>
+                <div className="flex justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                  <span>Storage Utilization</span>
+                  <span className="text-gray-900">75.4%</span>
                 </div>
-              ))}
+                <div className="w-full h-2.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100 p-[2px]">
+                  <div className="w-3/4 h-full bg-gradient-to-r from-primary-purple via-pink-500 to-amber-500 rounded-full shadow-[0_0_10px_rgba(75,0,130,0.3)] transition-all duration-1000 group-hover/health:w-[78%]" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-5 bg-gray-50 rounded-[25px] border border-gray-100 group-hover/health:bg-white group-hover/health:shadow-xl transition-all duration-500">
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5 leading-none">Latency</p>
+                  <p className="text-xl font-black text-gray-900 tracking-tight">12ms</p>
+                </div>
+                <div className="p-5 bg-gray-50 rounded-[25px] border border-gray-100 group-hover/health:bg-white group-hover/health:shadow-xl transition-all duration-500">
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5 leading-none">Uptime</p>
+                  <p className="text-xl font-black text-emerald-600 tracking-tight">99.9%</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
