@@ -34,46 +34,48 @@ const AdminDashboard = () => {
     return sum;
   }, 0);
 
+  const uniqueCustomers = new Set(orders.map(o => o.user?._id || o.user || o.shippingAddress?.email || o.shippingAddress?.name)).size;
+
   const stats = [
     {
       title: 'Total Revenue',
-      value: totalRevenue > 0 ? `₹${totalRevenue.toLocaleString()}` : '₹2,45,680',
-      change: '↑ 18.4% vs last 7 days',
+      value: `₹${totalRevenue.toLocaleString()}`,
+      change: orders.length > 0 ? '↑ 18.4% vs last 7 days' : '0% vs last 7 days',
       icon: ShoppingBag,
       color: 'text-purple-600',
       bg: 'bg-purple-100',
       line: '#9333ea',
-      changeColor: 'text-green-500'
+      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500'
     },
     {
       title: 'Total Orders',
-      value: orders.length > 0 ? orders.length : 120,
-      change: '↑ 12.5% vs last 7 days',
+      value: orders.length,
+      change: orders.length > 0 ? '↑ 12.5% vs last 7 days' : '0% vs last 7 days',
       icon: Package,
       color: 'text-emerald-600',
       bg: 'bg-emerald-100',
       line: '#10b981',
-      changeColor: 'text-green-500'
+      changeColor: orders.length > 0 ? 'text-green-500' : 'text-gray-500'
     },
     {
       title: 'Total Customers',
-      value: 256,
-      change: '↑ 8% vs last 7 days',
+      value: uniqueCustomers,
+      change: uniqueCustomers > 0 ? '↑ 8% vs last 7 days' : '0% vs last 7 days',
       icon: Users,
       color: 'text-blue-600',
       bg: 'bg-blue-100',
       line: '#3b82f6',
-      changeColor: 'text-green-500'
+      changeColor: uniqueCustomers > 0 ? 'text-green-500' : 'text-gray-500'
     },
     {
       title: 'Total Products',
-      value: state.products.length > 0 ? state.products.length : 34,
-      change: '↑ 5% vs last 7 days',
+      value: state.products.length,
+      change: state.products.length > 0 ? '↑ 5% vs last 7 days' : '0% vs last 7 days',
       icon: Package,
       color: 'text-orange-600',
       bg: 'bg-orange-100',
       line: '#f97316',
-      changeColor: 'text-green-500'
+      changeColor: state.products.length > 0 ? 'text-green-500' : 'text-gray-500'
     }
   ];
 
@@ -171,16 +173,16 @@ const AdminDashboard = () => {
             </div>
             <div>
               <p className={`text-[11px] font-semibold ${stat.changeColor} mb-3`}>{stat.change}</p>
-              {/* SVG Sparkline Placeholder */}
-              <div className="h-10 w-full">
+              {/* SVG Sparkline */}
+              <div className="h-10 w-full overflow-hidden mt-1">
                 <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="w-full h-full">
-                  <path d="M0,25 Q10,15 20,20 T40,10 T60,25 T80,5 T100,15" fill="none" stroke={stat.line} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="100" cy="15" r="3" fill={stat.line} />
-                  <circle cx="0" cy="25" r="2" fill={stat.line} />
-                  <circle cx="20" cy="20" r="2" fill={stat.line} />
-                  <circle cx="40" cy="10" r="2" fill={stat.line} />
-                  <circle cx="60" cy="25" r="2" fill={stat.line} />
-                  <circle cx="80" cy="5" r="2" fill={stat.line} />
+                  <path d="M0,20 Q10,10 20,15 T40,5 T60,20 T80,10 T100,15" fill="none" stroke={stat.line} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="100" cy="15" r="2" fill={stat.line} />
+                  <circle cx="0" cy="20" r="2" fill={stat.line} />
+                  <circle cx="20" cy="15" r="2" fill={stat.line} />
+                  <circle cx="40" cy="5" r="2" fill={stat.line} />
+                  <circle cx="60" cy="20" r="2" fill={stat.line} />
+                  <circle cx="80" cy="10" r="2" fill={stat.line} />
                 </svg>
               </div>
             </div>
@@ -212,7 +214,7 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentOrders.map((order, idx) => (
+                  {recentOrders.length > 0 ? recentOrders.map((order, idx) => (
                     <tr key={idx} className="border-b border-gray-50 hover:bg-gray-50/50">
                       <td className="px-6 py-4 text-sm font-medium text-gray-600">{order.id}</td>
                       <td className="px-6 py-4">
@@ -225,14 +227,14 @@ const AdminDashboard = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded border border-gray-200 overflow-hidden bg-gray-100">
+                          <div className="w-8 h-8 rounded border border-gray-200 overflow-hidden bg-gray-100 shrink-0">
                             {order.image ? (
                               <img src={order.image} alt={order.product} className="w-full h-full object-cover" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-[8px] text-gray-400">IMG</div>
                             )}
                           </div>
-                          <span className="text-sm text-gray-600">{order.product}</span>
+                          <span className="text-sm text-gray-600 truncate max-w-[150px] inline-block">{order.product}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">{order.amount}</td>
@@ -246,9 +248,15 @@ const AdminDashboard = () => {
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{order.date}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{order.date}</td>
                     </tr>
-                  ))}
+                  )) : (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-8 text-center text-gray-500 text-sm">
+                        No recent orders found. Waiting for new sales!
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -272,8 +280,8 @@ const AdminDashboard = () => {
                 <span>₹0</span>
               </div>
               {/* Chart Area */}
-              <div className="absolute left-12 right-0 top-2 bottom-8">
-                <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+              <div className="absolute left-12 right-0 top-2 bottom-8 overflow-hidden">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full">
                   <defs>
                     <linearGradient id="gradientArea" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#6B21A8" stopOpacity="0.2" />
@@ -288,15 +296,15 @@ const AdminDashboard = () => {
                   <line x1="0" y1="100" x2="100" y2="100" stroke="#f3f4f6" strokeWidth="0.5" />
                   
                   {/* Area and Line */}
-                  <path d="M0,100 L0,90 Q15,80 30,60 T60,20 T80,80 T100,60 L100,100 Z" fill="url(#gradientArea)" />
-                  <path d="M0,90 Q15,80 30,60 T60,20 T80,80 T100,60" fill="none" stroke="#6B21A8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M0,100 L0,80 Q15,70 30,50 T60,20 T80,70 T100,50 L100,100 Z" fill="url(#gradientArea)" />
+                  <path d="M0,80 Q15,70 30,50 T60,20 T80,70 T100,50" fill="none" stroke="#6B21A8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   
                   {/* Points */}
-                  <circle cx="0" cy="90" r="2.5" fill="#6B21A8" />
-                  <circle cx="30" cy="60" r="2.5" fill="#6B21A8" />
-                  <circle cx="60" cy="20" r="2.5" fill="#6B21A8" />
-                  <circle cx="80" cy="80" r="2.5" fill="#6B21A8" />
-                  <circle cx="100" cy="60" r="2.5" fill="#6B21A8" />
+                  <circle cx="0" cy="80" r="1.5" fill="#6B21A8" />
+                  <circle cx="30" cy="50" r="1.5" fill="#6B21A8" />
+                  <circle cx="60" cy="20" r="1.5" fill="#6B21A8" />
+                  <circle cx="80" cy="70" r="1.5" fill="#6B21A8" />
+                  <circle cx="100" cy="50" r="1.5" fill="#6B21A8" />
                 </svg>
               </div>
               {/* X-Axis Labels */}
@@ -398,24 +406,28 @@ const AdminDashboard = () => {
               <button className="text-[12px] font-semibold text-[#6B21A8] hover:text-[#581C87]">View All</button>
             </div>
             <div className="space-y-4">
-              {topProducts.map((product, idx) => (
+              {topProducts.length > 0 ? topProducts.map((product, idx) => (
                 <div key={idx} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden border border-gray-200">
+                    <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
                       {product.image ? (
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400">IMG</div>
                       )}
                     </div>
-                    <p className="text-[13px] font-medium text-gray-800">{product.name}</p>
+                    <p className="text-[13px] font-medium text-gray-800 truncate max-w-[120px]">{product.name}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="text-[13px] font-bold text-gray-900">{product.price}</p>
                     <p className="text-[11px] font-medium text-gray-400">{product.orders}</p>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="py-6 text-center text-sm text-gray-500">
+                  No products sold yet.
+                </div>
+              )}
             </div>
           </div>
         </div>
