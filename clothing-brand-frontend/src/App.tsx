@@ -22,6 +22,11 @@ import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminBanners from './pages/admin/AdminBanners';
 import AdminPromotions from './pages/admin/AdminPromotions';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminSalesReports from './pages/admin/AdminSalesReports';
+import AdminProductReports from './pages/admin/AdminProductReports';
+import AdminCustomerReports from './pages/admin/AdminCustomerReports';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminRoles from './pages/admin/AdminRoles';
 import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
 import AboutUs from './pages/AboutUs';
@@ -60,6 +65,11 @@ const MainLayout = () => {
             <Route path="banners" element={<AdminBanners />} />
             <Route path="promotions" element={<AdminPromotions />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="reports/sales" element={<AdminSalesReports />} />
+            <Route path="reports/products" element={<AdminProductReports />} />
+            <Route path="reports/customers" element={<AdminCustomerReports />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="roles" element={<AdminRoles />} />
           </Route>
           <Route path="/track-order" element={<TrackOrder />} />
           <Route path="/contact" element={<Contact />} />

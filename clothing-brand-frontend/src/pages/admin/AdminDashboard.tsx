@@ -77,19 +77,61 @@ const AdminDashboard = () => {
     }
   ];
 
-  const recentOrders = [
-    { id: '#ORD-1048', initial: 'AS', name: 'Anjali Sharma', initialBg: 'bg-purple-100', initialColor: 'text-purple-700', product: 'Embroidered Anarkali Set', amount: '₹4,299', status: 'Delivered', date: '11 May 2026' },
-    { id: '#ORD-1047', initial: 'RK', name: 'Riya Kapoor', initialBg: 'bg-gray-100', initialColor: 'text-gray-700', product: 'Silk Saree', amount: '₹5,899', status: 'Shipped', date: '10 May 2026' },
-    { id: '#ORD-1046', initial: 'NP', name: 'Neha Patel', initialBg: 'bg-gray-100', initialColor: 'text-gray-700', product: 'Kurta Set', amount: '₹2,199', status: 'Processing', date: '10 May 2026' },
-    { id: '#ORD-1045', initial: 'MS', name: 'Meera Singh', initialBg: 'bg-purple-100', initialColor: 'text-purple-700', product: 'Lehenga Choli', amount: '₹12,999', status: 'Delivered', date: '09 May 2026' },
-    { id: '#ORD-1044', initial: 'PK', name: 'Pooja Kumari', initialBg: 'bg-gray-100', initialColor: 'text-gray-700', product: 'Sharara Set', amount: '₹6,499', status: 'Cancelled', date: '09 May 2026' },
-  ];
+  const recentOrders = orders.slice(0, 5).map(order => {
+    const customerName = order.user?.name || order.shippingAddress?.fullName || order.shippingAddress?.name || 'Guest User';
+    const initial = customerName.substring(0, 2).toUpperCase();
+    
+    const bgColors = ['bg-purple-100', 'bg-emerald-100', 'bg-blue-100', 'bg-orange-100', 'bg-gray-100'];
+    const textColors = ['text-purple-700', 'text-emerald-700', 'text-blue-700', 'text-orange-700', 'text-gray-700'];
+    const colorIndex = customerName.length % bgColors.length;
 
-  const topProducts = [
-    { name: 'Embroidered Anarkali Set', price: '₹4,299', orders: '120 Orders' },
-    { name: 'Silk Saree', price: '₹5,899', orders: '98 Orders' },
-    { name: 'Kurta Set', price: '₹2,199', orders: '75 Orders' },
-  ];
+    const firstItem = order.orderItems?.[0] || order.items?.[0] || {};
+    const productName = firstItem.name || 'Various Items';
+    const image = firstItem.image || '';
+    
+    const status = order.isDelivered ? 'Delivered' : (order.isPaid ? 'Processing' : (order.status || 'Pending'));
+
+    return {
+      id: `#${(order._id || '').substring(0, 8).toUpperCase()}`,
+      initial,
+      name: customerName,
+      initialBg: bgColors[colorIndex],
+      initialColor: textColors[colorIndex],
+      product: productName,
+      image,
+      amount: `₹${(order.totalPrice || order.totalAmount || 0).toLocaleString()}`,
+      status,
+      date: order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'
+    };
+  });
+
+  const productSales: Record<string, {name: string, price: number, image: string, count: number}> = {};
+  orders.forEach(order => {
+    const items = order.orderItems || order.items || [];
+    items.forEach((item: any) => {
+      const pid = item.product || item._id || item.name;
+      if (productSales[pid]) {
+        productSales[pid].count += (item.qty || item.quantity || 1);
+      } else {
+        productSales[pid] = {
+          name: item.name || 'Unknown Product',
+          price: item.price || 0,
+          image: item.image || '',
+          count: item.qty || item.quantity || 1
+        };
+      }
+    });
+  });
+
+  const topProducts = Object.values(productSales)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3)
+    .map(p => ({
+      name: p.name,
+      price: `₹${p.price.toLocaleString()}`,
+      orders: `${p.count} Orders`,
+      image: p.image
+    }));
 
   return (
     <div className="max-w-[1400px] mx-auto space-y-8">
@@ -106,7 +148,7 @@ const AdminDashboard = () => {
         <div className="bg-white border border-gray-200 rounded-xl px-5 py-3.5 flex items-center gap-6 shadow-sm">
           <div>
             <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">Today's Date</p>
-            <p className="text-[14px] font-semibold text-gray-900 mt-0.5">Sunday, 11 May 2026</p>
+            <p className="text-[14px] font-semibold text-gray-900 mt-0.5">{new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
           </div>
           <div className="w-10 h-10 rounded-lg bg-[#F3E8FF] flex items-center justify-center text-[#6B21A8]">
             <CalendarIcon className="w-5 h-5" />
@@ -184,8 +226,11 @@ const AdminDashboard = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded border border-gray-200 overflow-hidden bg-gray-100">
-                            {/* Placeholder for product image */}
-                            <div className="w-full h-full flex items-center justify-center text-[8px] text-gray-400">IMG</div>
+                            {order.image ? (
+                              <img src={order.image} alt={order.product} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-[8px] text-gray-400">IMG</div>
+                            )}
                           </div>
                           <span className="text-sm text-gray-600">{order.product}</span>
                         </div>
@@ -357,7 +402,11 @@ const AdminDashboard = () => {
                 <div key={idx} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded bg-gray-100 overflow-hidden border border-gray-200">
-                      <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400">IMG</div>
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400">IMG</div>
+                      )}
                     </div>
                     <p className="text-[13px] font-medium text-gray-800">{product.name}</p>
                   </div>
