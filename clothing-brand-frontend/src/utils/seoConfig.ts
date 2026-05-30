@@ -6,9 +6,9 @@
 export const SEO_CONFIG = {
   // Site Information
   siteName: 'GUL FASHION',
-  siteUrl: 'https://GUL FASHIONjewles.com',
+  siteUrl: 'https://gulfashion.com',
   siteDescription: 'Premium luxury clothing collection with premium sarees, suits, and ethnic wear and more',
-  siteLogo: 'https://GUL FASHIONjewles.com/logo.png',
+  siteLogo: 'https://gulfashion.com/logo.png',
   
   // Business Information
   business: {
@@ -17,7 +17,7 @@ export const SEO_CONFIG = {
     description: 'Premium Luxury Clothing Retailer',
     priceRange: '₹₹₹',
     areaServed: 'IN',
-    email: 'GUL FASHIONfashion@gmail.com',
+    email: 'gulfashionjaipur@gmail.com',
     phone: '+91 93513 25459',
     address: {
       streetAddress: 'Pahadiya chowk',
@@ -30,11 +30,11 @@ export const SEO_CONFIG = {
 
   // Social Media
   socialProfiles: {
-    facebook: 'https://www.facebook.com/GUL FASHIONjewles',
-    instagram: 'https://www.instagram.com/GUL FASHIONjewles',
-    twitter: 'https://twitter.com/GUL FASHIONjewles',
-    linkedin: 'https://www.linkedin.com/company/GUL FASHION-fashion',
-    youtube: 'https://www.youtube.com/channel/GUL FASHIONjewles'
+    facebook: 'https://www.facebook.com/gulfashionjaipur',
+    instagram: 'https://www.instagram.com/gulfashionjaipur',
+    twitter: 'https://twitter.com/gulfashionjp',
+    linkedin: 'https://www.linkedin.com/company/gul-fashion',
+    youtube: 'https://www.youtube.com/channel/gulfashionjaipur'
   },
 
   // Default Meta Information
@@ -56,20 +56,25 @@ export const SEO_CONFIG = {
       description: 'Browse our complete collection of premium luxury clothing. Find the perfect sarees, suits, and dresses and more from GUL FASHION.',
       keywords: 'all products, clothing collection, sarees, suits, and dresses, luxury clothing, premium accessories'
     },
-    earrings: {
-      title: 'Premium Earrings Collection - GUL FASHION Luxury Clothing',
-      description: 'Shop our exclusive collection of premium earrings. From elegant studs to stunning dangles, find the perfect earrings to elevate your style.',
-      keywords: 'earrings, luxury earrings, premium earrings, designer earrings, clothing earrings, gold earrings, diamond earrings'
+    kurtaSets: {
+      title: 'Premium Kurta Sets - GUL FASHION Luxury Ethnic Wear',
+      description: 'Discover our elegant Kurta Sets. Premium designs crafted with finest fabrics, hand-embroidery, and traditional Jaipur prints.',
+      keywords: 'kurta sets, luxury kurtas, designer kurta sets, ethnic wear, jaipur kurtas, handcrafted kurta'
     },
-    bracelets: {
-      title: 'Premium Bracelets Collection - GUL FASHION Luxury Clothing',
-      description: 'Discover our stunning collection of premium bracelets. Elegant designs crafted with finest materials for timeless sophistication.',
-      keywords: 'bracelets, luxury bracelets, premium bracelets, designer bracelets, clothing bracelets, gold bracelets, diamond bracelets'
+    suits: {
+      title: 'Designer Suits Collection - GUL FASHION Luxury Clothing',
+      description: 'Explore GUL FASHION\' stunning collection of designer suits. From gotta patti to zari work, find perfect ensembles for every festive event.',
+      keywords: 'designer suits, luxury suits, embroidered suits, gotta patti suits, sharara suits, traditional suits'
     },
-    necklaces: {
-      title: 'Premium Necklaces Collection - GUL FASHION Luxury Clothing',
-      description: 'Browse our exquisite collection of premium necklaces. Find elegant designs with timeless appeal and finest craftsmanship.',
-      keywords: 'necklaces, luxury necklaces, premium necklaces, designer necklaces, clothing necklaces, gold necklaces, diamond necklaces'
+    sarees: {
+      title: 'Royal Sarees Collection - GUL FASHION Luxury Wear',
+      description: 'Shop our royal sarees collection featuring premium silk, georgette, and organza sarees with intricate borders and handloom craftsmanship.',
+      keywords: 'sarees, luxury sarees, designer sarees, silk sarees, banarasi sarees, jaipur handloom sarees'
+    },
+    lehengas: {
+      title: 'Exquisite Bridal Lehengas - GUL FASHION Luxury Bridal Edit',
+      description: 'Find your dream bridal lehenga at GUL FASHION. Intricate zardozi, royal zari, and timeless crimson silhouettes crafted for your precious moments.',
+      keywords: 'bridal lehenga, luxury lehengas, wedding lehenga, crimson lehenga, hand-embroidered lehenga'
     },
     contact: {
       title: 'Contact Us - GUL FASHION Premium Clothing',
@@ -137,7 +142,7 @@ export const SEO_CONFIG = {
   },
 
   // Canonical Base URL
-  canonicalBase: 'https://GUL FASHIONjewles.com',
+  canonicalBase: 'https://gulfashion.com',
 
   // OpenSearch Description
   openSearchUrl: '/opensearch.xml',

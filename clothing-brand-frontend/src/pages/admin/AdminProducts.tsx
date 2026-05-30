@@ -129,7 +129,7 @@ const AdminProducts = () => {
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
                         <img 
-                          src={getImageUrl(product.image?.[0])} 
+                          src={getImageUrl(product.images?.[0] || product.image)} 
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />

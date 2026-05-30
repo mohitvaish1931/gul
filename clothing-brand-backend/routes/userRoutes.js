@@ -64,10 +64,14 @@ router.post('/', async (req, res) => {
 // @route   POST /api/users/logout
 // @access  Public
 router.post('/logout', (req, res) => {
+  const isProd = process.env.NODE_ENV === 'production';
+  const sameSiteMode = process.env.COOKIE_SAME_SITE || (isProd ? 'none' : 'lax');
+  const isSecure = process.env.COOKIE_SECURE === 'true' || isProd;
+
   res.cookie('jwt', '', {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: isSecure,
+    sameSite: sameSiteMode,
     expires: new Date(0),
   });
   res.status(200).json({ message: 'Logged out successfully' });

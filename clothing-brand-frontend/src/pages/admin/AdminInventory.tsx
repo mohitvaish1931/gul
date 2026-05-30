@@ -47,7 +47,7 @@ const AdminInventory = () => {
                   <td className="px-10 py-6 whitespace-nowrap">
                     <div className="flex items-center gap-5">
                       <div className="w-16 h-16 rounded-2xl bg-white/5 overflow-hidden border border-gold-primary/10 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
-                        <img src={getImageUrl(product.image?.[0])} alt="" className="w-full h-full object-cover" />
+                        <img src={getImageUrl(product.images?.[0] || product.image)} alt="" className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                       </div>
                       <div className="flex flex-col">

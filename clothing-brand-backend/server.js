@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -24,8 +26,27 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = ['https://gul-neon.vercel.app', 'http://localhost:5173', 'http://localhost:3000'];
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+    const allowedOrigins = [
+      'https://gul-neon.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+
+    if (process.env.FRONTEND_URL) {
+      allowedOrigins.push(process.env.FRONTEND_URL);
+    }
+    if (process.env.ALLOWED_ORIGINS) {
+      const extraOrigins = process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim());
+      allowedOrigins.push(...extraOrigins);
+    }
+
+    if (
+      !origin || 
+      allowedOrigins.includes(origin) || 
+      origin.endsWith('.vercel.app') || 
+      origin.includes('hostinger') ||
+      origin.includes('localhost')
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -38,10 +59,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-app.get('/', (req, res) => {
-  res.send('Clothing Brand API is running...');
-});
-
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
@@ -51,6 +68,23 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/shiprocket', shiprocketRoutes);
 app.use('/api/chat', chatRoutes);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from frontend build folder
+  app.use(express.static(path.join(__dirname, '../clothing-brand-frontend/dist')));
+
+  // Support client-side routing by redirecting all other requests to index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'clothing-brand-frontend', 'dist', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send('Clothing Brand API is running...');
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);

@@ -144,6 +144,8 @@ const AdminAddProduct = () => {
                 <option value="">Select category</option>
                 <option value="Kurta Sets">Kurta Sets</option>
                 <option value="Suits">Suits</option>
+                <option value="Sarees">Sarees</option>
+                <option value="Lehengas">Lehengas</option>
               </select>
             </div>
           </div>
