@@ -74,11 +74,11 @@ const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === 'production') {
   // Serve static files from frontend build folder
-  app.use(express.static(path.join(__dirname, '../clothing-brand-frontend/dist')));
+  app.use(express.static(path.join(__dirname, '../dist')));
 
   // Support client-side routing by redirecting all other requests to index.html
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'clothing-brand-frontend', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
   });
 } else {
   app.get('/', (req, res) => {
