@@ -11,6 +11,7 @@ const ProductScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -21,6 +22,7 @@ const ProductScreen = () => {
         }
         const data = await response.json();
         setProduct(data);
+        setSelectedImage(data.image || '');
         setLoading(false);
       } catch (err) {
         setError('Error fetching product or backend not running');
@@ -66,13 +68,59 @@ const ProductScreen = () => {
             {/* Image Section */}
             <div className="product-image-section">
               <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
-                 <img src={product.image} alt={product.name} style={{ width: '100%', display: 'block' }} />
+                 <img src={selectedImage || product.image} alt={product.name} style={{ width: '100%', display: 'block' }} />
                  {product.countInStock === 0 && (
                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
                    </div>
                  )}
               </div>
+              
+              {/* Image Gallery Thumbnails */}
+              {product.images && product.images.length > 1 && (
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '12px', 
+                  marginTop: '20px', 
+                  overflowX: 'auto', 
+                  paddingBottom: '10px',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#2D0A4E #FDFBFD'
+                }}>
+                  {product.images.map((imgUrl: string, idx: number) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setSelectedImage(imgUrl)}
+                      style={{
+                        border: selectedImage === imgUrl ? '2px solid #2D0A4E' : '2px solid transparent',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        padding: 0,
+                        cursor: 'pointer',
+                        backgroundColor: 'transparent',
+                        width: '70px',
+                        height: '70px',
+                        flexShrink: 0,
+                        transition: 'all 0.2s ease',
+                        opacity: selectedImage === imgUrl ? 1 : 0.7,
+                        boxShadow: selectedImage === imgUrl ? '0 4px 10px rgba(45,10,78,0.15)' : 'none'
+                      }}
+                      onMouseOver={(e) => {
+                        if (selectedImage !== imgUrl) {
+                          e.currentTarget.style.opacity = '1';
+                        }
+                      }}
+                      onMouseOut={(e) => {
+                        if (selectedImage !== imgUrl) {
+                          e.currentTarget.style.opacity = '0.7';
+                        }
+                      }}
+                    >
+                      <img src={imgUrl} alt={`${product.name} detail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             
             {/* Info Section */}
