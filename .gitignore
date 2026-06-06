@@ -5,3 +5,11 @@ build/
 .DS_Store
 *.log
 .gemini/
+
+# Scratch & Download helpers
+drive_downloads/
+drive_contents.json
+Rate List For Kurtis.pdf
+*.py
+clothing-brand-backend/upload_and_seed.js
+clothing-brand-backend/verify_db.js
