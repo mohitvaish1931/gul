@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
 // @access  Public
 router.post('/logout', (req, res) => {
   const isProd = process.env.NODE_ENV === 'production';
-  const sameSiteMode = process.env.COOKIE_SAME_SITE || (isProd ? 'none' : 'lax');
+  const sameSiteMode = process.env.COOKIE_SAME_SITE || 'lax';
   const isSecure = process.env.COOKIE_SECURE === 'true' || isProd;
 
   res.cookie('jwt', '', {

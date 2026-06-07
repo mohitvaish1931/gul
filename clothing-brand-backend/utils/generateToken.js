@@ -6,7 +6,8 @@ const generateToken = (res, userId) => {
   });
 
   const isProd = process.env.NODE_ENV === 'production';
-  const sameSiteMode = process.env.COOKIE_SAME_SITE || (isProd ? 'none' : 'lax');
+  // Use 'lax' for same-origin (Render/Hostinger), 'none' only if cross-origin is needed
+  const sameSiteMode = process.env.COOKIE_SAME_SITE || 'lax';
   const isSecure = process.env.COOKIE_SECURE === 'true' || isProd;
 
   // Set JWT as HTTP-Only cookie
