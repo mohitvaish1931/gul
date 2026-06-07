@@ -171,7 +171,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
 
       {/* Write a Review Toggle */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #f0f0f0', paddingBottom: '20px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E' }}>Customer Reviews</h3>
+        <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', margin: 0 }}>Customer Reviews</h3>
         {!writeReviewOpen && (
           <button
             onClick={() => setWriteReviewOpen(true)}
@@ -340,7 +340,6 @@ const ProductScreen = () => {
   // Selection states
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<string>('specifications');
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [sizeError, setSizeError] = useState(false);
 
@@ -630,104 +629,79 @@ const ProductScreen = () => {
               </div>
             </div>
 
-            {/* Tabs Section */}
-            <div className="product-tabs-section" style={{ marginTop: '80px', borderTop: '1px solid #eee', paddingTop: '40px' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', borderBottom: '1px solid #f0f0f0', marginBottom: '40px', flexWrap: 'wrap' }}>
-                {[
-                  { id: 'specifications', label: 'Specifications' },
-                  { id: 'care_instructions', label: 'Care Instructions' },
-                  { id: 'reviews', label: `Reviews (${productReviewsCount})` }
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      paddingBottom: '15px',
-                      fontSize: '0.95rem',
-                      fontWeight: '800',
-                      letterSpacing: '1.5px',
-                      color: activeTab === tab.id ? '#2D0A4E' : '#aaa',
-                      borderBottom: activeTab === tab.id ? '3px solid #D4AF37' : '3px solid transparent',
-                      cursor: 'pointer',
-                      textTransform: 'uppercase',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Tabs Content */}
-              <div style={{ maxWidth: '800px', margin: '0 auto', minHeight: '200px' }}>
-                {activeTab === 'specifications' && (
-                  <div style={{ animation: 'fadeIn 0.3s ease' }}>
-                    <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '25px' }}>Specifications</h3>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
-                      <tbody>
-                        <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
-                          <td style={{ padding: '15px 0', color: '#999', width: '35%', fontWeight: '600' }}>Category</td>
-                          <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.category}</td>
+            {/* Detailed Information Sections (Stacked) */}
+            <div className="product-details-stacked" style={{ marginTop: '80px', borderTop: '1px solid #eee', paddingTop: '60px' }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '60px' }}>
+                
+                {/* 1. Specifications Section */}
+                <div style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '40px' }}>
+                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>DETAILS</span>
+                  <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '25px', marginTop: 0 }}>Specifications</h3>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
+                    <tbody>
+                      <tr style={{ borderBottom: '1px solid #f8f8f8' }}>
+                        <td style={{ padding: '15px 0', color: '#999', width: '35%', fontWeight: '600' }}>Category</td>
+                        <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.category}</td>
+                      </tr>
+                      {product.subcategory && (
+                        <tr style={{ borderBottom: '1px solid #f8f8f8' }}>
+                          <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>Subcategory</td>
+                          <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.subcategory}</td>
                         </tr>
-                        {product.subcategory && (
-                          <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
-                            <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>Subcategory</td>
-                            <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.subcategory}</td>
+                      )}
+                      {product.materials && product.materials.length > 0 && (
+                        <tr style={{ borderBottom: '1px solid #f8f8f8' }}>
+                          <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>Material / Fabric</td>
+                          <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.materials.join(', ')}</td>
+                        </tr>
+                      )}
+                      {product.specifications && product.specifications.length > 0 && product.specifications.map((spec: string, index: number) => {
+                        const parts = spec.split(':');
+                        const label = parts.length > 1 ? parts[0] : `Feature ${index + 1}`;
+                        const value = parts.length > 1 ? parts.slice(1).join(':') : spec;
+                        return (
+                          <tr key={index} style={{ borderBottom: '1px solid #f8f8f8' }}>
+                            <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>{label.trim()}</td>
+                            <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{value.trim()}</td>
                           </tr>
-                        )}
-                        {product.materials && product.materials.length > 0 && (
-                          <tr style={{ borderBottom: '1px solid #f0f0f0' }}>
-                            <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>Material / Fabric</td>
-                            <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{product.materials.join(', ')}</td>
-                          </tr>
-                        )}
-                        {product.specifications && product.specifications.length > 0 && product.specifications.map((spec: string, index: number) => {
-                          const parts = spec.split(':');
-                          const label = parts.length > 1 ? parts[0] : `Feature ${index + 1}`;
-                          const value = parts.length > 1 ? parts.slice(1).join(':') : spec;
-                          return (
-                            <tr key={index} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                              <td style={{ padding: '15px 0', color: '#999', fontWeight: '600' }}>{label.trim()}</td>
-                              <td style={{ padding: '15px 0', color: '#2D0A4E', fontWeight: '700' }}>{value.trim()}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
 
-                {activeTab === 'care_instructions' && (
-                  <div style={{ animation: 'fadeIn 0.3s ease' }}>
-                    <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '25px' }}>Care Guide</h3>
-                    {product.careInstructions && product.careInstructions.length > 0 ? (
-                      <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                        {product.careInstructions.map((inst: string, idx: number) => (
-                          <li key={idx} style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '15px', 
-                            padding: '15px', 
-                            borderBottom: '1px solid #f8f8f8',
-                            fontSize: '1rem',
-                            color: '#555'
-                          }}>
-                            <span style={{ color: '#D4AF37', fontSize: '1.2rem', lineHeight: '1' }}>✦</span>
-                            <span>{inst}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p style={{ color: '#666', lineHeight: '1.6' }}>We recommend professional dry clean or gentle hand wash with mild detergent for all ethnic wear to preserve colors and embroidery.</p>
-                    )}
-                  </div>
-                )}
+                {/* 2. Care Instructions Section */}
+                <div style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '40px' }}>
+                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>MAINTENANCE</span>
+                  <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '25px', marginTop: 0 }}>Care Guide</h3>
+                  {product.careInstructions && product.careInstructions.length > 0 ? (
+                    <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                      {product.careInstructions.map((inst: string, idx: number) => (
+                        <li key={idx} style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: '15px', 
+                          padding: '12px 15px', 
+                          borderBottom: '1px solid #fcfcfc',
+                          fontSize: '1rem',
+                          color: '#555'
+                        }}>
+                          <span style={{ color: '#D4AF37', fontSize: '1.2rem', lineHeight: '1' }}>✦</span>
+                          <span>{inst}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p style={{ color: '#666', lineHeight: '1.6', margin: 0 }}>We recommend professional dry clean or gentle hand wash with mild detergent for all ethnic wear to preserve colors and embroidery.</p>
+                  )}
+                </div>
 
-                {activeTab === 'reviews' && (
+                {/* 3. Reviews Section */}
+                <div>
+                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>FEEDBACK</span>
                   <ReviewsTab productId={product._id} />
-                )}
+                </div>
+
               </div>
             </div>
           </>
