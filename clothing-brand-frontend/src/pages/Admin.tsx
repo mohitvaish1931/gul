@@ -879,11 +879,16 @@ const Admin = () => {
         }
         
         // Handle image upload if new images were selected
-        const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"]') as HTMLInputElement;
+        const fileInput = (e.target as HTMLFormElement).querySelector('input[type="file"][accept="image/*"]') as HTMLInputElement;
         if (fileInput?.files?.length) {
           Array.from(fileInput.files).forEach(file => {
             fd.append('image', file);
           });
+        }
+        
+        // Send remaining existing images (after user may have deleted some)
+        if (localForm.images && localForm.images.length > 0) {
+          fd.append('existing_images', JSON.stringify(localForm.images));
         }
         
         const url = `${API_ENDPOINTS.PRODUCTS}/${localForm.id}`;
@@ -1119,36 +1124,63 @@ const Admin = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">Current Images</label>
+              <label className="block text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">PRODUCT IMAGES</label>
+              
+              {/* Existing Images with delete buttons */}
               {(localForm?.images && localForm.images.length > 0) ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
-                  {localForm.images.map((img: string, idx: number) => (
-                    <img key={idx} src={img} alt={`Current ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-teal-luxury/40" />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-text-primary/50 mb-3">No images yet</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">Update Images (Multiple)</label>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageChange}
-                className="w-full p-2 bg-white border border-teal-luxury/30 rounded text-text-primary placeholder-platinum/40 focus:ring-2 focus:ring-teal-luxury/60 outline-none"
-              />
-              {previewImages.length > 0 && (
-                <div className="mt-3">
-                  <p className="text-sm text-text-primary/70 mb-2">New images ({previewImages.length}):</p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {previewImages.map((preview, idx) => (
-                      <img key={idx} src={preview} alt={`Preview ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-teal-luxury/40" />
+                <div className="mb-4">
+                  <p className="text-xs text-text-primary/60 mb-2">Current Images ({localForm.images.length}) — Click ✕ to remove</p>
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                    {localForm.images.map((img: string, idx: number) => (
+                      <div key={idx} className="relative group">
+                        <img 
+                          src={img} 
+                          alt={`Image ${idx + 1}`} 
+                          className="w-full h-24 object-cover rounded-xl border-2 border-gray-100 group-hover:border-red-300 transition-all" 
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = localForm.images.filter((_: string, i: number) => i !== idx);
+                            setLocalForm({ ...localForm, images: updated });
+                          }}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg hover:bg-red-600 hover:scale-110 transition-all opacity-0 group-hover:opacity-100"
+                          title="Remove this image"
+                        >
+                          ✕
+                        </button>
+                        <span className="absolute bottom-1 left-1 bg-black/60 text-white text-[9px] px-1.5 py-0.5 rounded-md font-bold">
+                          {idx + 1}
+                        </span>
+                      </div>
                     ))}
                   </div>
                 </div>
+              ) : (
+                <p className="text-sm text-text-primary/50 mb-3 italic">No images yet</p>
               )}
+
+              {/* Add new images */}
+              <div className="border-2 border-dashed border-purple-200 rounded-xl p-4 bg-purple-50/30">
+                <label className="block text-xs font-semibold text-purple-700 mb-2">➕ Add More Images</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full p-2 bg-white border border-purple-200 rounded-lg text-text-primary text-sm focus:ring-2 focus:ring-purple-300 outline-none"
+                />
+                {previewImages.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-xs text-green-600 font-semibold mb-2">✓ {previewImages.length} new image(s) will be added on save</p>
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                      {previewImages.map((preview, idx) => (
+                        <img key={idx} src={preview} alt={`New ${idx + 1}`} className="w-full h-20 object-cover rounded-lg border-2 border-green-200" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-text-primary mb-2">Product Videos (Max 2 - Upload or URLs)</label>

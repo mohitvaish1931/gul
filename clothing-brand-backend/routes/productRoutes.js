@@ -118,14 +118,16 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      let imageUrls = req.files ? req.files.map(f => f.secure_url || f.url || f.path) : [];
+      // New uploaded images from Cloudinary
+      const newUploadedUrls = req.files ? req.files.map(f => f.secure_url || f.url || f.path) : [];
       
-      // If no new files, check if there are existing images passed in body
-      if (imageUrls.length === 0 && req.body.existing_images) {
-        imageUrls = parseField(req.body.existing_images);
-      }
+      // Existing images that user chose to keep (may have deleted some)
+      const existingImages = req.body.existing_images ? parseField(req.body.existing_images) : [];
       
-      // Fallback to current images if empty
+      // Merge: kept existing images + newly uploaded images
+      let imageUrls = [...existingImages, ...newUploadedUrls];
+      
+      // Fallback to current images if nothing was sent
       if (imageUrls.length === 0) {
         imageUrls = product.images && product.images.length > 0 ? product.images : [product.image];
       }
