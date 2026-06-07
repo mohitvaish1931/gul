@@ -79,8 +79,29 @@ const Header = () => {
         
         <div className="header-main-middle">
           <div className="container header-grid">
-            {/* Left: Search */}
+            {/* Left: Logo */}
             <div className="header-left">
+              <Link to="/" className="main-logo">
+                <div className="logo-top">
+                  <svg width="35" height="45" viewBox="0 0 100 120" className="logo-svg" fill="currentColor">
+                    <circle cx="40" cy="15" r="7" />
+                    <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
+                  </svg>
+                  <span className="logo-text">Gul</span>
+                </div>
+                <span className="logo-sub">FASHION</span>
+              </Link>
+            </div>
+
+            <button 
+              className="mobile-menu-btn"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Center: Search */}
+            <div className="header-center">
               <form onSubmit={submitSearch} className="search-form">
                 <input 
                   type="text" 
@@ -116,27 +137,6 @@ const Header = () => {
                   ))}
                 </div>
               )}
-            </div>
-
-            <button 
-              className="mobile-menu-btn"
-              onClick={() => setMobileMenuOpen(true)}
-            >
-              <Menu size={24} />
-            </button>
-
-            {/* Center: Main Logo */}
-            <div className="header-center">
-              <Link to="/" className="main-logo">
-                <div className="logo-top">
-                  <svg width="35" height="45" viewBox="0 0 100 120" className="logo-svg" fill="currentColor">
-                    <circle cx="40" cy="15" r="7" />
-                    <path d="M40 25 C 30 35, 20 40, 10 75 C 5 95, 10 110, 25 115 C 30 116, 35 110, 30 100 C 25 90, 25 60, 45 40 C 45 50, 40 85, 55 105 C 60 110, 65 105, 60 95 C 55 80, 50 50, 60 40 C 80 50, 95 60, 90 85 C 80 65, 60 55, 60 55 C 60 55, 75 75, 70 85 C 60 70, 50 65, 50 65 C 50 65, 45 25, 40 25 Z" />
-                  </svg>
-                  <span className="logo-text">Gul</span>
-                </div>
-                <span className="logo-sub">FASHION</span>
-              </Link>
             </div>
 
             {/* Right: Icons */}
