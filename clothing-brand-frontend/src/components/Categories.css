@@ -1,7 +1,7 @@
 .categories-masonry-dual {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 90vh;
+  height: 120vh;
   gap: 1px;
   background-color: #fcfaff;
 }
@@ -98,6 +98,7 @@
 
 @media (max-width: 1024px) {
   .categories-masonry-dual {
+    grid-template-columns: 1fr;
     height: auto;
   }
   

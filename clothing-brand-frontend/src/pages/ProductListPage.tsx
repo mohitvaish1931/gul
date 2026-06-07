@@ -5,7 +5,9 @@ import './ProductStyles.css';
 
 const ProductListPage = () => {
   const location = useLocation();
-  const keyword = new URLSearchParams(location.search).get('keyword') || '';
+  const queryParams = new URLSearchParams(location.search);
+  const keyword = queryParams.get('keyword') || '';
+  const category = queryParams.get('category') || '';
 
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,13 @@ const ProductListPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINTS.PRODUCTS}?keyword=${keyword}`);
+        let url = API_ENDPOINTS.PRODUCTS;
+        if (category) {
+          url += `?category=${encodeURIComponent(category)}`;
+        } else if (keyword) {
+          url += `?keyword=${encodeURIComponent(keyword)}`;
+        }
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -28,7 +36,7 @@ const ProductListPage = () => {
     };
 
     fetchProducts();
-  }, [keyword]);
+  }, [keyword, category]);
 
   return (
     <div className="shop-page" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', paddingBottom: '100px' }}>
@@ -37,7 +45,7 @@ const ProductListPage = () => {
          <div className="container">
             <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>CURATED SELECTION</span>
             <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>
-               {keyword ? `Search: "${keyword}"` : 'Shop The Collection'}
+               {category ? category : (keyword ? `Search: "${keyword}"` : 'Shop The Collection')}
             </h1>
             <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
                Experience the finest Jaipur craftsmanship, meticulously curated for the modern connoisseur.

@@ -35,16 +35,20 @@ const parseField = (field) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const keyword = req.query.keyword
-      ? {
-          $or: [
-            { name: { $regex: req.query.keyword, $options: 'i' } },
-            { category: { $regex: req.query.keyword, $options: 'i' } }
-          ],
-        }
-      : {};
+    let query = {};
 
-    const products = await Product.find({ ...keyword }).sort({ displayOrder: 1, createdAt: -1 });
+    if (req.query.category) {
+      query.category = req.query.category;
+    } else if (req.query.keyword) {
+      query = {
+        $or: [
+          { name: { $regex: req.query.keyword, $options: 'i' } },
+          { category: { $regex: req.query.keyword, $options: 'i' } }
+        ],
+      };
+    }
+
+    const products = await Product.find(query).sort({ displayOrder: 1, createdAt: -1 });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Server Error: unable to fetch products' });

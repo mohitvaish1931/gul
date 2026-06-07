@@ -32,8 +32,10 @@ const Footer = () => {
           <div className="footer-col">
             <h4 className="footer-heading-purple">Collections</h4>
             <ul className="footer-links-purple">
-              <li><Link to="/shop?keyword=Kurta">Kurta Sets</Link></li>
-              <li><Link to="/shop?keyword=Suits">Designer Suits</Link></li>
+              <li><Link to="/shop?category=Kurta%20Sets">Kurta Sets</Link></li>
+              <li><Link to="/shop?category=Suits">Designer Suits</Link></li>
+              <li><Link to="/shop?category=Tops">Tops & Tunics</Link></li>
+              <li><Link to="/shop?category=Three%20Piece%20Tops">Three Piece Tops</Link></li>
               <li><Link to="/shop">All Collections</Link></li>
               <li><Link to="/shop?keyword=New">New Arrivals</Link></li>
             </ul>

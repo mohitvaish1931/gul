@@ -59,8 +59,10 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Kurta Sets', path: '/shop?keyword=Kurta' },
-    { name: 'Suits', path: '/shop?keyword=Suit' },
+    { name: 'Kurta Sets', path: '/shop?category=Kurta%20Sets' },
+    { name: 'Suits', path: '/shop?category=Suits' },
+    { name: 'Tops', path: '/shop?category=Tops' },
+    { name: 'Three Piece Tops', path: '/shop?category=Three%20Piece%20Tops' },
     { name: 'Track Order', path: '/track-order', icon: <Truck size={14} /> },
     { name: 'Contact Us', path: '/contact', icon: <Phone size={14} /> }
   ];
