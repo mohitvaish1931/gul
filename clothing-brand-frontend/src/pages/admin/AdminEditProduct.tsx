@@ -45,8 +45,8 @@ const AdminEditProduct = () => {
     fd.delete('image');
     if (imageFiles.length > 0) {
       imageFiles.forEach(file => fd.append('image', file));
-    } else if (localForm.image) {
-      fd.append('existing_images', JSON.stringify(localForm.image));
+    } else if (localForm.images && localForm.images.length > 0) {
+      fd.append('existing_images', JSON.stringify(localForm.images));
     }
 
     const parseRaw = (name: string, target: string) => {
@@ -122,7 +122,7 @@ const AdminEditProduct = () => {
             <div className="space-y-4">
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Current Assets</label>
               <div className="grid grid-cols-3 gap-2">
-                {localForm.image?.map((img: string, idx: number) => (
+                {localForm.images?.map((img: string, idx: number) => (
                   <img key={idx} src={getImageUrl(img)} className="w-full h-20 object-cover rounded-xl border border-gray-100" alt="" />
                 ))}
               </div>
