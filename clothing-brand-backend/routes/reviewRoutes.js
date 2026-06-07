@@ -166,8 +166,10 @@ router.delete('/:id', requireAuth, async (req, res) => {
     if (productReviews.length > 0) {
       const avgRating = productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length;
       await Product.findByIdAndUpdate(review.productId, {
+        rating: Math.round(avgRating * 10) / 10,
+        numReviews: Math.max(0, productReviews.length - 1),
         averageRating: Math.round(avgRating * 10) / 10,
-        reviewCount: productReviews.length - 1
+        reviewCount: Math.max(0, productReviews.length - 1)
       });
     }
 
@@ -238,6 +240,8 @@ router.put('/admin/:id/approve', requireAuth, requireAdmin, async (req, res) => 
     if (productReviews.length > 0) {
       const avgRating = productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length;
       await Product.findByIdAndUpdate(review.productId, {
+        rating: Math.round(avgRating * 10) / 10,
+        numReviews: productReviews.length,
         averageRating: Math.round(avgRating * 10) / 10,
         reviewCount: productReviews.length
       });

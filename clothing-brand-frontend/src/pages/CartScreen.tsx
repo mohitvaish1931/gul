@@ -7,7 +7,10 @@ const CartScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  const qty = location.search ? Number(location.search.split('=')[1]) : 1;
+  const queryParams = new URLSearchParams(location.search);
+  const qty = Number(queryParams.get('qty')) || 1;
+  const size = queryParams.get('size') || '';
+  const color = queryParams.get('color') || '';
 
   const [cartItems, setCartItems] = useState<any[]>([]);
 
@@ -19,14 +22,14 @@ const CartScreen = () => {
           const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
           const data = await res.json();
           // Add to local cart state for demo
-          setCartItems([{...data, qty}]);
+          setCartItems([{...data, qty, selectedSize: size, selectedColor: color}]);
         } catch (e) {
           console.error('Error adding to cart');
         }
       };
       fetchItem();
     }
-  }, [id, qty]);
+  }, [id, qty, size, color]);
 
   const removeFromCartHandler = (removeId: any) => {
     setCartItems(cartItems.filter(x => x._id !== removeId));
@@ -62,6 +65,12 @@ const CartScreen = () => {
                     <span className="item-price">₹{item.price.toLocaleString('en-IN')}</span>
                     <span className="item-qty">Qty: {item.qty}</span>
                   </div>
+                  {(item.selectedSize || item.selectedColor) && (
+                    <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#666', display: 'flex', gap: '15px' }}>
+                      {item.selectedSize && <span>Size: <strong style={{ color: '#2D0A4E' }}>{item.selectedSize}</strong></span>}
+                      {item.selectedColor && <span>Color: <strong style={{ color: '#2D0A4E' }}>{item.selectedColor}</strong></span>}
+                    </div>
+                  )}
                 </div>
                 <div className="cart-item-actions">
                   <button onClick={() => removeFromCartHandler(item._id)} className="btn-remove">
