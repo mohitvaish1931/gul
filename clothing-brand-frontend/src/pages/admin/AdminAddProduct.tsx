@@ -75,7 +75,7 @@ const AdminAddProduct = () => {
     parseRaw('careInstructions_raw', 'careInstructions');
     
     try {
-      const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd });
+      const res = await fetch(API_ENDPOINTS.PRODUCTS, { method: 'POST', body: fd, credentials: 'include' });
       if (!res.ok) {
         const payload = await res.json();
         throw new Error(payload?.error || payload?.message || 'Create failed');

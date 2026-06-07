@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     // as much as possible while maintaining the visual style.
     const fetchOrders = async () => {
       try {
-        const res = await fetch(API_ENDPOINTS.ORDERS.BASE);
+        const res = await fetch(API_ENDPOINTS.ORDERS.BASE, { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setOrders(data);

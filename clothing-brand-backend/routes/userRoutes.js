@@ -1,6 +1,5 @@
 import express from 'express';
 import User from '../models/User.js';
-import generateToken from '../utils/generateToken.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -14,8 +13,6 @@ router.post('/login', async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
-
     res.json({
       _id: user._id,
       name: user.name,
@@ -47,8 +44,6 @@ router.post('/', async (req, res) => {
   });
 
   if (user) {
-    generateToken(res, user._id);
-
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -60,29 +55,22 @@ router.post('/', async (req, res) => {
   }
 });
 
-// @desc    Logout user / clear cookie
+// @desc    Logout user
 // @route   POST /api/users/logout
 // @access  Public
 router.post('/logout', (req, res) => {
-  const isProd = process.env.NODE_ENV === 'production';
-  const sameSiteMode = process.env.COOKIE_SAME_SITE || 'lax';
-  const isSecure = process.env.COOKIE_SECURE === 'true' || isProd;
-
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    secure: isSecure,
-    sameSite: sameSiteMode,
-    expires: new Date(0),
-  });
   res.status(200).json({ message: 'Logged out successfully' });
 });
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
-// @access  Private
-router.get('/profile', protect, async (req, res) => {
-  const user = await User.findById(req.user._id);
-
+// @access  Public
+router.get('/profile', async (req, res) => {
+  const { email } = req.query;
+  if (!email) {
+    return res.status(400).json({ message: 'Email query parameter required' });
+  }
+  const user = await User.findOne({ email }).select('-password');
   if (user) {
     res.json({
       _id: user._id,
@@ -97,9 +85,9 @@ router.get('/profile', protect, async (req, res) => {
 
 // @desc    Get all users
 // @route   GET /api/users
-// @access  Private/Admin
-router.get('/', protect, admin, async (req, res) => {
-  const users = await User.find({});
+// @access  Public (no JWT)
+router.get('/', async (req, res) => {
+  const users = await User.find({}).select('-password');
   res.json(users);
 });
 

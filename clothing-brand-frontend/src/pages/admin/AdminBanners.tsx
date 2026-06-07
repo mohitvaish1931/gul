@@ -16,7 +16,8 @@ const AdminBanners = () => {
       const res = await fetch(API_ENDPOINTS.BANNERS, { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ text, type }) 
+        body: JSON.stringify({ text, type }),
+        credentials: 'include' 
       });
       if (res.ok) {
         const b = await res.json();
@@ -31,7 +32,7 @@ const AdminBanners = () => {
   const deleteBanner = async (id: string) => {
     if (!window.confirm('Delete this banner?')) return;
     try {
-      const res = await fetch(`${API_ENDPOINTS.BANNERS}/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_ENDPOINTS.BANNERS}/${id}`, { method: 'DELETE', credentials: 'include' });
       if (res.ok) {
         dispatch({ type: 'SET_BANNERS', payload: state.banners.filter((b: any) => b._id !== id && b.id !== id) });
       }
