@@ -30,10 +30,22 @@ const Admin = () => {
 
 
   React.useEffect(() => {
+    const rawUser = localStorage.getItem('rr_user');
+    if (rawUser) {
+      try {
+        const parsed = JSON.parse(rawUser);
+        if (parsed && parsed.isAdmin) {
+          if (!state.user) {
+            dispatch({ type: 'SET_USER', payload: { id: parsed.id, email: parsed.email, name: parsed.name, isAdmin: parsed.isAdmin } });
+          }
+          return;
+        }
+      } catch (e) { /* ignore */ }
+    }
     if (!state.user || !state.user.isAdmin) {
       navigate('/login');
     }
-  }, [state.user, navigate]);
+  }, []);
 
   React.useEffect(() => {
     const fetchOrders = async () => {

@@ -11,13 +11,35 @@ import { useAppContext } from '../../context/AppContext';
 const AdminLayout = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
+    // Check localStorage directly to avoid race condition on refresh
+    const rawUser = localStorage.getItem('rr_user');
+    if (rawUser) {
+      try {
+        const parsed = JSON.parse(rawUser);
+        if (parsed && parsed.isAdmin) {
+          // Restore user in context if not already set
+          if (!state.user) {
+            dispatch({ type: 'SET_USER', payload: { id: parsed.id, email: parsed.email, name: parsed.name, isAdmin: parsed.isAdmin } });
+          }
+          setIsChecking(false);
+          return;
+        }
+      } catch (e) { /* ignore */ }
+    }
+    // No admin user found in localStorage
     if (!state.user || !state.user.isAdmin) {
       navigate('/login');
     }
-  }, [state.user, navigate]);
+    setIsChecking(false);
+  }, []);
+
+  if (isChecking) {
+    return <div className="min-h-screen bg-[#F8F9FC] flex items-center justify-center"><div className="text-gray-400 text-lg">Loading...</div></div>;
+  }
 
   const navGroups = [
     {

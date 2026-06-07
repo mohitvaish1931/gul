@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, ShoppingBag, User, Menu, X, Phone, Truck } from 'lucide-react';
+import { Search, ShoppingBag, User, Menu, X, Phone, Truck, ShieldCheck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
@@ -144,6 +144,11 @@ const Header = () => {
               <Link to={user ? "/profile" : "/login"} className="header-icon-link">
                 <User size={20} />
               </Link>
+              {user && user.isAdmin && (
+                <Link to="/admin" className="header-icon-link" title="Admin Panel" style={{ color: '#6B21A8' }}>
+                  <ShieldCheck size={20} />
+                </Link>
+              )}
               <Link to="/cart" className="header-icon-link cart-link">
                 <ShoppingBag size={20} />
                 {cart.length > 0 && <span className="cart-badge">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>}
@@ -204,6 +209,14 @@ const Header = () => {
               </Link>
             </li>
           ))}
+          {user && user.isAdmin && (
+            <li onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/admin" className="mobile-nav-link" style={{ color: '#6B21A8', fontWeight: 700 }}>
+                <ShieldCheck size={20} />
+                <span>Admin Panel</span>
+              </Link>
+            </li>
+          )}
           <li onClick={() => setMobileMenuOpen(false)}>
             <Link to={user ? "/profile" : "/login"} className="mobile-nav-link">
               <User size={20} />
