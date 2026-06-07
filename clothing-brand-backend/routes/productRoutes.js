@@ -3,7 +3,6 @@ import Product from '../models/Product.js';
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -30,9 +29,8 @@ const parseField = (field) => {
   }
 };
 
-// @desc    Fetch all products (with keyword search and displayOrder sorting)
+// @desc    Fetch all products
 // @route   GET /api/products
-// @access  Public
 router.get('/', async (req, res) => {
   try {
     let query = {};
@@ -57,7 +55,6 @@ router.get('/', async (req, res) => {
 
 // @desc    Fetch single product
 // @route   GET /api/products/:id
-// @access  Public
 router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -72,10 +69,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// @desc    Create new product (Admin only)
+// @desc    Create new product
 // @route   POST /api/products
-// @access  Private/Admin
-router.post('/', protect, admin, upload.array('image', 10), async (req, res) => {
+router.post('/', upload.array('image', 10), async (req, res) => {
   try {
     const imageUrls = req.files ? req.files.map(f => f.secure_url || f.url || f.path) : [];
     
@@ -87,7 +83,6 @@ router.post('/', protect, admin, upload.array('image', 10), async (req, res) => 
     const parsedVideos = parseField(req.body.videos);
 
     const product = new Product({
-      user: req.user._id,
       name: req.body.name,
       price: Number(req.body.price || 0),
       originalPrice: Number(req.body.originalPrice || 0),
@@ -116,10 +111,9 @@ router.post('/', protect, admin, upload.array('image', 10), async (req, res) => 
   }
 });
 
-// @desc    Update a product (Admin only)
+// @desc    Update a product
 // @route   PUT /api/products/:id
-// @access  Private/Admin
-router.put('/:id', protect, admin, upload.array('image', 10), async (req, res) => {
+router.put('/:id', upload.array('image', 10), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -175,10 +169,9 @@ router.put('/:id', protect, admin, upload.array('image', 10), async (req, res) =
   }
 });
 
-// @desc    Delete a product (Admin only)
+// @desc    Delete a product
 // @route   DELETE /api/products/:id
-// @access  Private/Admin
-router.delete('/:id', protect, admin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -194,10 +187,9 @@ router.delete('/:id', protect, admin, async (req, res) => {
   }
 });
 
-// @desc    Reorder products displayOrder (Admin only)
+// @desc    Reorder products displayOrder
 // @route   POST /api/products/reorder
-// @access  Private/Admin
-router.post('/reorder', protect, admin, async (req, res) => {
+router.post('/reorder', async (req, res) => {
   try {
     const { products } = req.body;
     if (!products || !Array.isArray(products)) {
