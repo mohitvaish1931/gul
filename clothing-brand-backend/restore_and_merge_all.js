@@ -53,28 +53,35 @@ const suitNames = [
 
 // Helper to make SEO-friendly names
 function getSeoName(baseName, folder) {
-  // Clean potential Design suffixes
-  const name = baseName.replace(/\s*\(Design\s*\d+\)/i, '').trim();
+  // Extract design suffix if present to keep names unique
+  const designMatch = baseName.match(/\s*\(Design\s*(\d+)\)/i);
+  const cleanName = baseName.replace(/\s*\(Design\s*\d+\)/i, '').trim();
+  const designSuffix = designMatch ? ` Vol ${designMatch[1]}` : '';
   
+  let seoName;
   if (folder.includes("Folder 1")) {
-    return `${name} 3-Piece Cotton Top Set`;
+    seoName = `${cleanName} 3-Piece Cotton Top Set`;
   } else if (folder.includes("Folder 2")) {
-    if (name.toLowerCase().includes("peplum")) {
-      return `${name} Cotton Peplum Top`;
-    } else if (name.toLowerCase().includes("tunic")) {
-      return `${name} Cotton Tunic Top`;
+    if (cleanName.toLowerCase().includes("peplum")) {
+      seoName = `${cleanName} Cotton Peplum Top`;
+    } else if (cleanName.toLowerCase().includes("tunic")) {
+      seoName = `${cleanName} Cotton Tunic Top`;
+    } else {
+      seoName = `${cleanName} Casual Printed Cotton Top`;
     }
-    return `${name} Casual Printed Cotton Top`;
   } else if (folder.includes("Folder 3")) {
-    return `${name} Cotton Flared Anarkali Gown Kurti`;
+    seoName = `${cleanName} Cotton Flared Anarkali Gown Kurti`;
   } else if (folder.includes("Folder 4")) {
-    return `${name} Premium Embroidered Cotton Angrakha Kurta Pant Set`;
+    seoName = `${cleanName} Premium Embroidered Cotton Angrakha Kurta Pant Set`;
   } else if (folder.includes("Folder 5")) {
-    return `${name} Daily Wear Cotton Angrakha Kurta Pant Set`;
+    seoName = `${cleanName} Daily Wear Cotton Angrakha Kurta Pant Set`;
   } else if (folder.includes("Folder 6")) {
-    return `${name} Premium Cotton Angrakha Suit Set with Dupatta`;
+    seoName = `${cleanName} Premium Cotton Angrakha Suit Set with Dupatta`;
+  } else {
+    seoName = cleanName;
   }
-  return name;
+  
+  return seoName + designSuffix;
 }
 
 const folderConfig = {
