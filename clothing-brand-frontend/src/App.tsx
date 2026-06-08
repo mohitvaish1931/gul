@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -41,6 +42,67 @@ import Accessibility from './pages/Accessibility';
 const MainLayout = () => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
+
+    const observeElements = (root: ParentNode = document) => {
+      const elements = root.querySelectorAll('.reveal-on-scroll');
+      elements.forEach((el) => {
+        if (!el.classList.contains('revealed')) {
+          const rect = el.getBoundingClientRect();
+          // If the element is already visible in the viewport, reveal immediately
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add('revealed');
+          } else {
+            observer.observe(el);
+          }
+        }
+      });
+    };
+
+    // Run initially for static elements
+    observeElements();
+
+    // Set up MutationObserver to detect dynamically fetched/rendered components
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const el = node as HTMLElement;
+            if (el.classList.contains('reveal-on-scroll')) {
+              observeElements(el.parentElement || document);
+            } else if (el.querySelector && el.querySelector('.reveal-on-scroll')) {
+              observeElements(el);
+            }
+          }
+        });
+      });
+    });
+
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
+  }, [location.pathname, location.search]);
 
   return (
     <div className="app-container flex flex-col w-full" style={{minHeight: '100vh', position: 'relative'}}>

@@ -94,6 +94,10 @@ const productSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    showOnHomepage: {
+      type: Boolean,
+      default: true,
+    },
     displayOrder: {
       type: Number,
       default: 0,

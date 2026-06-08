@@ -100,6 +100,7 @@ router.post('/', upload.array('image', 10), async (req, res) => {
       careInstructions: parsedCareInstructions,
       videos: parsedVideos,
       soldOut: req.body.soldOut === 'true' || req.body.soldOut === true,
+      showOnHomepage: req.body.showOnHomepage !== undefined ? (req.body.showOnHomepage === 'true' || req.body.showOnHomepage === true) : true,
       isBOGO: req.body.isBOGO === 'true' || req.body.isBOGO === true,
     });
 
@@ -155,6 +156,9 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
 
       if (req.body.soldOut !== undefined) {
         product.soldOut = req.body.soldOut === 'true' || req.body.soldOut === true;
+      }
+      if (req.body.showOnHomepage !== undefined) {
+        product.showOnHomepage = req.body.showOnHomepage === 'true' || req.body.showOnHomepage === true;
       }
       if (req.body.isBOGO !== undefined) {
         product.isBOGO = req.body.isBOGO === 'true' || req.body.isBOGO === true;

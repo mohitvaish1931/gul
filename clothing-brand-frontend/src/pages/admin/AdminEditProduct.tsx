@@ -13,6 +13,9 @@ const AdminEditProduct = () => {
   const [localForm, setLocalForm] = useState<any>(null);
   const [newImageFiles, setNewImageFiles] = useState<File[]>([]);
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
+  const [soldOut, setSoldOut] = useState(false);
+  const [isBOGO, setIsBOGO] = useState(false);
+  const [showOnHomepage, setShowOnHomepage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,6 +30,9 @@ const AdminEditProduct = () => {
         specifications_raw: product.specifications?.join('\n') || '',
         careInstructions_raw: product.careInstructions?.join('\n') || ''
       });
+      setSoldOut(!!product.soldOut);
+      setIsBOGO(!!product.isBOGO);
+      setShowOnHomepage(product.showOnHomepage !== false);
     }
   }, [id, state.products]);
 
@@ -65,6 +71,10 @@ const AdminEditProduct = () => {
     if (localForm.images && localForm.images.length > 0) {
       fd.append('existing_images', JSON.stringify(localForm.images));
     }
+
+    fd.append('soldOut', String(soldOut));
+    fd.append('isBOGO', String(isBOGO));
+    fd.append('showOnHomepage', String(showOnHomepage));
 
     const parseRaw = (name: string, target: string) => {
       const raw = fd.get(name)?.toString() || '';
@@ -274,18 +284,22 @@ const AdminEditProduct = () => {
             <textarea name="careInstructions_raw" rows={3} defaultValue={localForm.careInstructions_raw} className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-2xl text-sm focus:bg-white focus:border-indigo-600/20 transition-all outline-none" placeholder="Wash with cold water&#10;Do not bleach" />
           </div>
 
-          {/* Status */}
+          {/* Status & Visibility */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-4">
-              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Status</label>
-              <div className="flex gap-6">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" name="soldOut" defaultChecked={localForm.soldOut} className="w-4 h-4 text-indigo-600 rounded" />
-                  <span className="text-xs font-bold text-gray-600">Sold Out</span>
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Status & Visibility</label>
+              <div className="flex gap-6 flex-wrap">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input type="checkbox" checked={soldOut} onChange={e => setSoldOut(e.target.checked)} className="w-4 h-4 rounded-md border-gray-300 text-indigo-600 focus:ring-indigo-600/20" />
+                  <span className="text-xs font-bold text-gray-600 group-hover:text-gray-800 transition-colors">Sold Out</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" name="isBOGO" defaultChecked={localForm.isBOGO} className="w-4 h-4 text-indigo-600 rounded" />
-                  <span className="text-xs font-bold text-purple-600">Buy 1 Get 1</span>
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input type="checkbox" checked={isBOGO} onChange={e => setIsBOGO(e.target.checked)} className="w-4 h-4 rounded-md border-gray-300 text-purple-600 focus:ring-purple-600/20" />
+                  <span className="text-xs font-bold text-purple-600 group-hover:text-purple-800 transition-colors">Buy 1 Get 1</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input type="checkbox" checked={showOnHomepage} onChange={e => setShowOnHomepage(e.target.checked)} className="w-4 h-4 rounded-md border-gray-300 text-teal-600 focus:ring-teal-600/20" />
+                  <span className="text-xs font-bold text-teal-600 group-hover:text-teal-800 transition-colors">Show On Homepage</span>
                 </label>
               </div>
             </div>

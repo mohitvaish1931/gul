@@ -49,36 +49,63 @@
   position: relative;
 }
 
-.carousel-img-wrapper img {
+.carousel-img-wrapper .primary-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.carousel-img-wrapper .secondary-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 2;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+  transform: scale(1.03);
+}
+
+.carousel-product-card:hover .carousel-img-wrapper .primary-img {
+  opacity: 0;
+}
+
+.carousel-product-card:hover .carousel-img-wrapper .secondary-img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.carousel-product-card:hover .carousel-img-wrapper:not(:has(.secondary-img)) .primary-img {
+  transform: scale(1.06);
 }
 
 .carousel-img-wrapper::after {
   content: 'QUICK VIEW';
   position: absolute;
-  bottom: -50px;
+  bottom: -60px;
   left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   color: var(--primary-purple);
   text-align: center;
-  padding: 15px 0;
-  font-size: 0.85rem;
-  letter-spacing: 2px;
-  font-weight: 600;
-  transition: bottom 0.4s ease;
+  padding: 18px 0;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  z-index: 10;
+  transition: bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.03);
 }
 
 .carousel-product-card:hover .carousel-img-wrapper::after {
   bottom: 0;
-}
-
-.carousel-img-wrapper:hover img {
-  transform: scale(1.08);
 }
 
 .cp-name {

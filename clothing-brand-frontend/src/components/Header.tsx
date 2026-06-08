@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, ShoppingBag, User, Menu, X, Phone, Truck, ShieldCheck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
@@ -8,6 +8,8 @@ import './Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -52,7 +54,19 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 150); // Increased threshold to avoid jump
+      const currentScrollY = window.scrollY;
+      
+      // Determine if sticky nav should activate
+      setIsScrolled(currentScrollY > 150);
+      
+      // Show/Hide sticky header based on scroll direction
+      if (currentScrollY > lastScrollY.current && currentScrollY > 200) {
+        setShowHeader(false); // scrolling down
+      } else {
+        setShowHeader(true); // scrolling up
+      }
+      
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -159,7 +173,7 @@ const Header = () => {
       </header>
 
       {/* Navigation (Becomes Sticky) */}
-      <nav className={`header-nav ${isScrolled ? 'nav-sticky' : ''}`}>
+      <nav className={`header-nav ${isScrolled ? 'nav-sticky' : ''} ${isScrolled && !showHeader ? 'nav-hidden' : ''}`}>
         <div className="container nav-container">
           {isScrolled && (
             <Link to="/" className="mini-logo">

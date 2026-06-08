@@ -1,14 +1,24 @@
 import { Link } from 'react-router-dom';
 import './Categories.css';
 
-const Categories = () => {
+interface CategoriesProps {
+  products?: any[];
+}
+
+const Categories = ({ products = [] }: CategoriesProps) => {
+  const getCategoryImage = (categoryName: string, defaultImg: string) => {
+    const list = Array.isArray(products) ? products : [];
+    const matched = list.find((p) => p.category === categoryName);
+    return matched ? matched.image : defaultImg;
+  };
+
   return (
     <section className="section categories-masonry-section" style={{padding: '0'}}>
       <div className="categories-masonry-dual">
         
         {/* Kurta Sets */}
-        <Link to="/shop?category=Kurta%20Sets" className="cat-card-purple">
-          <img src="/images/kurta-category.png" alt="Kurta Sets" className="cat-bg-img" />
+        <Link to="/shop?category=Kurta%20Sets" className="cat-card-purple reveal-on-scroll">
+          <img src={getCategoryImage('Kurta Sets', '/images/kurta-category.png')} alt="Kurta Sets" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">THE ETHNIC EDIT</span>
@@ -19,8 +29,8 @@ const Categories = () => {
         </Link>
 
         {/* Suits */}
-        <Link to="/shop?category=Suits" className="cat-card-purple">
-          <img src="/images/suits-category.png" alt="Suits" className="cat-bg-img" />
+        <Link to="/shop?category=Suits" className="cat-card-purple reveal-on-scroll delay-100">
+          <img src={getCategoryImage('Suits', '/images/suits-category.png')} alt="Suits" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">DESIGNER FAVORITES</span>
@@ -31,8 +41,8 @@ const Categories = () => {
         </Link>
 
         {/* Tops */}
-        <Link to="/shop?category=Tops" className="cat-card-purple">
-          <img src="/images/indowestern-category.png" alt="Tops & Tunics" className="cat-bg-img" />
+        <Link to="/shop?category=Tops" className="cat-card-purple reveal-on-scroll delay-200">
+          <img src={getCategoryImage('Tops', '/images/indowestern-category.png')} alt="Tops & Tunics" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">CASUAL CHIC</span>
@@ -43,8 +53,8 @@ const Categories = () => {
         </Link>
 
         {/* Three Piece Tops */}
-        <Link to="/shop?category=Three%20Piece%20Tops" className="cat-card-purple">
-          <img src="/images/three-piece-tops-category.png" alt="Three Piece Tops" className="cat-bg-img" />
+        <Link to="/shop?category=Three%20Piece%20Tops" className="cat-card-purple reveal-on-scroll delay-300">
+          <img src={getCategoryImage('Three Piece Tops', '/images/three-piece-tops-category.png')} alt="Three Piece Tops" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">LUXURY LAYERS</span>

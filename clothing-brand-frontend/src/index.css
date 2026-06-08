@@ -131,6 +131,27 @@ body {
   animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Scroll Reveal Animations (Prestige theme style) */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(45px);
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered transition delays */
+.delay-100 { transition-delay: 100ms !important; }
+.delay-200 { transition-delay: 200ms !important; }
+.delay-300 { transition-delay: 300ms !important; }
+.delay-400 { transition-delay: 400ms !important; }
+.delay-500 { transition-delay: 500ms !important; }
+
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
@@ -148,3 +169,4 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(75, 0, 130, 0.4);
 }
+

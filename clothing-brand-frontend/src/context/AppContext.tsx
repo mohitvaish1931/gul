@@ -35,6 +35,8 @@ export interface Product {
   displayOrder?: number;
   quantity?: number;
   isBOGO?: boolean;
+  showOnHomepage?: boolean;
+  createdAt?: string;
 }
 
 export interface Video {

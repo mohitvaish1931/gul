@@ -89,3 +89,130 @@
   border-radius: 4px;
   margin: 20px 0;
 }
+
+/* Luxury Product Cards (Prestige style for Product list page) */
+.luxury-product-card {
+  text-align: left;
+  transition: all 0.4s ease;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.luxury-product-card:hover {
+  transform: translateY(-5px);
+}
+
+.luxury-img-wrapper {
+  position: relative;
+  aspect-ratio: 3/4;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.luxury-img-wrapper .primary-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-img-wrapper .secondary-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 2;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease;
+  transform: scale(1.03);
+}
+
+.luxury-product-card:hover .luxury-img-wrapper .primary-img {
+  opacity: 0;
+}
+
+.luxury-product-card:hover .luxury-img-wrapper .secondary-img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.luxury-product-card:hover .luxury-img-wrapper:not(:has(.secondary-img)) .primary-img {
+  transform: scale(1.06);
+}
+
+.luxury-img-wrapper::after {
+  content: 'QUICK VIEW';
+  position: absolute;
+  bottom: -60px;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-purple);
+  text-align: center;
+  padding: 18px 0;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  z-index: 10;
+  transition: bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.03);
+}
+
+.luxury-product-card:hover .luxury-img-wrapper::after {
+  bottom: 0;
+}
+
+.new-arrival-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: var(--gold-primary);
+  color: #fff;
+  padding: 5px 12px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 50px;
+  letter-spacing: 1px;
+  z-index: 5;
+}
+
+.luxury-card-details {
+  padding: 0 10px;
+}
+
+.luxury-name {
+  font-size: 1.25rem;
+  color: #2D0A4E;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.luxury-product-card:hover .luxury-name {
+  color: var(--accent-purple);
+}
+
+.luxury-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.luxury-price {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gold-primary);
+}
+
+.luxury-atelier {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 600;
+}

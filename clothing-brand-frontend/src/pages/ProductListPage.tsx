@@ -71,27 +71,23 @@ const ProductListPage = () => {
           </div>
         ) : (
           <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
-            {products.map(product => (
-              <div key={product._id} className="luxury-product-card" style={{ transition: 'transform 0.3s' }}>
+            {products.map((product, idx) => (
+              <div key={product._id} className={`luxury-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
                 <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
-                  <div style={{ 
-                    position: 'relative', 
-                    aspectRatio: '3/4', 
-                    borderRadius: '20px', 
-                    overflow: 'hidden', 
-                    marginBottom: '20px',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.03)'
-                  }}>
-                    <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s' }} className="hover-zoom" />
+                  <div className="luxury-img-wrapper">
+                    <img src={product.image} alt={product.name} className="primary-img" />
+                    {product.images && product.images.length > 1 && (
+                      <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                    )}
                     {product.isNew && (
-                      <span style={{ position: 'absolute', top: '20px', left: '20px', backgroundColor: '#D4AF37', color: '#fff', padding: '5px 12px', fontSize: '0.65rem', fontWeight: '800', borderRadius: '50px', letterSpacing: '1px' }}>NEW ARRIVAL</span>
+                      <span className="new-arrival-tag">NEW ARRIVAL</span>
                     )}
                   </div>
-                  <div style={{ padding: '0 10px' }}>
-                    <h3 className="font-serif" style={{ fontSize: '1.25rem', color: '#2D0A4E', marginBottom: '8px', lineHeight: '1.4' }}>{product.name}</h3>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                       <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#D4AF37' }}>₹{product.price.toLocaleString('en-IN')}</span>
-                       <span style={{ fontSize: '0.75rem', color: '#999', fontWeight: '600' }}>JAIPUR ATELIER</span>
+                  <div className="luxury-card-details">
+                    <h3 className="font-serif luxury-name">{product.name}</h3>
+                    <div className="luxury-price-row">
+                       <span className="luxury-price">₹{product.price.toLocaleString('en-IN')}</span>
+                       <span className="luxury-atelier">JAIPUR ATELIER</span>
                     </div>
                   </div>
                 </Link>

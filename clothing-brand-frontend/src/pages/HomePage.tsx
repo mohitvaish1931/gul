@@ -13,13 +13,41 @@ const HomePage = () => {
       try {
         const res = await fetch(API_ENDPOINTS.PRODUCTS);
         const data = await res.json();
-        setProducts(data);
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else {
+          setProducts([]);
+        }
       } catch (e) {
-        console.error('Failed to grab products');
+        console.error('Failed to grab products', e);
+        setProducts([]);
       }
     };
     fetchProducts();
   }, []);
+
+  const homepageProducts = products.filter(p => p.showOnHomepage !== false);
+
+  // Sort by createdAt descending to show latest arrivals
+  const newArrivals = [...homepageProducts]
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+    .slice(0, 8);
+
+  const kurtaSets = homepageProducts
+    .filter(p => p.category === 'Kurta Sets')
+    .slice(0, 8);
+
+  const suits = homepageProducts
+    .filter(p => p.category === 'Suits')
+    .slice(0, 8);
+
+  const tops = homepageProducts
+    .filter(p => p.category === 'Tops')
+    .slice(0, 8);
+
+  const threePieceTops = homepageProducts
+    .filter(p => p.category === 'Three Piece Tops')
+    .slice(0, 8);
 
   const TrustBadges = () => (
     <div className="trust-badges-section">
@@ -46,23 +74,26 @@ const HomePage = () => {
     </div>
   );
 
-  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items }: any) => (
+  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAllLink = '/shop' }: any) => (
     <section className="carousel-section container section">
-      <div className="carousel-header flex justify-between items-center" style={{marginBottom: '40px'}}>
+      <div className="carousel-header flex justify-between items-center reveal-on-scroll" style={{marginBottom: '40px'}}>
         <div>
           <span className="small-gold-tag">{tag}</span>
           <h2 className="title" style={{fontSize: '2.5rem'}}><span style={{fontWeight: 700}}>{titleLight}</span> <i className="font-serif" style={{color: 'var(--primary-purple)'}}>{titleItalic}</i></h2>
           {subtext && <p className="subtext mt-2 text-gray-500 font-serif">{subtext}</p>}
         </div>
-        <Link to="/shop" className="view-all-link">VIEW ALL</Link>
+        <Link to={viewAllLink} className="view-all-link">VIEW ALL</Link>
       </div>
       
       <div className="products-carousel-grid">
-        {items.map((product: any) => (
-          <div key={product._id} className="carousel-product-card">
+        {items.map((product: any, idx: number) => (
+          <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
             <Link to={`/product/${product._id}`}>
               <div className="carousel-img-wrapper">
-                <img src={product.image} alt={product.name} />
+                <img src={product.image} alt={product.name} className="primary-img" />
+                {product.images && product.images.length > 1 && (
+                  <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                )}
               </div>
             </Link>
             <div className="carousel-product-details">
@@ -77,23 +108,24 @@ const HomePage = () => {
 
   return (
     <div className="homepage-wrapper">
-      <Hero />
+      <Hero products={homepageProducts} />
       <div style={{marginTop: '40px'}}></div>
       
       <div className="container text-center" style={{marginBottom: '40px'}}>
         <span className="small-gold-tag text-center" style={{display: 'inline-block'}}>CURATED FOR YOU</span>
       </div>
-      <Categories />
+      <Categories products={homepageProducts} />
 
       <CarouselSection 
         tag="JUST IN" 
         titleLight="NEW" 
         titleItalic="ARRIVALS" 
         subtext="Handpicked for this season"
-        items={products} 
+        items={newArrivals}
+        viewAllLink="/shop"
       />
 
-      <section className="bridal-edit-section">
+      <section className="bridal-edit-section reveal-on-scroll">
         <div className="bridal-split">
           <div className="bridal-img-side">
             <img src="/images/bridal-edit.png" alt="Bridal Edit 2026" />
@@ -128,7 +160,8 @@ const HomePage = () => {
         tag="BEST SELLING CATEGORY" 
         titleLight="KURTA" 
         titleItalic="SETS" 
-        items={products.filter(p => p.category === 'Kurta Sets')} 
+        items={kurtaSets} 
+        viewAllLink="/shop?category=Kurta%20Sets"
       />
 
       <TrustBadges />
@@ -137,25 +170,45 @@ const HomePage = () => {
         tag="TOP CATEGORY" 
         titleLight="DESIGNER" 
         titleItalic="SUITS" 
-        items={products.filter(p => p.category === 'Suits')} 
+        items={suits} 
+        viewAllLink="/shop?category=Suits"
       />
 
-      <section className="shop-by-craft container section">
+      <CarouselSection 
+        tag="DAILY CHIC" 
+        titleLight="TRENDING" 
+        titleItalic="TOPS" 
+        items={tops} 
+        viewAllLink="/shop?category=Tops"
+      />
+
+      <CarouselSection 
+        tag="LUXURY LAYERS" 
+        titleLight="THREE PIECE" 
+        titleItalic="TOPS" 
+        items={threePieceTops} 
+        viewAllLink="/shop?category=Three%20Piece%20Tops"
+      />
+
+      <section className="shop-by-craft container section reveal-on-scroll">
         <span className="small-gold-tag">SHOP BY CRAFT</span>
         <div className="craft-grid" style={{marginTop: '20px'}}>
-          {['Zari', 'Hand-embroidery', 'Gotta Patti', 'Prints'].map((craft, i) => (
-             <div className="craft-card" key={craft}>
-               <div className="craft-img-wrapper" style={{backgroundColor: '#f5f0ff'}}>
-                  <img src={i % 2 === 0 ? '/images/kurta-category.png' : '/images/suits-category.png'} alt={craft} />
+          {['Zari', 'Hand-embroidery', 'Gotta Patti', 'Prints'].map((craft, i) => {
+             const craftImg = homepageProducts[i + 4]?.image || homepageProducts[i]?.image || '/images/kurta-category.png';
+             return (
+               <div className={`craft-card reveal-on-scroll delay-${i * 100}`} key={craft}>
+                  <div className="craft-img-wrapper" style={{backgroundColor: '#f5f0ff'}}>
+                     <img src={craftImg} alt={craft} />
+                  </div>
+                  <span className="craft-number" style={{color: 'var(--primary-purple)', opacity: 0.2}}>0{i+1}</span>
+                  <h3 className="craft-name font-serif">{craft}</h3>
                </div>
-               <span className="craft-number" style={{color: 'var(--primary-purple)', opacity: 0.2}}>0{i+1}</span>
-               <h3 className="craft-name font-serif">{craft}</h3>
-             </div>
-          ))}
+             );
+          })}
         </div>
       </section>
 
-      <section className="store-locator-banner" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
+      <section className="store-locator-banner reveal-on-scroll" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
         <div className="store-locator-overlay" style={{backgroundColor: 'rgba(45, 0, 77, 0.7)'}}>
           <div className="store-locator-content text-center">
             <h2 className="title font-serif" style={{color: '#fff', fontSize: '3.5rem', marginBottom: '20px'}}>Find Your Perfect Look, <i style={{color: 'var(--gold-primary)'}}>In-Store</i></h2>
@@ -165,12 +218,12 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="worn-with-love container section">
+      <section className="worn-with-love container section reveal-on-scroll">
         <h2 className="title text-center font-serif" style={{fontSize: '3rem', margin: '40px 0'}}>Worn with <i style={{color: 'var(--primary-purple)'}}>Love</i></h2>
         <div className="social-proof-grid">
-           {[...Array(4)].map((_, i) => (
-             <div className="social-card" key={i}>
-                <img src={`/images/${i % 2 === 0 ? 'saree-category' : 'kurta-category'}.png`} alt="Social Proof" />
+           {homepageProducts.slice(0, 4).map((product, i) => (
+             <div className={`social-card reveal-on-scroll delay-${i * 100}`} key={i}>
+                <img src={product.image} alt="Social Proof" />
                 <div className="social-hover">Instagram ♥ 1.2k</div>
              </div>
            ))}
@@ -187,7 +240,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="testimonials text-center section container" style={{padding: '80px 0'}}>
+      <section className="testimonials text-center section container reveal-on-scroll" style={{padding: '80px 0'}}>
         <h2 className="title font-serif" style={{fontSize: '2.5rem', marginBottom: '40px'}}>What Our <i style={{color: 'var(--primary-purple)'}}>Patrons Say</i></h2>
         <div style={{maxWidth: '800px', margin: '0 auto'}}>
            <p className="font-serif italic" style={{fontSize: '1.5rem', lineHeight: '1.8', color: '#444'}}>

@@ -17,6 +17,7 @@ const AdminAddProduct = () => {
   const [videoUrls] = useState<string[]>(['', '']);
   const [soldOut, setSoldOut] = useState(false);
   const [isBOGO, setIsBOGO] = useState(false);
+  const [showOnHomepage, setShowOnHomepage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -55,6 +56,7 @@ const AdminAddProduct = () => {
 
     fd.append('soldOut', String(soldOut));
     fd.append('isBOGO', String(isBOGO));
+    fd.append('showOnHomepage', String(showOnHomepage));
 
     const parseRaw = (name: string, target: string, isJson: boolean = true) => {
       const raw = fd.get(name)?.toString() || '';
@@ -226,6 +228,10 @@ const AdminAddProduct = () => {
               <label className="flex items-center gap-2 cursor-pointer group">
                 <input type="checkbox" checked={isBOGO} onChange={e => setIsBOGO(e.target.checked)} className="w-4 h-4 rounded-md border-gray-300 text-indigo-600 focus:ring-indigo-600/20" />
                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">BOGO Promotion</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <input type="checkbox" checked={showOnHomepage} onChange={e => setShowOnHomepage(e.target.checked)} className="w-4 h-4 rounded-md border-gray-300 text-teal-600 focus:ring-teal-600/20" />
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-teal-600 transition-colors">Show On Homepage</span>
               </label>
             </div>
             
