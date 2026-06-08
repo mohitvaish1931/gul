@@ -15,16 +15,17 @@ const Hero = ({ products = [] }: HeroProps) => {
   const suitsProduct = list.find(p => p.category === 'Suits');
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
   const topsProduct = list.find(p => p.category === 'Tops');
+  const threePieceProduct = list.find(p => p.category === 'Three Piece Tops');
 
   const slides = [
     {
-      type: 'video',
-      src: '/Video_Combination_and_Sync.mp4',
-      title: 'Regal Elegance',
-      subtitle: 'Discover our latest collection of handcrafted bridal and festive wear',
-      btnPrimary: 'EXPLORE COLLECTION',
+      type: 'image',
+      src: threePieceProduct?.image || '/images/hero-banner.png',
+      title: threePieceProduct ? threePieceProduct.name : 'Luxury Three Piece Ensembles',
+      subtitle: threePieceProduct ? threePieceProduct.description : 'Exquisite cotton three-piece sets handcrafted for absolute comfort and regal elegance',
+      btnPrimary: 'EXPLORE THREE PIECE',
       btnOutline: 'OUR HERITAGE',
-      link: '/shop'
+      link: threePieceProduct ? `/product/${threePieceProduct._id}` : '/shop?category=Three%20Piece%20Tops'
     },
     {
       type: 'image',

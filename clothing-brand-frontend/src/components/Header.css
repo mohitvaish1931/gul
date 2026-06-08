@@ -352,18 +352,119 @@
   color: #1a1a1a;
 }
 
+/* Mobile search controls */
+.mobile-search-toggle {
+  display: none;
+}
+
+.mobile-search-bar-row {
+  display: none;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1000;
+}
+
+.mobile-search-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  background: #fdfbff;
+  border: 1px solid #f0e6ff;
+  border-radius: 12px;
+  padding: 8px 15px;
+}
+
+.mobile-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--primary-purple);
+}
+
+.mobile-search-btn, .mobile-search-close {
+  background: none;
+  border: none;
+  color: var(--primary-purple);
+  cursor: pointer;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-search-close {
+  color: #999;
+  margin-left: 10px;
+}
+
+.mobile-search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #f0e6ff;
+  box-shadow: 0 10px 30px rgba(75, 0, 130, 0.1);
+  border-radius: 12px;
+  margin-top: 5px;
+  z-index: 9999;
+  overflow: hidden;
+}
+
 @media (max-width: 1024px) {
   .header-grid {
     grid-template-columns: auto 1fr auto;
+    padding: 10px 0;
   }
-  .header-left, .header-nav {
+  .header-left {
+    display: flex;
+    justify-content: center;
+    grid-column: 2;
+  }
+  .header-center, .header-nav {
     display: none;
   }
   .mobile-menu-btn {
     display: block;
+    grid-column: 1;
+    cursor: pointer;
+  }
+  .header-right {
+    grid-column: 3;
+    gap: 15px;
+  }
+  .mobile-search-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-search-bar-row {
+    display: block;
+  }
+  .mobile-search-bar-row.open {
+    max-height: 70px;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
   }
   .logo-text {
-    font-size: 2.2rem;
+    font-size: 2rem;
+  }
+  .logo-svg {
+    width: 25px;
+    height: 35px;
+  }
+  .logo-sub {
+    font-size: 0.5rem;
+    letter-spacing: 5px;
+    margin-left: 5px;
   }
 }
 

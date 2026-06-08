@@ -11,6 +11,7 @@ const Header = () => {
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -155,6 +156,16 @@ const Header = () => {
 
             {/* Right: Icons */}
             <div className="header-right">
+              {/* Mobile Search Toggle Icon */}
+              <button 
+                type="button" 
+                className="header-icon-link mobile-search-toggle"
+                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                title="Toggle Search"
+              >
+                <Search size={20} />
+              </button>
+
               <Link to={user ? "/profile" : "/login"} className="header-icon-link">
                 <User size={20} />
               </Link>
@@ -171,6 +182,59 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Search Bar Row (slides down) */}
+      <div className={`mobile-search-bar-row ${mobileSearchOpen ? 'open' : ''}`}>
+        <div className="container" style={{ position: 'relative' }}>
+          <form onSubmit={submitSearch} className="mobile-search-form">
+            <input 
+              type="text" 
+              placeholder="SEARCH THE STORE..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => { if(searchTerm.length > 1) setShowSuggestions(true); }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              className="mobile-search-input"
+            />
+            <button type="submit" className="mobile-search-btn">
+              <Search size={18} />
+            </button>
+            <button 
+              type="button" 
+              className="mobile-search-close"
+              onClick={() => {
+                setMobileSearchOpen(false);
+                setSearchTerm('');
+              }}
+            >
+              <X size={18} />
+            </button>
+          </form>
+          
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="mobile-search-dropdown" onMouseDown={(e) => e.preventDefault()}>
+              {suggestions.map(item => (
+                <Link 
+                  key={item._id} 
+                  to={`/product/${item._id}`} 
+                  className="suggestion-item"
+                  onClick={() => {
+                    setShowSuggestions(false);
+                    setMobileSearchOpen(false);
+                    setSearchTerm('');
+                  }}
+                >
+                  <img src={getImageUrl(item.image)} alt={item.name} />
+                  <div>
+                    <p className="suggestion-name">{item.name}</p>
+                    <span className="suggestion-cat">{item.category}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Navigation (Becomes Sticky) */}
       <nav className={`header-nav ${isScrolled ? 'nav-sticky' : ''} ${isScrolled && !showHeader ? 'nav-hidden' : ''}`}>
