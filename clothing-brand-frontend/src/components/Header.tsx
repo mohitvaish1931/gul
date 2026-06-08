@@ -97,15 +97,7 @@ const Header = () => {
             {/* Left: Logo */}
             <div className="header-left">
               <Link to="/" className="main-logo">
-                <div className="logo-top">
-                  <svg width="30" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="logo-svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" strokeWidth="0.5" strokeDasharray="1 1" opacity="0.2" />
-                    <path d="M12 5C9 9 6 10 6 13.5C6 17 8.5 19 12 19C15.5 19 18 17 18 13.5C18 10 15 9 12 5Z" />
-                    <path d="M12 9C10.5 11.5 8.5 12 8.5 14C8.5 16 10 17 12 17C14 17 15.5 16 15.5 14C15.5 12 13.5 11.5 12 9Z" />
-                    <path d="M12 12.5C11.5 13.5 10.5 13.7 10.5 14.5C10.5 15.3 11.2 15.7 12 15.7C12.8 15.7 13.5 15.3 13.5 14.5C13.5 13.7 12.5 13.5 12 12.5Z" />
-                  </svg>
-                  <span className="logo-text">Gul</span>
-                </div>
+                <span className="logo-text">Gul</span>
                 <span className="logo-sub">FASHION</span>
               </Link>
             </div>
@@ -243,12 +235,6 @@ const Header = () => {
         <div className="container nav-container">
           {isScrolled && (
             <Link to="/" className="mini-logo">
-               <svg width="22" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mini-logo-svg">
-                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" strokeWidth="0.5" strokeDasharray="1 1" opacity="0.2" />
-                  <path d="M12 5C9 9 6 10 6 13.5C6 17 8.5 19 12 19C15.5 19 18 17 18 13.5C18 10 15 9 12 5Z" />
-                  <path d="M12 9C10.5 11.5 8.5 12 8.5 14C8.5 16 10 17 12 17C14 17 15.5 16 15.5 14C15.5 12 13.5 11.5 12 9Z" />
-                  <path d="M12 12.5C11.5 13.5 10.5 13.7 10.5 14.5C10.5 15.3 11.2 15.7 12 15.7C12.8 15.7 13.5 15.3 13.5 14.5C13.5 13.7 12.5 13.5 12 12.5Z" />
-                </svg>
                 <span className="mini-logo-text">Gul</span>
             </Link>
           )}

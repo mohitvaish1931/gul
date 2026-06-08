@@ -152,9 +152,10 @@
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 10px;
+  margin-right: -10px;
   color: var(--accent-purple);
-  margin-top: -2px;
-  margin-left: 10px;
+  margin-top: 4px;
+  margin-left: 0;
 }
 
 /* Right: Icons */
@@ -466,13 +467,10 @@
   .logo-text {
     font-size: 2rem;
   }
-  .logo-svg {
-    width: 25px;
-    height: 35px;
-  }
   .logo-sub {
     font-size: 0.5rem;
     letter-spacing: 5px;
+    margin-right: -5px;
     margin-left: 0;
     text-align: center;
     width: 100%;
@@ -493,6 +491,7 @@
   }
   .logo-sub {
     letter-spacing: 3px;
+    margin-right: -3px;
     margin-left: 0;
     text-align: center;
   }
