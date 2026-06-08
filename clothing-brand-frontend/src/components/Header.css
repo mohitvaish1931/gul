@@ -423,11 +423,16 @@
   .header-grid {
     grid-template-columns: auto 1fr auto;
     padding: 10px 0;
+    align-items: center;
   }
   .header-left {
     display: flex;
     justify-content: center;
     grid-column: 2;
+    grid-row: 1;
+  }
+  .main-logo {
+    align-items: center;
   }
   .header-center, .header-nav {
     display: none;
@@ -435,11 +440,15 @@
   .mobile-menu-btn {
     display: block;
     grid-column: 1;
+    grid-row: 1;
     cursor: pointer;
   }
   .header-right {
     grid-column: 3;
+    grid-row: 1;
     gap: 15px;
+    display: flex;
+    align-items: center;
   }
   .mobile-search-toggle {
     display: flex;
@@ -464,7 +473,9 @@
   .logo-sub {
     font-size: 0.5rem;
     letter-spacing: 5px;
-    margin-left: 5px;
+    margin-left: 0;
+    text-align: center;
+    width: 100%;
   }
 }
 
@@ -482,6 +493,7 @@
   }
   .logo-sub {
     letter-spacing: 3px;
-    margin-left: 5px;
+    margin-left: 0;
+    text-align: center;
   }
 }
