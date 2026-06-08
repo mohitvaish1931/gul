@@ -135,6 +135,13 @@
   text-decoration: none;
 }
 
+.main-logo .logo-svg {
+  width: 45px;
+  height: 45px;
+  margin-bottom: 6px;
+  display: block;
+}
+
 .logo-top {
   display: flex;
   align-items: center;
@@ -415,9 +422,9 @@
   border: 1px solid #f0e6ff;
   box-shadow: 0 10px 30px rgba(75, 0, 130, 0.1);
   border-radius: 12px;
-  margin-top: 5px;
-  z-index: 9999;
-  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 10px 0;
+  position: relative;
 }
 
 @media (max-width: 1024px) {
@@ -466,6 +473,11 @@
   }
   .logo-text {
     font-size: 2rem;
+  }
+  .main-logo .logo-svg {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 4px;
   }
   .logo-sub {
     font-size: 0.5rem;
