@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
+import logoImg from '../assets/logo.png';
 import './Header.css';
 
 const Header = () => {
@@ -97,21 +98,7 @@ const Header = () => {
             {/* Left: Logo */}
             <div className="header-left">
               <Link to="/" className="main-logo">
-                <svg viewBox="0 0 100 100" className="logo-svg">
-                  <defs>
-                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#7B2CBF" />
-                      <stop offset="100%" stopColor="#EAFF00" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGrad)" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="url(#logoGrad)" strokeWidth="0.8" />
-                  <path d="M50 15 C30 15, 20 30, 20 50 C20 70, 35 80, 50 80 C65 80, 80 65, 80 50 C80 35, 75 30, 68 30 C58 30, 50 40, 50 50 C50 60, 58 65, 68 65" fill="none" stroke="url(#logoGrad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M50 30 C40 38, 38 45, 38 50 C38 58, 43 62, 50 62 C57 62, 62 58, 62 50 C62 45, 60 38, 50 30 Z" fill="none" stroke="url(#logoGrad)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M50 42 C46 45, 45 48, 45 50 C45 53, 47 55, 50 55 C53 55, 55 53, 55 50 C55 48, 54 45, 50 42 Z" fill="none" stroke="url(#logoGrad)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span className="logo-text">Gul</span>
-                <span className="logo-sub">FASHION</span>
+                <img src={logoImg} alt="Gul Fashion Logo" className="logo-img" />
               </Link>
             </div>
 
@@ -248,7 +235,7 @@ const Header = () => {
         <div className="container nav-container">
           {isScrolled && (
             <Link to="/" className="mini-logo">
-                <span className="mini-logo-text">Gul</span>
+                <img src={logoImg} alt="Gul Fashion Logo" className="logo-img-mini" />
             </Link>
           )}
           
@@ -278,7 +265,7 @@ const Header = () => {
       <div className={`mobile-nav-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)}></div>
       <div className={`mobile-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-nav-header">
-           <span className="logo-text" style={{fontSize: '1.5rem'}}>Gul</span>
+           <img src={logoImg} alt="Gul Fashion Logo" className="logo-img-mobile" />
            <button onClick={() => setMobileMenuOpen(false)}><X size={24} /></button>
         </div>
         <ul className="mobile-nav-list">
