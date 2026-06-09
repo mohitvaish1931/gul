@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
+import CircleCategories from '../components/CircleCategories';
 import { API_ENDPOINTS } from '../utils/api';
 import './HomePage.css';
 
@@ -37,16 +38,20 @@ const HomePage = () => {
     .filter(p => p.category === 'Kurta Sets')
     .slice(0, 8);
 
-  const suits = homepageProducts
-    .filter(p => p.category === 'Suits')
+  const suitSets = homepageProducts
+    .filter(p => p.category === 'Suit Sets')
     .slice(0, 8);
 
-  const tops = homepageProducts
-    .filter(p => p.category === 'Tops')
+  const topsCoOrds = homepageProducts
+    .filter(p => p.category === 'Tops & Co-ord Sets')
     .slice(0, 8);
 
-  const threePieceTops = homepageProducts
-    .filter(p => p.category === 'Three Piece Tops')
+  const shrugSets = homepageProducts
+    .filter(p => p.category === 'Shrug Sets')
+    .slice(0, 8);
+
+  const maxisDresses = homepageProducts
+    .filter(p => p.category === 'Maxis & Dresses')
     .slice(0, 8);
 
   const TrustBadges = () => (
@@ -109,7 +114,10 @@ const HomePage = () => {
   return (
     <div className="homepage-wrapper">
       <Hero products={homepageProducts} />
-      <div style={{marginTop: '40px'}}></div>
+      
+      <CircleCategories products={homepageProducts} />
+      
+      <div style={{marginTop: '45px'}}></div>
       
       <div className="container text-center" style={{marginBottom: '40px'}}>
         <span className="small-gold-tag text-center" style={{display: 'inline-block'}}>CURATED FOR YOU</span>
@@ -168,26 +176,34 @@ const HomePage = () => {
 
       <CarouselSection 
         tag="TOP CATEGORY" 
-        titleLight="DESIGNER" 
-        titleItalic="SUITS" 
-        items={suits} 
-        viewAllLink="/shop?category=Suits"
-      />
-
-      <CarouselSection 
-        tag="DAILY CHIC" 
-        titleLight="TRENDING" 
-        titleItalic="TOPS" 
-        items={tops} 
-        viewAllLink="/shop?category=Tops"
+        titleLight="SUIT" 
+        titleItalic="SETS" 
+        items={suitSets} 
+        viewAllLink="/shop?category=Suit%20Sets"
       />
 
       <CarouselSection 
         tag="LUXURY LAYERS" 
-        titleLight="THREE PIECE" 
-        titleItalic="TOPS" 
-        items={threePieceTops} 
-        viewAllLink="/shop?category=Three%20Piece%20Tops"
+        titleLight="SHRUG" 
+        titleItalic="SETS" 
+        items={shrugSets} 
+        viewAllLink="/shop?category=Shrug%20Sets"
+      />
+
+      <CarouselSection 
+        tag="DAILY CHIC" 
+        titleLight="CO-ORD" 
+        titleItalic="SETS" 
+        items={topsCoOrds} 
+        viewAllLink="/shop?category=Tops%20%26%20Co-ord%20Sets"
+      />
+
+      <CarouselSection 
+        tag="ELEGANT FLOW" 
+        titleLight="MAXIS &" 
+        titleItalic="DRESSES" 
+        items={maxisDresses} 
+        viewAllLink="/shop?category=Maxis%20%26%20Dresses"
       />
 
       <section className="shop-by-craft container section reveal-on-scroll">

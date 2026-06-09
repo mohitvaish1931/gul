@@ -12,37 +12,37 @@ const Hero = ({ products = [] }: HeroProps) => {
 
   // Dynamic slides from database collections with array checks
   const list = Array.isArray(products) ? products : [];
-  const suitsProduct = list.find(p => p.category === 'Suits');
+  const suitsProduct = list.find(p => p.category === 'Suit Sets');
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
-  const topsProduct = list.find(p => p.category === 'Tops');
-  const threePieceProduct = list.find(p => p.category === 'Three Piece Tops');
+  const topsProduct = list.find(p => p.category === 'Tops & Co-ord Sets');
+  const threePieceProduct = list.find(p => p.category === 'Shrug Sets');
 
   const slides = [
     {
       type: 'image',
       src: threePieceProduct?.image || '/images/hero-banner.png',
-      title: threePieceProduct ? threePieceProduct.name : 'Luxury Three Piece Ensembles',
-      subtitle: threePieceProduct ? threePieceProduct.description : 'Exquisite cotton three-piece sets handcrafted for absolute comfort and regal elegance',
-      btnPrimary: 'EXPLORE THREE PIECE',
-      btnOutline: 'OUR HERITAGE',
-      link: threePieceProduct ? `/product/${threePieceProduct._id}` : '/shop?category=Three%20Piece%20Tops'
+      title: threePieceProduct ? threePieceProduct.name : 'Premium Shrug Ensembles',
+      subtitle: threePieceProduct ? threePieceProduct.description : 'Exquisite three-piece shrug sets handcrafted for daily comfort and elegance',
+      btnPrimary: 'EXPLORE SHRUG SETS',
+      btnOutline: 'OUR COLLECTION',
+      link: threePieceProduct ? `/product/${threePieceProduct._id}` : '/shop?category=Shrug%20Sets'
     },
     {
       type: 'image',
       src: suitsProduct?.image || '/images/hero-banner.png',
-      title: suitsProduct ? suitsProduct.name : 'Timeless Heritage',
-      subtitle: suitsProduct ? suitsProduct.description : 'Handcrafted in Jaipur, designed for the modern royal',
-      btnPrimary: 'SHOP DESIGNER SUITS',
-      btnOutline: 'OUR HERITAGE',
-      link: suitsProduct ? `/product/${suitsProduct._id}` : '/shop?category=Suits'
+      title: suitsProduct ? suitsProduct.name : 'Designer Suit Sets',
+      subtitle: suitsProduct ? suitsProduct.description : 'Jaipur hand-block prints and hand-embroidered suit sets with dupattas',
+      btnPrimary: 'SHOP SUIT SETS',
+      btnOutline: 'OUR STORY',
+      link: suitsProduct ? `/product/${suitsProduct._id}` : '/shop?category=Suit%20Sets'
     },
     {
       type: 'image',
       src: topsProduct?.image || kurtaProduct?.image || '/images/clothing_rack_hero.png',
-      title: topsProduct ? topsProduct.name : (kurtaProduct ? kurtaProduct.name : 'Artisanal Grace'),
-      subtitle: topsProduct ? topsProduct.description : (kurtaProduct ? kurtaProduct.description : 'Exquisite details, premium fabrics, and intricate zari embroidery'),
+      title: topsProduct ? topsProduct.name : (kurtaProduct ? kurtaProduct.name : 'Chic Co-ord Ensembles'),
+      subtitle: topsProduct ? topsProduct.description : (kurtaProduct ? kurtaProduct.description : 'Contemporary cuts, breathable fabrics, and elegant block print patterns'),
       btnPrimary: 'EXPLORE STYLES',
-      btnOutline: 'OUR STORY',
+      btnOutline: 'SHOP ALL',
       link: topsProduct ? `/product/${topsProduct._id}` : (kurtaProduct ? `/product/${kurtaProduct._id}` : '/shop')
     }
   ];

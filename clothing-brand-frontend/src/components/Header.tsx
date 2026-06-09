@@ -20,6 +20,26 @@ const Header = () => {
   const { state } = useAppContext();
   const { user, cart } = state;
 
+  const announcements = [
+    "COD AVAILABLE | WORLDWIDE SHIPPING | FREE DELIVERY",
+    "SUMMER BONANZA SALE IS LIVE: UPTO 80% OFF | USE CODE: BONANZA80",
+    "FREE SHIPPING ON ALL DOMESTIC PREPAID ORDERS"
+  ];
+  const [announcementIdx, setAnnouncementIdx] = useState(0);
+  const [fadeProp, setFadeProp] = useState('fade-in');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFadeProp('fade-out');
+      const timeout = setTimeout(() => {
+        setAnnouncementIdx((prev) => (prev + 1) % announcements.length);
+        setFadeProp('fade-in');
+      }, 500);
+      return () => clearTimeout(timeout);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (searchTerm.trim().length > 1) {
@@ -76,9 +96,10 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Kurta Sets', path: '/shop?category=Kurta%20Sets' },
-    { name: 'Suits', path: '/shop?category=Suits' },
-    { name: 'Tops', path: '/shop?category=Tops' },
-    { name: 'Three Piece Tops', path: '/shop?category=Three%20Piece%20Tops' },
+    { name: 'Suit Sets', path: '/shop?category=Suit%20Sets' },
+    { name: 'Shrug Sets', path: '/shop?category=Shrug%20Sets' },
+    { name: 'Tops & Co-ord Sets', path: '/shop?category=Tops%20%26%20Co-ord%20Sets' },
+    { name: 'Maxis & Dresses', path: '/shop?category=Maxis%20%26%20Dresses' },
     { name: 'Track Order', path: '/track-order', icon: <Truck size={14} /> },
     { name: 'Contact Us', path: '/contact', icon: <Phone size={14} /> }
   ];
@@ -89,7 +110,9 @@ const Header = () => {
       <header className={`header-main ${isScrolled ? 'header-hidden' : ''}`}>
         <div className="header-top-bar">
           <div className="container flex justify-center items-center">
-            <span className="promo-text">FREE SHIPPING ON PREPAID ORDERS WITHIN INDIA</span>
+            <span className={`promo-text announcement-fade ${fadeProp}`}>
+              {announcements[announcementIdx]}
+            </span>
           </div>
         </div>
         

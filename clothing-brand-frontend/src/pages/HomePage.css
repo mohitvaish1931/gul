@@ -351,16 +351,30 @@
 }
 
 @media (max-width: 576px) {
-  .products-carousel-grid, .badges-grid, .craft-grid {
+  .products-carousel-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .badges-grid, .craft-grid {
     grid-template-columns: 1fr;
   }
   .social-proof-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   .bridal-title {
     font-size: 1.8rem;
   }
   .carousel-img-wrapper {
-    height: 350px;
+    height: auto;
+    aspect-ratio: 3/4;
+  }
+  .cp-name {
+    font-size: 0.85rem;
+  }
+  .cp-price {
+    font-size: 0.95rem;
+  }
+  .carousel-product-card {
+    padding: 5px;
   }
 }

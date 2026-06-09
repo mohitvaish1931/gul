@@ -216,3 +216,31 @@
   color: #999;
   font-weight: 600;
 }
+
+@media (max-width: 576px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-bottom: 40px;
+  }
+  .luxury-name {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+  }
+  .luxury-price {
+    font-size: 0.95rem;
+  }
+  .luxury-atelier {
+    display: none;
+  }
+  .luxury-img-wrapper {
+    margin-bottom: 10px;
+    border-radius: 12px;
+  }
+  .luxury-card-details {
+    padding: 0 5px;
+  }
+  .luxury-product-card {
+    border-radius: 12px;
+  }
+}

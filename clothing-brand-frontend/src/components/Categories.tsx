@@ -28,37 +28,37 @@ const Categories = ({ products = [] }: CategoriesProps) => {
           </div>
         </Link>
 
-        {/* Suits */}
-        <Link to="/shop?category=Suits" className="cat-card-purple reveal-on-scroll delay-100">
-          <img src={getCategoryImage('Suits', '/images/suits-category.png')} alt="Suits" className="cat-bg-img" />
+        {/* Suit Sets */}
+        <Link to="/shop?category=Suit%20Sets" className="cat-card-purple reveal-on-scroll delay-100">
+          <img src={getCategoryImage('Suit Sets', '/images/suits-category.png')} alt="Suit Sets" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">DESIGNER FAVORITES</span>
-            <h3 className="cat-title-purple font-serif">Suits</h3>
+            <h3 className="cat-title-purple font-serif">Suit Sets</h3>
             <p className="cat-desc-purple">Regal elegance for every precious occasion.</p>
             <span className="cat-link-purple">EXPLORE COLLECTION</span>
           </div>
         </Link>
 
-        {/* Tops */}
-        <Link to="/shop?category=Tops" className="cat-card-purple reveal-on-scroll delay-200">
-          <img src={getCategoryImage('Tops', '/images/indowestern-category.png')} alt="Tops & Tunics" className="cat-bg-img" />
+        {/* Tops & Co-ord Sets */}
+        <Link to="/shop?category=Tops%20%26%20Co-ord%20Sets" className="cat-card-purple reveal-on-scroll delay-200">
+          <img src={getCategoryImage('Tops & Co-ord Sets', '/images/indowestern-category.png')} alt="Tops & Co-ord Sets" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">CASUAL CHIC</span>
-            <h3 className="cat-title-purple font-serif">Tops</h3>
+            <h3 className="cat-title-purple font-serif">Tops & Co-ords</h3>
             <p className="cat-desc-purple">Charming everyday comfort in breathable cotton.</p>
             <span className="cat-link-purple">EXPLORE COLLECTION</span>
           </div>
         </Link>
 
-        {/* Three Piece Tops */}
-        <Link to="/shop?category=Three%20Piece%20Tops" className="cat-card-purple reveal-on-scroll delay-300">
-          <img src={getCategoryImage('Three Piece Tops', '/images/three-piece-tops-category.png')} alt="Three Piece Tops" className="cat-bg-img" />
+        {/* Shrug Sets */}
+        <Link to="/shop?category=Shrug%20Sets" className="cat-card-purple reveal-on-scroll delay-300">
+          <img src={getCategoryImage('Shrug Sets', '/images/three-piece-tops-category.png')} alt="Shrug Sets" className="cat-bg-img" />
           <div className="cat-overlay-purple"></div>
           <div className="cat-text-content-purple">
             <span className="cat-tag-purple">LUXURY LAYERS</span>
-            <h3 className="cat-title-purple font-serif">Three Piece Tops</h3>
+            <h3 className="cat-title-purple font-serif">Shrug Sets</h3>
             <p className="cat-desc-purple">Sophisticated three-piece cotton tunic ensembles.</p>
             <span className="cat-link-purple">EXPLORE COLLECTION</span>
           </div>
