@@ -113,9 +113,9 @@ const HomePage = () => {
 
   return (
     <div className="homepage-wrapper">
-      <Hero products={homepageProducts} />
-      
       <CircleCategories products={homepageProducts} />
+      
+      <Hero products={homepageProducts} />
       
       <div style={{marginTop: '45px'}}></div>
       
@@ -206,23 +206,7 @@ const HomePage = () => {
         viewAllLink="/shop?category=Maxis%20%26%20Dresses"
       />
 
-      <section className="shop-by-craft container section reveal-on-scroll">
-        <span className="small-gold-tag">SHOP BY CRAFT</span>
-        <div className="craft-grid" style={{marginTop: '20px'}}>
-          {['Zari', 'Hand-embroidery', 'Gotta Patti', 'Prints'].map((craft, i) => {
-             const craftImg = homepageProducts[i + 4]?.image || homepageProducts[i]?.image || '/images/kurta-category.png';
-             return (
-               <div className={`craft-card reveal-on-scroll delay-${i * 100}`} key={craft}>
-                  <div className="craft-img-wrapper" style={{backgroundColor: '#f5f0ff'}}>
-                     <img src={craftImg} alt={craft} />
-                  </div>
-                  <span className="craft-number" style={{color: 'var(--primary-purple)', opacity: 0.2}}>0{i+1}</span>
-                  <h3 className="craft-name font-serif">{craft}</h3>
-               </div>
-             );
-          })}
-        </div>
-      </section>
+
 
       <section className="store-locator-banner reveal-on-scroll" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
         <div className="store-locator-overlay" style={{backgroundColor: 'rgba(45, 0, 77, 0.7)'}}>

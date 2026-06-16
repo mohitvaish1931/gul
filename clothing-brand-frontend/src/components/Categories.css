@@ -98,7 +98,7 @@
 
 @media (max-width: 1024px) {
   .categories-masonry-dual {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     height: auto;
   }
   
@@ -107,21 +107,47 @@
   }
   
   .cat-text-content-purple {
-    left: 40px;
-    bottom: 50px;
+    left: 20px;
+    bottom: 30px;
   }
   
   .cat-title-purple {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .categories-masonry-dual {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
   
   .cat-card-purple {
-    height: 500px;
+    height: 300px;
+  }
+
+  .cat-text-content-purple {
+    left: 15px;
+    bottom: 20px;
+  }
+  
+  .cat-tag-purple {
+    font-size: 0.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+  
+  .cat-title-purple {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  .cat-desc-purple {
+    display: none;
+  }
+  
+  .cat-link-purple {
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    padding-bottom: 5px;
   }
 }
