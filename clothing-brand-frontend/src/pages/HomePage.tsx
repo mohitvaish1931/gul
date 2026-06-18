@@ -91,22 +91,38 @@ const HomePage = () => {
       </div>
       
       <div className="products-carousel-grid">
-        {items.map((product: any, idx: number) => (
-          <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
-            <Link to={`/product/${product._id}`}>
-              <div className="carousel-img-wrapper">
-                <img src={product.image} alt={product.name} className="primary-img" />
-                {product.images && product.images.length > 1 && (
-                  <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
-                )}
-              </div>
-            </Link>
+        {items.map((product: any, idx: number) => {
+          const discount = product.originalPrice && product.price && product.originalPrice > product.price 
+            ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+            : 0;
+
+          return (
+            <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
+              <Link to={`/product/${product._id}`}>
+                <div className="carousel-img-wrapper">
+                  <img src={product.image} alt={product.name} className="primary-img" />
+                  {product.images && product.images.length > 1 && (
+                    <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                  )}
+                  {discount > 0 && (
+                    <div className="discount-badge">{discount}% OFF</div>
+                  )}
+                </div>
+              </Link>
             <div className="carousel-product-details">
               <Link to={`/product/${product._id}`}><h3 className="cp-name">{product.name}</h3></Link>
-              <p className="cp-price">₹{product.price.toLocaleString('en-IN')}</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                {discount > 0 && (
+                  <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', fontWeight: 500 }}>
+                    ₹{product.originalPrice.toLocaleString('en-IN')}
+                  </span>
+                )}
+                <p className="cp-price" style={{ marginTop: 0 }}>₹{product.price.toLocaleString('en-IN')}</p>
+              </div>
             </div>
           </div>
-        ))}
+        );
+      })}
       </div>
     </section>
   );

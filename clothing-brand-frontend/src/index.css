@@ -213,3 +213,18 @@ body {
   }
 }
 
+/* Discount Badge */
+.discount-badge {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background-color: rgba(144, 168, 126, 0.85); /* sage green color matching screenshot */
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}

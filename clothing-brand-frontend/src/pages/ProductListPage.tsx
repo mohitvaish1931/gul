@@ -71,28 +71,44 @@ const ProductListPage = () => {
           </div>
         ) : (
           <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
-            {products.map((product, idx) => (
-              <div key={product._id} className={`luxury-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
-                <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
-                  <div className="luxury-img-wrapper">
-                    <img src={product.image} alt={product.name} className="primary-img" />
-                    {product.images && product.images.length > 1 && (
-                      <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
-                    )}
-                    {product.isNew && (
-                      <span className="new-arrival-tag">NEW ARRIVAL</span>
-                    )}
-                  </div>
-                  <div className="luxury-card-details">
-                    <h3 className="font-serif luxury-name">{product.name}</h3>
-                    <div className="luxury-price-row">
-                       <span className="luxury-price">₹{product.price.toLocaleString('en-IN')}</span>
-                       <span className="luxury-atelier">JAIPUR ATELIER</span>
+            {products.map((product, idx) => {
+              const discount = product.originalPrice && product.price && product.originalPrice > product.price 
+                ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+                : 0;
+
+              return (
+                <div key={product._id} className={`luxury-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
+                  <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
+                    <div className="luxury-img-wrapper">
+                      <img src={product.image} alt={product.name} className="primary-img" />
+                      {product.images && product.images.length > 1 && (
+                        <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                      )}
+                      {product.isNew && (
+                        <span className="new-arrival-tag">NEW ARRIVAL</span>
+                      )}
+                      {discount > 0 && (
+                        <div className="discount-badge">{discount}% OFF</div>
+                      )}
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                    <div className="luxury-card-details">
+                      <h3 className="font-serif luxury-name">{product.name}</h3>
+                      <div className="luxury-price-row">
+                         <div style={{ display: 'flex', flexDirection: 'column' }}>
+                           {discount > 0 && (
+                             <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem' }}>
+                               ₹{product.originalPrice.toLocaleString('en-IN')}
+                             </span>
+                           )}
+                           <span className="luxury-price">₹{product.price.toLocaleString('en-IN')}</span>
+                         </div>
+                         <span className="luxury-atelier">JAIPUR ATELIER</span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
