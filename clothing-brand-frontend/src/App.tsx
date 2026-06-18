@@ -17,6 +17,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminAddProduct from './pages/admin/AdminAddProduct';
 import AdminEditProduct from './pages/admin/AdminEditProduct';
+import AdminFirstPhotoSection from './pages/admin/AdminFirstPhotoSection';
 import AdminInventory from './pages/admin/AdminInventory';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminCustomers from './pages/admin/AdminCustomers';
@@ -121,6 +122,7 @@ const MainLayout = () => {
             <Route path="products" element={<AdminProducts />} />
             <Route path="products/add" element={<AdminAddProduct />} />
             <Route path="products/:id/edit" element={<AdminEditProduct />} />
+            <Route path="first-photo" element={<AdminFirstPhotoSection />} />
             <Route path="inventory" element={<AdminInventory />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="customers" element={<AdminCustomers />} />

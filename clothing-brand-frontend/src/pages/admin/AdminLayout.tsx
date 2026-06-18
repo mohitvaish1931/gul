@@ -46,6 +46,7 @@ const AdminLayout = () => {
       title: 'MANAGEMENT',
       items: [
         { path: '/admin/products', name: 'Products', icon: ShoppingBag },
+        { path: '/admin/first-photo', name: 'First Photo Editor', icon: ImageIcon },
         { path: '/admin/inventory', name: 'Inventory', icon: Package },
         { path: '/admin/orders', name: 'Orders', icon: Ticket },
         { path: '/admin/customers', name: 'Customers', icon: Users },
