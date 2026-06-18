@@ -145,9 +145,9 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'ADD_PRODUCT':
       return { ...state, products: [...state.products, action.payload] };
     case 'UPDATE_PRODUCT':
-      return { ...state, products: state.products.map(p => p.id === action.payload.id ? action.payload : p) };
+      return { ...state, products: state.products.map(p => (p.id || p._id) === (action.payload.id || action.payload._id) ? action.payload : p) };
     case 'REMOVE_PRODUCT':
-      return { ...state, products: state.products.filter(p => p.id !== action.payload) };
+      return { ...state, products: state.products.filter(p => (p.id || p._id) !== action.payload) };
     case 'SET_VIDEOS':
       return { ...state, videos: action.payload };
     case 'ADD_VIDEO':
