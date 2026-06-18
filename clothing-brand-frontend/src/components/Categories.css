@@ -2,7 +2,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 120vh;
-  gap: 1px;
+  gap: 12px;
+  padding: 12px;
   background-color: #fcfaff;
 }
 
@@ -11,6 +12,7 @@
   overflow: hidden;
   display: block;
   cursor: pointer;
+  border-radius: 16px;
 }
 
 .cat-bg-img {
