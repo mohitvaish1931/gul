@@ -12,6 +12,7 @@ import RegisterScreen from './pages/RegisterScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import ScrollToTop from './components/ScrollToTop';
 import { AppProvider } from './context/AppContext';
+import { HelmetProvider } from 'react-helmet-async';
 
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -173,12 +174,14 @@ const MainLayout = () => {
 
 function App() {
   return (
-    <AppProvider>
-      <Router>
-        <ScrollToTop />
-        <MainLayout />
-      </Router>
-    </AppProvider>
+    <HelmetProvider>
+      <AppProvider>
+        <Router>
+          <ScrollToTop />
+          <MainLayout />
+        </Router>
+      </AppProvider>
+    </HelmetProvider>
   );
 }
 

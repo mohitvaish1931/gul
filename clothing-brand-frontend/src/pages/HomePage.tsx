@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import CircleCategories from '../components/CircleCategories';
+import { Helmet } from 'react-helmet-async';
 import { API_ENDPOINTS } from '../utils/api';
 import './HomePage.css';
 
@@ -129,6 +130,30 @@ const HomePage = () => {
 
   return (
     <div className="homepage-wrapper">
+      <Helmet>
+        <title>Gul Fashion | Premium Women's Ethnic & Casual Wear</title>
+        <meta name="description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion. Explore our wide collection of Kurtis, Tops, Co-ord sets, and more with premium quality." />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Gul Fashion",
+              "url": "https://gulfashion.store",
+              "logo": "https://gulfashion.store/favicon.svg",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-9351325459",
+                "contactType": "customer service"
+              },
+              "sameAs": [
+                "https://www.facebook.com/gulfashion",
+                "https://www.instagram.com/gulfashion"
+              ]
+            }
+          `}
+        </script>
+      </Helmet>
       <CircleCategories products={homepageProducts} />
       
       <Hero products={homepageProducts} />

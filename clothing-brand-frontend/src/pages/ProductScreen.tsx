@@ -4,6 +4,7 @@ import './ProductStyles.css';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star } from 'lucide-react';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { useAppContext } from '../context/AppContext';
+import { Helmet } from 'react-helmet-async';
 
 // Helper component for star ratings
 const StarRating = ({ rating, size = 16, interactive = false, onChange }: { rating: number, size?: number, interactive?: boolean, onChange?: (r: number) => void }) => {
@@ -416,6 +417,39 @@ const ProductScreen = () => {
           </div>
         ) : (
           <>
+            <Helmet>
+              <title>{`${product.name} | Gul Fashion`}</title>
+              <meta name="description" content={product.description ? product.description.substring(0, 150) + '...' : ''} />
+              <meta property="og:title" content={`${product.name} | Gul Fashion`} />
+              <meta property="og:description" content={product.description ? product.description.substring(0, 150) + '...' : ''} />
+              <meta property="og:image" content={product.image} />
+              <script type="application/ld+json">
+                {`
+                  {
+                    "@context": "https://schema.org/",
+                    "@type": "Product",
+                    "name": "${product.name}",
+                    "image": [
+                      "${product.image}"
+                    ],
+                    "description": "${product.description ? product.description.replace(/\\n/g, ' ').replace(/"/g, '\\"') : ''}",
+                    "sku": "${product._id}",
+                    "brand": {
+                      "@type": "Brand",
+                      "name": "Gul Fashion"
+                    },
+                    "offers": {
+                      "@type": "Offer",
+                      "url": "https://gulfashion.store/product/${product._id}",
+                      "priceCurrency": "INR",
+                      "price": "${product.price}",
+                      "itemCondition": "https://schema.org/NewCondition",
+                      "availability": "${product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}"
+                    }
+                  }
+                `}
+              </script>
+            </Helmet>
             <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
               {/* Image Section */}
               <div className="product-image-section">

@@ -13,6 +13,7 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import shiprocketRoutes from './routes/shiprocketRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -67,6 +68,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/shiprocket', shiprocketRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api', sitemapRoutes);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
