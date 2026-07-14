@@ -29,8 +29,9 @@ const ProductListPage = () => {
         const data = await response.json();
         setProducts(data);
         setLoading(false);
-      } catch (err) {
-        setError('Make sure the backend is running and MongoDB is seeded!');
+      } catch (err: any) {
+        console.error('Fetch error:', err);
+        setError(err.message || 'Failed to load products. Please try again.');
         setLoading(false);
       }
     };

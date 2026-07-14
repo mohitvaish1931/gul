@@ -78,7 +78,13 @@ const Hero = ({ products = [] }: HeroProps) => {
                 playsInline
               />
             ) : (
-              <img src={slide.src} alt={slide.title} className="hero-media hero-image" />
+              <img 
+                src={slide.src} 
+                alt={slide.title} 
+                className="hero-media hero-image" 
+                fetchpriority={idx === 0 ? "high" : "auto"}
+                loading={idx === 0 ? "eager" : "lazy"}
+              />
             )}
             <div className="hero-overlay"></div>
             <div className="hero-content">

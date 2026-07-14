@@ -46,6 +46,7 @@ app.use(cors({
       origin.endsWith('.vercel.app') || 
       origin.endsWith('.onrender.com') ||
       origin.includes('hostinger') ||
+      origin.includes('gulfashion.store') ||
       origin.includes('localhost')
     ) {
       callback(null, true);
