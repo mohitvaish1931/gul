@@ -26,27 +26,13 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://gul-neon.vercel.app',
-      'http://localhost:5173',
-      'http://localhost:3000'
-    ];
-
-    if (process.env.FRONTEND_URL) {
-      allowedOrigins.push(process.env.FRONTEND_URL);
-    }
-    if (process.env.ALLOWED_ORIGINS) {
-      const extraOrigins = process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim());
-      allowedOrigins.push(...extraOrigins);
-    }
-
-    if (true) { // Allow all origins to prevent any CORS issues
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    // Explicitly allow the origin that is making the request.
+    // If no origin is provided (e.g. some mobile browsers or direct API calls), fallback to the main domain.
+    callback(null, origin || 'https://gulfashion.store');
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
