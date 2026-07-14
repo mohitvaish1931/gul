@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "start": "node clothing-brand-backend/server.js",
-    "build": "npm run build --workspace=clothing-brand-frontend",
+    "build": "node smart-build.js",
     "install-all": "npm install"
   }
 }
