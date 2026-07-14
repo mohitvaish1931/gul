@@ -52,10 +52,24 @@ export async function apiCall(
     ...options,
   };
 
-  const response = await fetch(endpoint, defaultOptions);
+  if (!navigator.onLine) {
+    throw new Error("No internet connection. Please check your network and try again.");
+  }
+
+  let response;
+  try {
+    response = await fetch(endpoint, defaultOptions);
+  } catch (err) {
+    // If fetch throws, it's usually a network error or CORS issue
+    throw new Error("Unable to connect to the server. Please check your internet connection.");
+  }
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'API Error' }));
+    const error = await response.json().catch(() => ({ message: 'Something went wrong on the server.' }));
+    // If backend sends a specific confusing message, override it here
+    if (error.message && error.message.toLowerCase().includes('mongodb')) {
+      throw new Error('Server connection error. Please try again later.');
+    }
     throw new Error(error.message || `API Error: ${response.status}`);
   }
 
