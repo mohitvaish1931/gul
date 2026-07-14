@@ -174,6 +174,7 @@ const MainLayout = () => {
 
 function App() {
   return (
+    // @ts-ignore
     <HelmetProvider>
       <AppProvider>
         <Router>

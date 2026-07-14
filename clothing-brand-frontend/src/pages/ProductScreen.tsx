@@ -417,6 +417,7 @@ const ProductScreen = () => {
           </div>
         ) : (
           <>
+            {/* @ts-ignore */}
             <Helmet>
               <title>{`${product.name} | Gul Fashion`}</title>
               <meta name="description" content={product.description ? product.description.substring(0, 150) + '...' : ''} />

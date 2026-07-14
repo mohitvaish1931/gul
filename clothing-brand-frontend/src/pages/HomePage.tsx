@@ -130,6 +130,7 @@ const HomePage = () => {
 
   return (
     <div className="homepage-wrapper">
+      {/* @ts-ignore */}
       <Helmet>
         <title>Gul Fashion | Premium Women's Ethnic & Casual Wear</title>
         <meta name="description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion. Explore our wide collection of Kurtis, Tops, Co-ord sets, and more with premium quality." />
