@@ -115,7 +115,7 @@ const AdminLayout = () => {
               to="/admin"
               end
               onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
+              className={({ isActive }: { isActive: boolean }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-medium transition-colors ${
                   isActive
                     ? 'bg-[#F3E8FF] text-[#6B21A8]'
@@ -137,7 +137,7 @@ const AdminLayout = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setSidebarOpen(false)}
-                    className={({ isActive }) =>
+                    className={({ isActive }: { isActive: boolean }) =>
                       `flex items-center gap-3 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${
                         isActive
                           ? 'bg-[#F3E8FF] text-[#6B21A8]'
