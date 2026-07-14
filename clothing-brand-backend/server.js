@@ -57,13 +57,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === 'production') {
-  // Serve static files from frontend build folder
-  app.use(express.static(path.join(__dirname, '../dist')));
-
-  // Support client-side routing by redirecting all other requests to index.html
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
-  });
+  // In split architecture (Hostinger + Render), backend only acts as API
+  // app.use(express.static(path.join(__dirname, '../dist')));
+  // app.get('*', (req, res) => {
+  //   res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
+  // });
+  app.get('/', (req, res) => res.send('Clothing Brand API is running...'));
 } else {
   app.get('/', (req, res) => {
     res.send('Clothing Brand API is running...');
