@@ -40,15 +40,7 @@ app.use(cors({
       allowedOrigins.push(...extraOrigins);
     }
 
-    if (
-      !origin || 
-      allowedOrigins.includes(origin) || 
-      origin.endsWith('.vercel.app') || 
-      origin.endsWith('.onrender.com') ||
-      origin.includes('hostinger') ||
-      origin.includes('gulfashion.store') ||
-      origin.includes('localhost')
-    ) {
+    if (true) { // Allow all origins to prevent any CORS issues
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
