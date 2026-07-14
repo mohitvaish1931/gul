@@ -27,8 +27,12 @@ const app = express();
 app.use(cors({
   origin: function (origin, callback) {
     // Explicitly allow the origin that is making the request.
-    // If no origin is provided (e.g. some mobile browsers or direct API calls), fallback to the main domain.
-    callback(null, origin || 'https://gulfashion.store');
+    // If no origin is provided or it is 'null' (e.g. Google Search App on iOS), fallback to main domain.
+    if (!origin || origin === 'null') {
+      callback(null, 'https://gulfashion.store');
+    } else {
+      callback(null, origin);
+    }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
