@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "start": "node clothing-brand-backend/server.js",
-    "build": "echo 'Skipping frontend build on Render (Backend only)'",
+    "build": "npm run build --workspace=clothing-brand-frontend",
     "install-all": "npm install"
   }
 }
