@@ -125,7 +125,7 @@ const CartScreen = () => {
           if (verifyRes.ok) {
             alert('Payment Successful! Order Confirmed. Your AWB has been generated.');
             setCartItems([]);
-            navigate('/track');
+            navigate('/profile');
           } else {
             alert('Payment verification failed');
           }
