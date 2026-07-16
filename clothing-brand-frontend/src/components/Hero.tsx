@@ -18,34 +18,34 @@ const Hero = ({ products = [] }: HeroProps) => {
   const threePieceProduct = list.find(p => p.category === 'Shrug Sets');
 
   const slides = [
-    {
+    threePieceProduct ? {
       type: 'image',
-      src: threePieceProduct?.image || '/images/hero-banner.png',
-      title: threePieceProduct ? threePieceProduct.name : 'Premium Shrug Ensembles',
-      subtitle: threePieceProduct ? threePieceProduct.description : 'Exquisite three-piece shrug sets handcrafted for daily comfort and elegance',
+      src: threePieceProduct.image,
+      title: threePieceProduct.name,
+      subtitle: threePieceProduct.description,
       btnPrimary: 'EXPLORE SHRUG SETS',
       btnOutline: 'OUR COLLECTION',
-      link: threePieceProduct ? `/product/${threePieceProduct._id}` : '/shop?category=Shrug%20Sets'
-    },
-    {
+      link: `/product/${threePieceProduct._id}`
+    } : null,
+    suitsProduct ? {
       type: 'image',
-      src: suitsProduct?.image || '/images/hero-banner.png',
-      title: suitsProduct ? suitsProduct.name : 'Designer Suit Sets',
-      subtitle: suitsProduct ? suitsProduct.description : 'Jaipur hand-block prints and hand-embroidered suit sets with dupattas',
+      src: suitsProduct.image,
+      title: suitsProduct.name,
+      subtitle: suitsProduct.description,
       btnPrimary: 'SHOP SUIT SETS',
       btnOutline: 'OUR STORY',
-      link: suitsProduct ? `/product/${suitsProduct._id}` : '/shop?category=Suit%20Sets'
-    },
-    {
+      link: `/product/${suitsProduct._id}`
+    } : null,
+    topsProduct || kurtaProduct ? {
       type: 'image',
-      src: topsProduct?.image || kurtaProduct?.image || '/images/clothing_rack_hero.png',
-      title: topsProduct ? topsProduct.name : (kurtaProduct ? kurtaProduct.name : 'Chic Co-ord Ensembles'),
-      subtitle: topsProduct ? topsProduct.description : (kurtaProduct ? kurtaProduct.description : 'Contemporary cuts, breathable fabrics, and elegant block print patterns'),
+      src: topsProduct?.image || kurtaProduct?.image,
+      title: topsProduct ? topsProduct.name : (kurtaProduct ? kurtaProduct.name : ''),
+      subtitle: topsProduct ? topsProduct.description : (kurtaProduct ? kurtaProduct.description : ''),
       btnPrimary: 'EXPLORE STYLES',
       btnOutline: 'SHOP ALL',
-      link: topsProduct ? `/product/${topsProduct._id}` : (kurtaProduct ? `/product/${kurtaProduct._id}` : '/shop')
-    }
-  ];
+      link: topsProduct ? `/product/${topsProduct._id}` : `/product/${kurtaProduct?._id}`
+    } : null
+  ].filter(Boolean) as any[];
 
   useEffect(() => {
     if (videoRef.current) {
@@ -61,6 +61,8 @@ const Hero = ({ products = [] }: HeroProps) => {
     }, 7000); // 7 seconds per slide
     return () => clearInterval(timer);
   }, [slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <section className="hero">

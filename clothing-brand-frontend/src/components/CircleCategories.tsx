@@ -49,7 +49,11 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
     <div className="circle-categories-wrapper">
       <div className="circle-categories-container scroll-hidden">
         {categoriesList.map((cat, index) => {
-          const imgSrc = getCategoryImage(cat.name, cat.defaultImg);
+          const list = Array.isArray(products) ? products : [];
+          const matched = list.find((p) => p.category === cat.name);
+          if (!matched) return null; // Only show category if a product exists
+          const imgSrc = matched.image;
+          
           return (
             <Link to={cat.path} key={index} className="circle-category-item">
               <div className="circle-image-ring">

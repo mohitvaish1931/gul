@@ -10,6 +10,7 @@ import './HomePage.css';
 const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,12 +32,14 @@ const HomePage = () => {
 
         if (Array.isArray(data)) {
           setProducts(data);
+          setError(null);
         } else {
           setProducts([]);
         }
       } catch (e) {
         console.error('Failed to grab products', e);
         setProducts([]);
+        setError('Our server is currently starting up. Please refresh the page in a few seconds.');
       } finally {
         setLoading(false);
       }
@@ -45,6 +48,16 @@ const HomePage = () => {
   }, []);
 
   const homepageProducts = products.filter(p => p.showOnHomepage !== false);
+
+  if (error) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#FDFBFD', padding: '20px', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif, serif)', color: '#C53030', marginBottom: '15px' }}>Store is waking up</h2>
+        <p style={{ color: '#666', marginBottom: '30px', maxWidth: '400px', lineHeight: '1.6' }}>{error}</p>
+        <button onClick={() => window.location.reload()} className="btn btn-primary">Refresh Page</button>
+      </div>
+    );
+  }
 
   // Sort by createdAt descending to show latest arrivals
   const newArrivals = [...homepageProducts]

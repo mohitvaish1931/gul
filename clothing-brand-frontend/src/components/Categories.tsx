@@ -16,53 +16,57 @@ const Categories = ({ products = [] }: CategoriesProps) => {
     <section className="section categories-masonry-section" style={{padding: '0'}}>
       <div className="categories-masonry-dual">
         
-        {/* Kurta Sets */}
-        <Link to="/shop?category=Kurta%20Sets" className="cat-card-purple reveal-on-scroll">
-          <img src={getCategoryImage('Kurta Sets', '/images/kurta-category.png')} alt="Kurta Sets" className="cat-bg-img" />
-          <div className="cat-overlay-purple"></div>
-          <div className="cat-text-content-purple">
-            <span className="cat-tag-purple">THE ETHNIC EDIT</span>
-            <h3 className="cat-title-purple font-serif">Kurta Sets</h3>
-            <p className="cat-desc-purple">Timeless craftsmanship meets modern silhouettes.</p>
-            <span className="cat-link-purple">EXPLORE COLLECTION</span>
-          </div>
-        </Link>
+        {(() => {
+          const categoriesList = [
+            {
+              name: 'Kurta Sets',
+              path: '/shop?category=Kurta%20Sets',
+              tag: 'THE ETHNIC EDIT',
+              title: 'Kurta Sets',
+              desc: 'Timeless craftsmanship meets modern silhouettes.'
+            },
+            {
+              name: 'Suit Sets',
+              path: '/shop?category=Suit%20Sets',
+              tag: 'DESIGNER FAVORITES',
+              title: 'Suit Sets',
+              desc: 'Regal elegance for every precious occasion.'
+            },
+            {
+              name: 'Tops & Co-ord Sets',
+              path: '/shop?category=Tops%20%26%20Co-ord%20Sets',
+              tag: 'CASUAL CHIC',
+              title: 'Tops & Co-ords',
+              desc: 'Charming everyday comfort in breathable cotton.'
+            },
+            {
+              name: 'Shrug Sets',
+              path: '/shop?category=Shrug%20Sets',
+              tag: 'LUXURY LAYERS',
+              title: 'Shrug Sets',
+              desc: 'Sophisticated three-piece cotton tunic ensembles.'
+            }
+          ];
 
-        {/* Suit Sets */}
-        <Link to="/shop?category=Suit%20Sets" className="cat-card-purple reveal-on-scroll delay-100">
-          <img src={getCategoryImage('Suit Sets', '/images/suits-category.png')} alt="Suit Sets" className="cat-bg-img" />
-          <div className="cat-overlay-purple"></div>
-          <div className="cat-text-content-purple">
-            <span className="cat-tag-purple">DESIGNER FAVORITES</span>
-            <h3 className="cat-title-purple font-serif">Suit Sets</h3>
-            <p className="cat-desc-purple">Regal elegance for every precious occasion.</p>
-            <span className="cat-link-purple">EXPLORE COLLECTION</span>
-          </div>
-        </Link>
-
-        {/* Tops & Co-ord Sets */}
-        <Link to="/shop?category=Tops%20%26%20Co-ord%20Sets" className="cat-card-purple reveal-on-scroll delay-200">
-          <img src={getCategoryImage('Tops & Co-ord Sets', '/images/indowestern-category.png')} alt="Tops & Co-ord Sets" className="cat-bg-img" />
-          <div className="cat-overlay-purple"></div>
-          <div className="cat-text-content-purple">
-            <span className="cat-tag-purple">CASUAL CHIC</span>
-            <h3 className="cat-title-purple font-serif">Tops & Co-ords</h3>
-            <p className="cat-desc-purple">Charming everyday comfort in breathable cotton.</p>
-            <span className="cat-link-purple">EXPLORE COLLECTION</span>
-          </div>
-        </Link>
-
-        {/* Shrug Sets */}
-        <Link to="/shop?category=Shrug%20Sets" className="cat-card-purple reveal-on-scroll delay-300">
-          <img src={getCategoryImage('Shrug Sets', '/images/three-piece-tops-category.png')} alt="Shrug Sets" className="cat-bg-img" />
-          <div className="cat-overlay-purple"></div>
-          <div className="cat-text-content-purple">
-            <span className="cat-tag-purple">LUXURY LAYERS</span>
-            <h3 className="cat-title-purple font-serif">Shrug Sets</h3>
-            <p className="cat-desc-purple">Sophisticated three-piece cotton tunic ensembles.</p>
-            <span className="cat-link-purple">EXPLORE COLLECTION</span>
-          </div>
-        </Link>
+          return categoriesList.map((cat, index) => {
+            const list = Array.isArray(products) ? products : [];
+            const matched = list.find((p) => p.category === cat.name);
+            if (!matched) return null;
+            
+            return (
+              <Link to={cat.path} key={index} className={`cat-card-purple reveal-on-scroll delay-${index * 100}`}>
+                <img src={matched.image} alt={cat.name} className="cat-bg-img" />
+                <div className="cat-overlay-purple"></div>
+                <div className="cat-text-content-purple">
+                  <span className="cat-tag-purple">{cat.tag}</span>
+                  <h3 className="cat-title-purple font-serif">{cat.title}</h3>
+                  <p className="cat-desc-purple">{cat.desc}</p>
+                  <span className="cat-link-purple">EXPLORE COLLECTION</span>
+                </div>
+              </Link>
+            );
+          });
+        })()}
 
       </div>
     </section>
