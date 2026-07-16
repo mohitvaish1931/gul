@@ -15,6 +15,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Gul Fashion | Premium Women's Ethnic & Casual Wear" />
     <meta name="twitter:description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion." />
+    
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://gul-275k.onrender.com" crossorigin="anonymous" />
+    <link rel="dns-prefetch" href="https://gul-275k.onrender.com" />
+    <script>
+      // Preload the main products API request immediately when HTML is parsed
+      // This eliminates the waterfall delay of downloading/parsing JS before making the API call
+      window.__INITIAL_PRODUCTS_PROMISE__ = fetch("https://gul-275k.onrender.com/api/products")
+        .then(res => res.json())
+        .catch(err => { console.error('Prefetch failed', err); return null; });
+    </script>
   </head>
   <body>
     <div id="root"></div>

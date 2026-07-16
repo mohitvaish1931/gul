@@ -14,8 +14,21 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(API_ENDPOINTS.PRODUCTS);
-        const data = await res.json();
+        let data;
+        // Check if prefetch promise exists on window
+        // @ts-ignore
+        if (window.__INITIAL_PRODUCTS_PROMISE__) {
+          // @ts-ignore
+          data = await window.__INITIAL_PRODUCTS_PROMISE__;
+          // @ts-ignore
+          window.__INITIAL_PRODUCTS_PROMISE__ = null; // Clear it so it's not reused on re-renders
+        } 
+        
+        if (!data) {
+          const res = await fetch(API_ENDPOINTS.PRODUCTS);
+          data = await res.json();
+        }
+
         if (Array.isArray(data)) {
           setProducts(data);
         } else {
