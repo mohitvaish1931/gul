@@ -67,6 +67,7 @@ export interface CartItem extends Product {
 
 export interface User {
   id: string;
+  _id?: string;
   email: string;
   name: string;
   isAdmin?: boolean;

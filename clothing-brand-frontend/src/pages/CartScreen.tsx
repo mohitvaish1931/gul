@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
-import { API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 
 const CartScreen = () => {
   const { id } = useParams();
@@ -16,6 +16,7 @@ const CartScreen = () => {
   const [shippingAddress, setShippingAddress] = useState({
     name: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
   });
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
@@ -68,11 +69,11 @@ const CartScreen = () => {
 
     try {
       // 1. Fetch Razorpay config
-      const configRes = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/razorpay/config`);
+      const configRes = await fetch(`${API_BASE_URL}/api/payment/razorpay/config`);
       const { keyId } = await configRes.json();
 
       // 2. Create MongoDB Order
-      const orderResponse = await fetch(`${API_ENDPOINTS.BASE_URL}/orders`, {
+      const orderResponse = await fetch(`${API_ENDPOINTS.ORDERS.BASE}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -90,7 +91,7 @@ const CartScreen = () => {
       if (!orderResponse.ok) throw new Error('Failed to create order');
 
       // 3. Create Razorpay Order
-      const rzpResponse = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/razorpay`, {
+      const rzpResponse = await fetch(`${API_BASE_URL}/api/payment/razorpay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: totalAmount, receipt: orderData._id })
@@ -109,7 +110,7 @@ const CartScreen = () => {
         order_id: rzpData.id,
         handler: async function (response: any) {
           // 5. Verify payment & Trigger Shipmozo
-          const verifyRes = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/verify`, {
+          const verifyRes = await fetch(`${API_BASE_URL}/api/payment/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

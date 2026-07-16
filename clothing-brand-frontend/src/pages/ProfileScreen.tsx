@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { ShoppingBag, LogOut, Package, Settings } from 'lucide-react';
 
 const ProfileScreen = () => {
@@ -16,7 +16,7 @@ const ProfileScreen = () => {
     } else {
       const fetchOrders = async () => {
         try {
-          const res = await fetch(`${API_ENDPOINTS.BASE_URL}/orders/my/${user.id || user._id}`);
+          const res = await fetch(`${API_BASE_URL}/api/orders/my/${user.id || user._id}`);
           if (res.ok) {
             const data = await res.json();
             setOrders(data);
