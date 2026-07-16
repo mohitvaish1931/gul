@@ -12,6 +12,7 @@ import couponRoutes from './routes/couponRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
 import shiprocketRoutes from './routes/shiprocketRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -50,6 +51,7 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/shiprocket', shiprocketRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api', sitemapRoutes);
 

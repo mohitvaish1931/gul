@@ -12,7 +12,11 @@ const CartScreen = () => {
   const size = queryParams.get('size') || '';
   const color = queryParams.get('color') || '';
 
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState({
+    name: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
+  });
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
     // In a real app we'd dispatch to Redux/Context. Here we'll simulate adding.
@@ -21,7 +25,6 @@ const CartScreen = () => {
         try {
           const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
           const data = await res.json();
-          // Add to local cart state for demo
           setCartItems([{...data, qty, selectedSize: size, selectedColor: color}]);
         } catch (e) {
           console.error('Error adding to cart');
@@ -36,8 +39,124 @@ const CartScreen = () => {
     navigate('/cart');
   };
 
-  const checkoutHandler = () => {
-    alert('Proceeding to Checkout... Integration with Payment Gateway needed!');
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShippingAddress({...shippingAddress, [e.target.name]: e.target.value});
+  };
+
+  const processPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPaymentLoading(true);
+
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      setPaymentLoading(false);
+      return;
+    }
+
+    const totalAmount = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+
+    try {
+      // 1. Fetch Razorpay config
+      const configRes = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/razorpay/config`);
+      const { keyId } = await configRes.json();
+
+      // 2. Create MongoDB Order
+      const orderResponse = await fetch(`${API_ENDPOINTS.BASE_URL}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderItems: cartItems,
+          shippingAddress,
+          paymentMethod: 'Razorpay',
+          itemsPrice: totalAmount,
+          taxPrice: 0,
+          shippingPrice: 0,
+          totalPrice: totalAmount,
+        })
+      });
+      const orderData = await orderResponse.json();
+
+      if (!orderResponse.ok) throw new Error('Failed to create order');
+
+      // 3. Create Razorpay Order
+      const rzpResponse = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/razorpay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: totalAmount, receipt: orderData._id })
+      });
+      const rzpData = await rzpResponse.json();
+
+      if (!rzpResponse.ok) throw new Error('Failed to init payment');
+
+      // 4. Open Razorpay Checkout Modal
+      const options = {
+        key: keyId,
+        amount: rzpData.amount,
+        currency: rzpData.currency,
+        name: "Gul Fashion",
+        description: "Premium Ethnic Wear",
+        order_id: rzpData.id,
+        handler: async function (response: any) {
+          // 5. Verify payment & Trigger Shipmozo
+          const verifyRes = await fetch(`${API_ENDPOINTS.BASE_URL}/payment/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              mongo_order_id: orderData._id,
+              user_details: { name: shippingAddress.name }
+            })
+          });
+          
+          if (verifyRes.ok) {
+            alert('Payment Successful! Order Confirmed. Your AWB has been generated.');
+            setCartItems([]);
+            navigate('/track');
+          } else {
+            alert('Payment verification failed');
+          }
+        },
+        prefill: {
+          name: shippingAddress.name,
+          contact: shippingAddress.phoneNumber
+        },
+        theme: {
+          color: "#4B0082"
+        }
+      };
+      
+      // Mock flow handler if using dummy keys
+      if (rzpData.id.startsWith('order_mock_')) {
+        options.handler({
+          razorpay_payment_id: 'mock_payment_' + Date.now(),
+          razorpay_order_id: rzpData.id,
+          razorpay_signature: 'mock_signature_skip'
+        });
+        return;
+      }
+
+      const paymentObject = new (window as any).Razorpay(options);
+      paymentObject.open();
+
+    } catch (err) {
+      console.error(err);
+      alert('Error initiating checkout. Please try again.');
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   return (
@@ -51,50 +170,79 @@ const CartScreen = () => {
         </div>
       ) : (
         <div className="cart-grid-wrap">
-          <div className="cart-items-list-wrap">
-            {cartItems.map((item) => (
-              <div key={item._id} className="cart-item-card">
-                <div className="cart-item-img">
-                  <img src={item.image} alt={item.name} />
-                </div>
-                <div className="cart-item-info">
-                  <Link to={`/product/${item._id}`} className="font-serif item-name-link">
-                    {item.name}
-                  </Link>
-                  <div className="item-meta">
-                    <span className="item-price">₹{item.price.toLocaleString('en-IN')}</span>
-                    <span className="item-qty">Qty: {item.qty}</span>
-                  </div>
-                  {(item.selectedSize || item.selectedColor) && (
-                    <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#666', display: 'flex', gap: '15px' }}>
-                      {item.selectedSize && <span>Size: <strong style={{ color: '#2D0A4E' }}>{item.selectedSize}</strong></span>}
-                      {item.selectedColor && <span>Color: <strong style={{ color: '#2D0A4E' }}>{item.selectedColor}</strong></span>}
+          {!isCheckingOut ? (
+            <>
+              <div className="cart-items-list-wrap">
+                {cartItems.map((item) => (
+                  <div key={item._id} className="cart-item-card">
+                    <div className="cart-item-img">
+                      <img src={item.image} alt={item.name} />
                     </div>
-                  )}
+                    <div className="cart-item-info">
+                      <Link to={`/product/${item._id}`} className="font-serif item-name-link">
+                        {item.name}
+                      </Link>
+                      <div className="item-meta">
+                        <span className="item-price">₹{item.price.toLocaleString('en-IN')}</span>
+                        <span className="item-qty">Qty: {item.qty}</span>
+                      </div>
+                      {(item.selectedSize || item.selectedColor) && (
+                        <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#666', display: 'flex', gap: '15px' }}>
+                          {item.selectedSize && <span>Size: <strong style={{ color: '#2D0A4E' }}>{item.selectedSize}</strong></span>}
+                          {item.selectedColor && <span>Color: <strong style={{ color: '#2D0A4E' }}>{item.selectedColor}</strong></span>}
+                        </div>
+                      )}
+                    </div>
+                    <div className="cart-item-actions">
+                      <button onClick={() => removeFromCartHandler(item._id)} className="btn-remove">
+                        REMOVE
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="cart-summary-card">
+                <h2 className="font-serif summary-title">Cart Summary</h2>
+                <div className="summary-row">
+                  <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
+                  <span className="summary-total">₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
                 </div>
-                <div className="cart-item-actions">
-                  <button onClick={() => removeFromCartHandler(item._id)} className="btn-remove">
-                    REMOVE
+                <button 
+                  type="button" 
+                  className="btn btn-primary w-full"
+                  onClick={() => setIsCheckingOut(true)}
+                >
+                  PROCEED TO CHECKOUT
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="checkout-form-wrap" style={{width: '100%', maxWidth: '600px', margin: '0 auto'}}>
+              <h2 className="font-serif summary-title">Shipping Details</h2>
+              <form onSubmit={processPayment} style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
+                <input type="text" name="name" placeholder="Full Name" value={shippingAddress.name} onChange={handleInputChange} required className="form-input" />
+                <input type="text" name="phoneNumber" placeholder="Phone Number" value={shippingAddress.phoneNumber} onChange={handleInputChange} required className="form-input" />
+                <input type="text" name="address" placeholder="Complete Address" value={shippingAddress.address} onChange={handleInputChange} required className="form-input" />
+                <div style={{display: 'flex', gap: '15px'}}>
+                  <input type="text" name="city" placeholder="City" value={shippingAddress.city} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
+                  <input type="text" name="postalCode" placeholder="Pincode" value={shippingAddress.postalCode} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
+                </div>
+                
+                <div className="summary-row" style={{marginTop: '20px', padding: '15px 0', borderTop: '1px solid #eee'}}>
+                  <span>Total Amount to Pay</span>
+                  <span className="summary-total">₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
+                </div>
+
+                <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
+                  <button type="button" className="btn btn-outline" onClick={() => setIsCheckingOut(false)} style={{flex: 1}}>BACK TO CART</button>
+                  <button type="submit" className="btn btn-primary" disabled={paymentLoading} style={{flex: 2}}>
+                    {paymentLoading ? 'PROCESSING...' : 'PAY NOW (RAZORPAY)'}
                   </button>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="cart-summary-card">
-            <h2 className="font-serif summary-title">Cart Summary</h2>
-            <div className="summary-row">
-              <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
-              <span className="summary-total">₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
+              </form>
             </div>
-            <button 
-              type="button" 
-              className="btn btn-primary w-full"
-              onClick={checkoutHandler}
-            >
-              PROCEED TO CHECKOUT
-            </button>
-          </div>
+          )}
         </div>
       )}
 
@@ -188,6 +336,28 @@ const CartScreen = () => {
         .summary-total {
           font-size: 1.2rem;
           color: var(--primary-purple);
+        }
+        .form-input {
+          width: 100%;
+          padding: 12px 15px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+          font-family: 'Inter', sans-serif;
+        }
+        .form-input:focus {
+          outline: none;
+          border-color: var(--primary-purple);
+          box-shadow: 0 0 0 2px rgba(75,0,130,0.1);
+        }
+        .btn-outline {
+          background: transparent;
+          border: 1px solid var(--primary-purple);
+          color: var(--primary-purple);
+        }
+        .btn-outline:hover {
+          background: var(--primary-purple);
+          color: white;
         }
 
         @media (max-width: 768px) {

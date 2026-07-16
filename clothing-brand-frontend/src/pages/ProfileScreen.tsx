@@ -8,10 +8,24 @@ const ProfileScreen = () => {
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
   const { user } = state;
+  const [orders, setOrders] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     if (!user) {
       navigate('/login');
+    } else {
+      const fetchOrders = async () => {
+        try {
+          const res = await fetch(`${API_ENDPOINTS.BASE_URL}/orders/my/${user.id || user._id}`);
+          if (res.ok) {
+            const data = await res.json();
+            setOrders(data);
+          }
+        } catch (err) {
+          console.error('Failed to fetch user orders', err);
+        }
+      };
+      fetchOrders();
     }
   }, [user, navigate]);
 
@@ -114,7 +128,8 @@ const ProfileScreen = () => {
 
           {/* Main Content Area */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-             <div style={{ backgroundColor: '#fff', padding: '50px', borderRadius: '24px', border: '1px solid #f0f0f0', textAlign: 'center', boxShadow: '0 15px 40px rgba(0,0,0,0.02)' }}>
+            {orders.length === 0 ? (
+              <div style={{ backgroundColor: '#fff', padding: '50px', borderRadius: '24px', border: '1px solid #f0f0f0', textAlign: 'center', boxShadow: '0 15px 40px rgba(0,0,0,0.02)' }}>
                 <div style={{ color: '#D4AF37', marginBottom: '25px' }}>
                    <Package size={60} strokeWidth={1} />
                 </div>
@@ -137,7 +152,55 @@ const ProfileScreen = () => {
                 }}>
                    <ShoppingBag size={20} /> COMMENCE SHOPPING
                 </Link>
-             </div>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <h2 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E' }}>Order History</h2>
+                {orders.map((order: any) => (
+                  <div key={order._id} style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '16px', border: '1px solid #eee', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f0f0f0', paddingBottom: '15px', marginBottom: '15px' }}>
+                      <div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#999', textTransform: 'uppercase' }}>Order Placed</span>
+                        <p style={{ margin: '5px 0 0 0', fontWeight: '600' }}>{new Date(order.createdAt).toLocaleDateString()}</p>
+                      </div>
+                      <div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#999', textTransform: 'uppercase' }}>Total</span>
+                        <p style={{ margin: '5px 0 0 0', fontWeight: '600', color: '#2D0A4E' }}>₹{order.totalPrice || (order.orderItems?.reduce((a:any, b:any) => a + (b.price * b.qty), 0))}</p>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#999', textTransform: 'uppercase' }}>Order ID</span>
+                        <p style={{ margin: '5px 0 0 0', fontWeight: '600', fontSize: '0.9rem' }}>#{order._id.substring(0, 8)}</p>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 'bold', color: order.status === 'Delivered' ? '#38A169' : '#D69E2E' }}>
+                          Status: {order.status || 'Processing'}
+                        </p>
+                        {order.awbNumber && (
+                          <div style={{ marginTop: '10px' }}>
+                            <p style={{ margin: '0 0 5px 0', fontSize: '0.85rem' }}>AWB: <strong>{order.awbNumber}</strong> ({order.courierName})</p>
+                            {order.trackingUrl && (
+                              <a href={order.trackingUrl} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '5px 12px', backgroundColor: '#EBF4FF', color: '#3182CE', borderRadius: '4px', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                                TRACK SHIPMENT
+                              </a>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        {order.labelPdf && (
+                          <a href={order.labelPdf} target="_blank" rel="noreferrer" style={{ padding: '8px 15px', border: '1px solid #E2E8F0', borderRadius: '8px', color: '#4A5568', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                            Invoice
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

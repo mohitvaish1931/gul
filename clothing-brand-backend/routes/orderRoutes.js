@@ -56,6 +56,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+// @desc    Get logged in user orders
+// @route   GET /api/orders/my/:userId
+router.get('/my/:userId', async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.params.userId }).sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    console.error('Get my orders error:', error);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+});
+
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
 router.get('/:id', async (req, res) => {

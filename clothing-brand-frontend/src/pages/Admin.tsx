@@ -2165,14 +2165,15 @@ const Admin = () => {
             <div className="bg-white border border-gold-primary/10 rounded-3xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="min-w-full">
-                  <thead>
-                    <tr className="bg-[#FDFBF9]">
-                      <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Order Info</th>
-                      <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Customer Detail</th>
-                      <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Items</th>
-                      <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Total</th>
-                      <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Status</th>
-                      <th className="px-8 py-5 text-right text-[10px] font-bold text-text-muted uppercase tracking-widest">Actions</th>
+                  <thead className="bg-white/40 border-b border-gold-primary/10">
+                    <tr>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Order Details</th>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Customer</th>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Items</th>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Payment</th>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Status</th>
+                      <th className="px-8 py-5 text-left text-[10px] font-black text-text-muted uppercase tracking-widest">Shipping (Shipmozo)</th>
+                      <th className="px-8 py-5 text-right text-[10px] font-black text-text-muted uppercase tracking-widest">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gold-primary/5">
@@ -2227,6 +2228,24 @@ const Admin = () => {
                             }`}></span>
                             {order.status || 'Processing'}
                           </span>
+                        </td>
+                        <td className="px-8 py-4 whitespace-nowrap">
+                          {order.awbNumber ? (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs font-bold text-text-primary">AWB: {order.awbNumber}</span>
+                              <span className="text-[10px] text-text-muted">{order.courierName}</span>
+                              <div className="flex gap-2 mt-1">
+                                {order.labelPdf && (
+                                  <a href={order.labelPdf} target="_blank" rel="noreferrer" className="text-[9px] font-bold uppercase text-primary-purple hover:underline border border-primary-purple/20 px-2 py-0.5 rounded">Label</a>
+                                )}
+                                {order.trackingUrl && (
+                                  <a href={order.trackingUrl} target="_blank" rel="noreferrer" className="text-[9px] font-bold uppercase text-blue-600 hover:underline border border-blue-600/20 px-2 py-0.5 rounded">Track</a>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-text-muted italic">Not generated</span>
+                          )}
                         </td>
                         <td className="px-8 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-3">

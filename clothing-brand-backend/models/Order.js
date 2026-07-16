@@ -4,7 +4,6 @@ const orderSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: 'User',
     },
     orderItems: [
@@ -73,16 +72,33 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: 'Pending',
     },
-    shiprocketOrderId: {
+    paymentStatus: {
+      type: String,
+      default: 'unpaid',
+    },
+    orderStatus: {
+      type: String,
+      default: 'processing',
+    },
+    razorpayOrderId: {
       type: String,
     },
-    shiprocketShipmentId: {
+    razorpayPaymentId: {
+      type: String,
+    },
+    razorpaySignature: {
       type: String,
     },
     awbNumber: {
       type: String,
     },
-    trackingStatus: {
+    courierName: {
+      type: String,
+    },
+    trackingUrl: {
+      type: String,
+    },
+    labelPdf: {
       type: String,
     },
   },
