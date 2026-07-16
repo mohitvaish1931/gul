@@ -9,6 +9,7 @@ import './HomePage.css';
 
 const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,6 +24,8 @@ const HomePage = () => {
       } catch (e) {
         console.error('Failed to grab products', e);
         setProducts([]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProducts();
@@ -127,6 +130,21 @@ const HomePage = () => {
       </div>
     </section>
   );
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#FDFBFD' }}>
+        <div style={{ border: '3px solid #f3f3f3', borderTop: '3px solid var(--primary-purple, #2D0A4E)', borderRadius: '50%', width: '50px', height: '50px', animation: 'spin 1s linear infinite', margin: '0 auto' }}></div>
+        <p style={{ marginTop: '20px', color: '#666', fontFamily: 'var(--font-serif, serif)', letterSpacing: '1px' }}>Loading Collection...</p>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="homepage-wrapper">
