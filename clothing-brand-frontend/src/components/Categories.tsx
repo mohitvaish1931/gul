@@ -6,12 +6,6 @@ interface CategoriesProps {
 }
 
 const Categories = ({ products = [] }: CategoriesProps) => {
-  const getCategoryImage = (categoryName: string, defaultImg: string) => {
-    const list = Array.isArray(products) ? products : [];
-    const matched = list.find((p) => p.category === categoryName);
-    return matched ? matched.image : defaultImg;
-  };
-
   return (
     <section className="section categories-masonry-section" style={{padding: '0'}}>
       <div className="categories-masonry-dual">

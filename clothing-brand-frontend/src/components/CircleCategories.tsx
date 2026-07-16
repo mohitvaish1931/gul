@@ -39,12 +39,6 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
     }
   ];
 
-  const getCategoryImage = (categoryName: string, defaultImg: string) => {
-    const list = Array.isArray(products) ? products : [];
-    const matched = list.find((p) => p.category === categoryName);
-    return matched ? matched.image : defaultImg;
-  };
-
   return (
     <div className="circle-categories-wrapper">
       <div className="circle-categories-container scroll-hidden">
