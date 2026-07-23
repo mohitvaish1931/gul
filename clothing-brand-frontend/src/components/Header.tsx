@@ -97,8 +97,8 @@ const Header = () => {
   const navLinks = [
     { name: 'Kurta Sets', path: '/shop?category=Kurta%20Sets' },
     { name: 'Suit Sets', path: '/shop?category=Suit%20Sets' },
-    { name: 'Shrug Sets', path: '/shop?category=Shrug%20Sets' },
-    { name: 'Tops & Co-ord Sets', path: '/shop?category=Tops%20%26%20Co-ord%20Sets' },
+    { name: 'Co-ord & Shrug Sets', path: '/shop?category=Co-ord%20%26%20Shrug%20Sets' },
+    { name: 'Tops', path: '/shop?category=Tops' },
     { name: 'Maxis & Dresses', path: '/shop?category=Maxis%20%26%20Dresses' },
     { name: 'Track Order', path: '/track-order', icon: <Truck size={14} /> },
     { name: 'Contact Us', path: '/contact', icon: <Phone size={14} /> }

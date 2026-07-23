@@ -20,15 +20,15 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
       defaultImg: '/images/suits-category.png'
     },
     {
-      name: 'Shrug Sets',
-      path: '/shop?category=Shrug%20Sets',
-      label: 'Shrug Sets',
+      name: 'Co-ord & Shrug Sets',
+      path: '/shop?category=Co-ord%20%26%20Shrug%20Sets',
+      label: 'Co-ord & Shrugs',
       defaultImg: '/images/three-piece-tops-category.png'
     },
     {
-      name: 'Tops & Co-ord Sets',
-      path: '/shop?category=Tops%20%26%20Co-ord%20Sets',
-      label: 'Co-ord Sets',
+      name: 'Tops',
+      path: '/shop?category=Tops',
+      label: 'Tops',
       defaultImg: '/images/indowestern-category.png'
     },
     {

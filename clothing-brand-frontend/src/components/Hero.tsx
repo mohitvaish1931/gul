@@ -14,8 +14,8 @@ const Hero = ({ products = [] }: HeroProps) => {
   const list = Array.isArray(products) ? products : [];
   const suitsProduct = list.find(p => p.category === 'Suit Sets');
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
-  const topsProduct = list.find(p => p.category === 'Tops & Co-ord Sets');
-  const threePieceProduct = list.find(p => p.category === 'Shrug Sets');
+  const topsProduct = list.find(p => p.category === 'Tops');
+  const threePieceProduct = list.find(p => p.category === 'Co-ord & Shrug Sets');
 
   const slides = [
     threePieceProduct ? {
@@ -23,7 +23,7 @@ const Hero = ({ products = [] }: HeroProps) => {
       src: threePieceProduct.image,
       title: threePieceProduct.name,
       subtitle: threePieceProduct.description,
-      btnPrimary: 'EXPLORE SHRUG SETS',
+      btnPrimary: 'EXPLORE CO-ORDS & SHRUGS',
       btnOutline: 'OUR COLLECTION',
       link: `/product/${threePieceProduct._id}`
     } : null,

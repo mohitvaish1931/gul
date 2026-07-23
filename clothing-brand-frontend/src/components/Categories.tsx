@@ -27,18 +27,18 @@ const Categories = ({ products = [] }: CategoriesProps) => {
               desc: 'Regal elegance for every precious occasion.'
             },
             {
-              name: 'Tops & Co-ord Sets',
-              path: '/shop?category=Tops%20%26%20Co-ord%20Sets',
+              name: 'Tops',
+              path: '/shop?category=Tops',
               tag: 'CASUAL CHIC',
-              title: 'Tops & Co-ords',
+              title: 'Tops',
               desc: 'Charming everyday comfort in breathable cotton.'
             },
             {
-              name: 'Shrug Sets',
-              path: '/shop?category=Shrug%20Sets',
+              name: 'Co-ord & Shrug Sets',
+              path: '/shop?category=Co-ord%20%26%20Shrug%20Sets',
               tag: 'LUXURY LAYERS',
-              title: 'Shrug Sets',
-              desc: 'Sophisticated three-piece cotton tunic ensembles.'
+              title: 'Co-ord & Shrug Sets',
+              desc: 'Sophisticated multi-piece ensembles for effortless style.'
             }
           ];
 

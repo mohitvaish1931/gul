@@ -73,11 +73,11 @@ const HomePage = () => {
     .slice(0, 8);
 
   const topsCoOrds = homepageProducts
-    .filter(p => p.category === 'Tops & Co-ord Sets')
+    .filter(p => p.category === 'Tops')
     .slice(0, 8);
 
   const shrugSets = homepageProducts
-    .filter(p => p.category === 'Shrug Sets')
+    .filter(p => p.category === 'Co-ord & Shrug Sets')
     .slice(0, 8);
 
   const maxisDresses = homepageProducts
@@ -270,18 +270,18 @@ const HomePage = () => {
 
       <CarouselSection 
         tag="LUXURY LAYERS" 
-        titleLight="SHRUG" 
-        titleItalic="SETS" 
+        titleLight="CO-ORD &" 
+        titleItalic="SHRUG SETS" 
         items={shrugSets} 
-        viewAllLink="/shop?category=Shrug%20Sets"
+        viewAllLink="/shop?category=Co-ord%20%26%20Shrug%20Sets"
       />
 
       <CarouselSection 
         tag="DAILY CHIC" 
-        titleLight="CO-ORD" 
-        titleItalic="SETS" 
+        titleLight="TOPS" 
+        titleItalic="" 
         items={topsCoOrds} 
-        viewAllLink="/shop?category=Tops%20%26%20Co-ord%20Sets"
+        viewAllLink="/shop?category=Tops"
       />
 
       <CarouselSection 
