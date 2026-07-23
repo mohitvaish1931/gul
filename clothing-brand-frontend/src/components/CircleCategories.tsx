@@ -19,12 +19,7 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
       label: 'Suit Sets',
       defaultImg: '/images/suits-category.png'
     },
-    {
-      name: 'Co-ord & Shrug Sets',
-      path: '/shop?category=Co-ord%20%26%20Shrug%20Sets',
-      label: 'Co-ord & Shrugs',
-      defaultImg: '/images/three-piece-tops-category.png'
-    },
+
     {
       name: 'Tops',
       path: '/shop?category=Tops',

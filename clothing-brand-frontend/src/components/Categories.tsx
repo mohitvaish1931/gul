@@ -32,13 +32,6 @@ const Categories = ({ products = [] }: CategoriesProps) => {
               tag: 'CASUAL CHIC',
               title: 'Tops',
               desc: 'Charming everyday comfort in breathable cotton.'
-            },
-            {
-              name: 'Co-ord & Shrug Sets',
-              path: '/shop?category=Co-ord%20%26%20Shrug%20Sets',
-              tag: 'LUXURY LAYERS',
-              title: 'Co-ord & Shrug Sets',
-              desc: 'Sophisticated multi-piece ensembles for effortless style.'
             }
           ];
 

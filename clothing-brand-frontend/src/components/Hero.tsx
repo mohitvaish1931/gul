@@ -15,18 +15,8 @@ const Hero = ({ products = [] }: HeroProps) => {
   const suitsProduct = list.find(p => p.category === 'Suit Sets');
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
   const topsProduct = list.find(p => p.category === 'Tops');
-  const threePieceProduct = list.find(p => p.category === 'Co-ord & Shrug Sets');
 
   const slides = [
-    threePieceProduct ? {
-      type: 'image',
-      src: threePieceProduct.image,
-      title: threePieceProduct.name,
-      subtitle: threePieceProduct.description,
-      btnPrimary: 'EXPLORE CO-ORDS & SHRUGS',
-      btnOutline: 'OUR COLLECTION',
-      link: `/product/${threePieceProduct._id}`
-    } : null,
     suitsProduct ? {
       type: 'image',
       src: suitsProduct.image,
