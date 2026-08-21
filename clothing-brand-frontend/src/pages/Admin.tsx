@@ -1394,8 +1394,14 @@ const Admin = () => {
     const [productId, setProductId] = useState<number | ''>('');
     const [expiresAt, setExpiresAt] = useState<string | null>(null);
     const [usageLimit, setUsageLimit] = useState<number | ''>('');
+    const [customCode, setCustomCode] = useState('');
+
     const generateCode = () => {
-      const code = 'RR' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      // Use custom code if provided, otherwise generate random 8 chars
+      const code = customCode.trim() 
+        ? customCode.trim().toUpperCase() 
+        : 'RR' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
       (async () => {
         const payload = { code, discountPercent: discount, active: true, productId: productId === '' ? null : Number(productId), expiresAt, usageLimit: usageLimit === '' ? null : Number(usageLimit), used: 0 };
         try {
@@ -1403,6 +1409,7 @@ const Admin = () => {
           if (!res.ok) throw new Error('Create coupon failed');
           const c = await res.json();
           dispatch({ type: 'ADD_COUPON', payload: c });
+          setCustomCode(''); // Reset after success
         } catch (e) {
           dispatch({ type: 'ADD_COUPON', payload });
         }
@@ -1410,16 +1417,17 @@ const Admin = () => {
     };
     return (
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-          <input type="number" value={discount} onChange={e => setDiscount(Number(e.target.value))} className="p-2 border rounded" />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
+          <input type="text" value={customCode} onChange={e => setCustomCode(e.target.value)} placeholder="Code (leave blank for random)" className="p-2 border rounded" />
+          <input type="number" value={discount} onChange={e => setDiscount(Number(e.target.value))} placeholder="Discount %" className="p-2 border rounded" />
           <select value={productId as any} onChange={e => setProductId(e.target.value === '' ? '' : Number(e.target.value))} className="p-2 border rounded">
             <option value="">All products</option>
             {state.products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           <input type="date" value={expiresAt || ''} onChange={e => setExpiresAt(e.target.value || null)} className="p-2 border rounded" />
           <input type="number" value={usageLimit as any} onChange={e => setUsageLimit(e.target.value === '' ? '' : Number(e.target.value))} placeholder="Usage limit" className="p-2 border rounded" />
-          <button onClick={generateCode} className="bg-brand text-text-primary px-4 rounded col-span-2">Generate Coupon</button>
         </div>
+        <button onClick={generateCode} className="btn-premium-gold text-luxury-dark px-4 py-2 rounded mb-6">Create Coupon</button>
         <div className="space-y-2">
           {state.coupons.map((c, i) => (
             <div key={(c as any)._id || c.code || i} className="flex justify-between items-center p-2 border rounded">

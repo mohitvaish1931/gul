@@ -14,6 +14,34 @@ router.post('/', async (req, res) => {
   res.status(201).json(c);
 });
 
+router.get('/validate/:code', async (req, res) => {
+  const couponCode = req.params.code.toUpperCase();
+  const coupon = await Coupon.findOne({ code: couponCode });
+  
+  if (!coupon) {
+    return res.status(404).json({ error: 'Invalid coupon code' });
+  }
+  
+  if (!coupon.active) {
+    return res.status(400).json({ error: 'Coupon is no longer active' });
+  }
+
+  // Check usage limit if applicable
+  if (coupon.usageLimit && coupon.used >= coupon.usageLimit) {
+    return res.status(400).json({ error: 'Coupon usage limit reached' });
+  }
+  
+  // Check expiration if applicable
+  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+    return res.status(400).json({ error: 'Coupon has expired' });
+  }
+
+  res.json({
+    code: coupon.code,
+    discountPercent: coupon.discountPercent
+  });
+});
+
 router.put('/:code', async (req, res) => {
   const updated = await Coupon.findOneAndUpdate({ code: req.params.code }, req.body, { new: true });
   if (!updated) return res.status(404).json({ error: 'Not found' });

@@ -107,4 +107,40 @@ router.post('/verify', async (req, res) => {
   }
 });
 
+router.post('/bypass', async (req, res) => {
+  try {
+    const { mongo_order_id, user_details } = req.body;
+    const order = await Order.findById(mongo_order_id).populate('user', 'name email');
+    
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (order.totalPrice > 0) {
+      return res.status(400).json({ error: 'Cannot bypass payment for non-zero amount' });
+    }
+
+    order.paymentStatus = 'Paid';
+    order.isPaid = true;
+    order.paidAt = Date.now();
+
+    // Trigger Shipmozo Automation
+    console.log('Payment bypassed (100% off), triggering Shipmozo...');
+    const shipmozoData = await createShipmozoOrder(order, user_details || order.user);
+
+    if (shipmozoData) {
+      order.awbNumber = shipmozoData.awbNumber;
+      order.courierName = shipmozoData.courierName;
+      order.trackingUrl = shipmozoData.trackingUrl;
+      order.labelPdf = shipmozoData.labelPdf;
+    }
+
+    await order.save();
+    res.json({ success: true, order });
+  } catch (error) {
+    console.error('Bypass Payment Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export default router;

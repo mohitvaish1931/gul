@@ -14,6 +14,8 @@ router.post('/', async (req, res) => {
       itemsPrice,
       taxPrice,
       shippingPrice,
+      discountAmount,
+      couponCode,
       totalPrice,
     } = req.body;
 
@@ -33,6 +35,8 @@ router.post('/', async (req, res) => {
       itemsPrice,
       taxPrice,
       shippingPrice,
+      discountAmount,
+      couponCode,
       totalPrice,
     });
 

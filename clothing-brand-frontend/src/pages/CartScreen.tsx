@@ -19,6 +19,11 @@ const CartScreen = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{code: string, discountPercent: number} | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponMessage, setCouponMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
+
   useEffect(() => {
     // In a real app we'd dispatch to Redux/Context. Here we'll simulate adding.
     if (id) {
@@ -34,6 +39,30 @@ const CartScreen = () => {
       fetchItem();
     }
   }, [id, qty, size, color]);
+
+  const applyCouponHandler = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponMessage(null);
+    try {
+      const res = await fetch(`${API_ENDPOINTS.COUPONS}/validate/${couponCode}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Invalid coupon');
+      setAppliedCoupon(data);
+      setCouponMessage({ type: 'success', text: `Coupon applied! ${data.discountPercent}% off.` });
+      setCouponCode('');
+    } catch (err: any) {
+      setCouponMessage({ type: 'error', text: err.message });
+      setAppliedCoupon(null);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCouponHandler = () => {
+    setAppliedCoupon(null);
+    setCouponMessage(null);
+  };
 
   const removeFromCartHandler = (removeId: any) => {
     setCartItems(cartItems.filter(x => x._id !== removeId));
@@ -65,7 +94,9 @@ const CartScreen = () => {
       return;
     }
 
-    const totalAmount = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+    const subtotalAmount = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+    const discountAmount = appliedCoupon ? Math.round((subtotalAmount * appliedCoupon.discountPercent) / 100) : 0;
+    const totalAmount = subtotalAmount - discountAmount;
 
     try {
       // 1. Fetch Razorpay config
@@ -80,15 +111,37 @@ const CartScreen = () => {
           orderItems: cartItems,
           shippingAddress,
           paymentMethod: 'Razorpay',
-          itemsPrice: totalAmount,
+          itemsPrice: subtotalAmount, // Usually subtotal
           taxPrice: 0,
           shippingPrice: 0,
+          discountAmount,
+          couponCode: appliedCoupon ? appliedCoupon.code : null,
           totalPrice: totalAmount,
         })
       });
       const orderData = await orderResponse.json();
 
       if (!orderResponse.ok) throw new Error('Failed to create order');
+
+      // If total amount is 0 (100% off coupon), we can bypass Razorpay!
+      if (totalAmount === 0) {
+        // Call bypass route to mark as paid and trigger Shipmozo
+        const bypassRes = await fetch(`${API_BASE_URL}/api/payment/bypass`, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ mongo_order_id: orderData._id, user_details: { name: shippingAddress.name } })
+        });
+        
+        if (bypassRes.ok) {
+          alert('Order Placed Successfully! (100% Discount Applied). Your AWB has been generated.');
+          setCartItems([]);
+          navigate('/profile');
+        } else {
+          alert('Failed to process 100% off order');
+        }
+        setPaymentLoading(false);
+        return;
+      }
 
       // 3. Create Razorpay Order
       const rzpResponse = await fetch(`${API_BASE_URL}/api/payment/razorpay`, {
@@ -205,10 +258,64 @@ const CartScreen = () => {
 
               <div className="cart-summary-card">
                 <h2 className="font-serif summary-title">Cart Summary</h2>
+                
+                {/* Coupon Code Section */}
+                <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
+                  <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#2D0A4E', display: 'block', marginBottom: '10px' }}>Apply Coupon Code</span>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="text" 
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="Enter code" 
+                      className="form-input"
+                      style={{ padding: '8px 12px', flex: 1, textTransform: 'uppercase' }}
+                      disabled={!!appliedCoupon}
+                    />
+                    {!appliedCoupon ? (
+                      <button 
+                        onClick={applyCouponHandler} 
+                        disabled={couponLoading || !couponCode.trim()}
+                        style={{ backgroundColor: '#2D0A4E', color: 'white', border: 'none', borderRadius: '4px', padding: '0 15px', fontWeight: 'bold', cursor: 'pointer', opacity: (couponLoading || !couponCode.trim()) ? 0.7 : 1 }}
+                      >
+                        {couponLoading ? '...' : 'APPLY'}
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={removeCouponHandler}
+                        style={{ backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '4px', padding: '0 15px', fontWeight: 'bold', cursor: 'pointer' }}
+                      >
+                        REMOVE
+                      </button>
+                    )}
+                  </div>
+                  {couponMessage && (
+                    <p style={{ marginTop: '8px', fontSize: '0.8rem', color: couponMessage.type === 'success' ? '#16a34a' : '#ef4444' }}>
+                      {couponMessage.text}
+                    </p>
+                  )}
+                </div>
+
                 <div className="summary-row">
                   <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
-                  <span className="summary-total">₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
+                  <span>₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
                 </div>
+                
+                {appliedCoupon && (
+                  <div className="summary-row" style={{ color: '#16a34a' }}>
+                    <span>Discount ({appliedCoupon.discountPercent}%)</span>
+                    <span>-₹{Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100).toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+                
+                <div className="summary-row" style={{ borderTop: '1px solid #eee', paddingTop: '15px', marginTop: '10px' }}>
+                  <span style={{ fontWeight: '800' }}>Total</span>
+                  <span className="summary-total">₹{(
+                    cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - 
+                    (appliedCoupon ? Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100) : 0)
+                  ).toLocaleString('en-IN')}</span>
+                </div>
+                
                 <button 
                   type="button" 
                   className="btn btn-primary w-full"
@@ -232,7 +339,10 @@ const CartScreen = () => {
                 
                 <div className="summary-row" style={{marginTop: '20px', padding: '15px 0', borderTop: '1px solid #eee'}}>
                   <span>Total Amount to Pay</span>
-                  <span className="summary-total">₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
+                  <span className="summary-total">₹{(
+                    cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - 
+                    (appliedCoupon ? Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100) : 0)
+                  ).toLocaleString('en-IN')}</span>
                 </div>
 
                 <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
