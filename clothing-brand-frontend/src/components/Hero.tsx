@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../utils/mediaHelper';
 import './Hero.css';
 
 interface HeroProps {
@@ -71,7 +72,7 @@ const Hero = ({ products = [] }: HeroProps) => {
               />
             ) : (
               <img 
-                src={slide.src} 
+                src={getImageUrl(slide.src, 1920)} 
                 alt={slide.title} 
                 className="hero-media hero-image" 
                 fetchPriority={idx === 0 ? "high" : "auto"}

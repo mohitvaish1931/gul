@@ -2,9 +2,17 @@
  * Media loading utility for handling images and videos with fallbacks
  */
 
-export const getImageUrl = (imageUrl: string | undefined): string => {
+export const getImageUrl = (imageUrl: string | undefined, width?: number): string => {
   if (!imageUrl) return 'https://via.placeholder.com/400?text=No+Image';
   
+  // Apply Cloudinary optimizations if it's a Cloudinary URL
+  if (imageUrl.includes('res.cloudinary.com') && imageUrl.includes('/upload/')) {
+    if (!imageUrl.includes('/upload/c_')) {
+      const transform = width ? `c_scale,w_${width},q_auto,f_auto` : `q_auto,f_auto`;
+      return imageUrl.replace('/upload/', `/upload/${transform}/`);
+    }
+  }
+
   // If it's already a full URL or Base64 data, return as-is
   if (imageUrl.startsWith('http') || imageUrl.startsWith('data:')) {
     return imageUrl;

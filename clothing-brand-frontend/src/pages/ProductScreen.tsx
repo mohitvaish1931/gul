@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star } from 'lucide-react';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
+import { getImageUrl } from '../utils/mediaHelper';
 import { useAppContext } from '../context/AppContext';
 import { Helmet } from 'react-helmet-async';
 
@@ -455,7 +456,7 @@ const ProductScreen = () => {
               {/* Image Section */}
               <div className="product-image-section">
                 <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
-                   <img src={selectedImage || product.image} alt={product.name} style={{ width: '100%', display: 'block' }} />
+                   <img src={getImageUrl(selectedImage || product.image, 1200)} alt={product.name} style={{ width: '100%', display: 'block' }} loading="eager" fetchPriority="high" />
                    {product.countInStock === 0 && (
                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
@@ -503,7 +504,7 @@ const ProductScreen = () => {
                           }
                         }}
                       >
-                        <img src={imgUrl} alt={`${product.name} detail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={getImageUrl(imgUrl, 400)} alt={`${product.name} detail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                       </button>
                     ))}
                   </div>

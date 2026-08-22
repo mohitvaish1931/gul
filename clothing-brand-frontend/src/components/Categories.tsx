@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../utils/mediaHelper';
 import './Categories.css';
 
 interface CategoriesProps {
@@ -42,7 +43,7 @@ const Categories = ({ products = [] }: CategoriesProps) => {
             
             return (
               <Link to={cat.path} key={index} className={`cat-card-purple reveal-on-scroll delay-${index * 100}`}>
-                <img src={matched.image} alt={cat.name} className="cat-bg-img" />
+                <img src={getImageUrl(matched.image, 800)} alt={cat.name} className="cat-bg-img" loading="lazy" />
                 <div className="cat-overlay-purple"></div>
                 <div className="cat-text-content-purple">
                   <span className="cat-tag-purple">{cat.tag}</span>

@@ -5,6 +5,7 @@ import Categories from '../components/Categories';
 import CircleCategories from '../components/CircleCategories';
 import { Helmet } from 'react-helmet-async';
 import { API_ENDPOINTS } from '../utils/api';
+import { getImageUrl } from '../utils/mediaHelper';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -127,9 +128,9 @@ const HomePage = () => {
             <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
               <Link to={`/product/${product._id}`}>
                 <div className="carousel-img-wrapper">
-                  <img src={product.image} alt={product.name} className="primary-img" />
+                  <img src={getImageUrl(product.image, 600)} alt={product.name} className="primary-img" loading="lazy" />
                   {product.images && product.images.length > 1 && (
-                    <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                    <img src={getImageUrl(product.images[1], 600)} alt={`${product.name} alternate`} className="secondary-img" loading="lazy" />
                   )}
                   {discount > 0 && (
                     <div className="discount-badge">{discount}% OFF</div>
@@ -299,7 +300,7 @@ const HomePage = () => {
         <div className="social-proof-grid">
            {homepageProducts.slice(0, 4).map((product, i) => (
              <div className={`social-card reveal-on-scroll delay-${i * 100}`} key={i}>
-                <img src={product.image} alt="Social Proof" />
+                <img src={getImageUrl(product.image, 600)} alt="Social Proof" loading="lazy" />
                 <div className="social-hover">Instagram ♥ 1.2k</div>
              </div>
            ))}

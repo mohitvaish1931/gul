@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../utils/mediaHelper';
 import './CircleCategories.css';
 
 interface CircleCategoriesProps {
@@ -41,13 +42,13 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
           const list = Array.isArray(products) ? products : [];
           const matched = list.find((p) => p.category === cat.name);
           if (!matched) return null; // Only show category if a product exists
-          const imgSrc = matched.image;
+          const imgSrc = getImageUrl(matched.image, 300); // Smaller for circles
           
           return (
             <Link to={cat.path} key={index} className="circle-category-item">
               <div className="circle-image-ring">
                 <div className="circle-image-inner">
-                  <img src={imgSrc} alt={cat.label} />
+                  <img src={imgSrc} alt={cat.label} loading="lazy" />
                 </div>
               </div>
               <span className="circle-category-label">{cat.label}</span>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../utils/api';
+import { getImageUrl } from '../utils/mediaHelper';
 import './ProductStyles.css';
 
 const ProductListPage = () => {
@@ -81,9 +82,9 @@ const ProductListPage = () => {
                 <div key={product._id} className={`luxury-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
                   <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
                     <div className="luxury-img-wrapper">
-                      <img src={product.image} alt={product.name} className="primary-img" />
+                      <img src={getImageUrl(product.image, 600)} alt={product.name} className="primary-img" loading="lazy" />
                       {product.images && product.images.length > 1 && (
-                        <img src={product.images[1]} alt={`${product.name} alternate`} className="secondary-img" />
+                        <img src={getImageUrl(product.images[1], 600)} alt={`${product.name} alternate`} className="secondary-img" loading="lazy" />
                       )}
                       {product.isNew && (
                         <span className="new-arrival-tag">NEW ARRIVAL</span>
