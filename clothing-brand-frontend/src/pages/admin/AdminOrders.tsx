@@ -77,20 +77,21 @@ const AdminOrders = () => {
                       <span className="text-sm font-bold text-text-primary">
                         {order.shippingAddress?.name || order.user?.name || 'Guest'}
                       </span>
-                      <span className="text-[10px] text-text-muted">{order.shippingAddress?.phone}</span>
+                      <span className="text-[10px] text-text-muted">{order.shippingAddress?.email}</span>
+                      <span className="text-[10px] text-text-muted">{order.shippingAddress?.phoneNumber || order.shippingAddress?.phone}</span>
                     </div>
                   </td>
                   <td className="px-8 py-4 whitespace-nowrap">
                     <div className="flex flex-col max-w-[200px]">
                       <span className="text-xs text-text-secondary truncate font-medium">
-                        {order.items?.map((it: any) => it.name).join(', ')}
+                        {(order.orderItems || order.items)?.map((it: any) => it.name).join(', ')}
                       </span>
-                      <span className="text-[10px] text-text-muted">{order.items?.length || 0} item(s)</span>
+                      <span className="text-[10px] text-text-muted">{(order.orderItems || order.items)?.length || 0} item(s)</span>
                     </div>
                   </td>
                   <td className="px-8 py-4 whitespace-nowrap">
                     <div className="flex flex-col">
-                      <span className="text-sm font-black text-text-primary luxury-serif">₹{order.totalAmount?.toLocaleString()}</span>
+                      <span className="text-sm font-black text-text-primary luxury-serif">₹{(order.totalPrice || order.totalAmount)?.toLocaleString('en-IN')}</span>
                       <span className={`text-[8px] font-bold uppercase tracking-tighter ${order.paymentStatus === 'Paid' ? 'text-emerald-600' : 'text-orange-600'}`}>
                         {order.paymentStatus === 'Paid' ? '✓ Paid' : '⏳ Pending'}
                       </span>
@@ -119,7 +120,7 @@ const AdminOrders = () => {
                         onChange={async (e) => {
                           try {
                             const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${order._id}/status`, {
-                              method: 'PATCH',
+                              method: 'PUT',
                               headers: { 'Content-Type': 'application/json' },
                               body: JSON.stringify({ status: e.target.value })
                             });

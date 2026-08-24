@@ -14,7 +14,7 @@ const CartScreen = () => {
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
-    name: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
+    name: '', email: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
   });
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -129,7 +129,7 @@ const CartScreen = () => {
         const bypassRes = await fetch(`${API_BASE_URL}/api/payment/bypass`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ mongo_order_id: orderData._id, user_details: { name: shippingAddress.name } })
+           body: JSON.stringify({ mongo_order_id: orderData._id, user_details: { name: shippingAddress.name, email: shippingAddress.email } })
         });
         
         if (bypassRes.ok) {
@@ -171,7 +171,7 @@ const CartScreen = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
               mongo_order_id: orderData._id,
-              user_details: { name: shippingAddress.name }
+              user_details: { name: shippingAddress.name, email: shippingAddress.email }
             })
           });
           
@@ -185,6 +185,7 @@ const CartScreen = () => {
         },
         prefill: {
           name: shippingAddress.name,
+          email: shippingAddress.email,
           contact: shippingAddress.phoneNumber
         },
         theme: {
@@ -330,6 +331,7 @@ const CartScreen = () => {
               <h2 className="font-serif summary-title">Shipping Details</h2>
               <form onSubmit={processPayment} style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
                 <input type="text" name="name" placeholder="Full Name" value={shippingAddress.name} onChange={handleInputChange} required className="form-input" />
+                <input type="email" name="email" placeholder="Email Address" value={shippingAddress.email} onChange={handleInputChange} required className="form-input" />
                 <input type="text" name="phoneNumber" placeholder="Phone Number" value={shippingAddress.phoneNumber} onChange={handleInputChange} required className="form-input" />
                 <input type="text" name="address" placeholder="Complete Address" value={shippingAddress.address} onChange={handleInputChange} required className="form-input" />
                 <div style={{display: 'flex', gap: '15px'}}>

@@ -86,6 +86,17 @@ router.post('/verify', async (req, res) => {
     order.razorpayPaymentId = razorpay_payment_id;
     order.razorpaySignature = razorpay_signature;
 
+    if (user_details && user_details.name) {
+      if (order.shippingAddress && !order.shippingAddress.name) {
+        order.shippingAddress.name = user_details.name;
+      }
+    }
+    if (user_details && user_details.email) {
+      if (order.shippingAddress && !order.shippingAddress.email) {
+        order.shippingAddress.email = user_details.email;
+      }
+    }
+
     // Trigger Shipmozo Automation
     console.log('Payment verified, triggering Shipmozo...');
     const shipmozoData = await createShipmozoOrder(order, user_details || order.user);
