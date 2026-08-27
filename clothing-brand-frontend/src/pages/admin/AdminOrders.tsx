@@ -72,21 +72,31 @@ const AdminOrders = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-8 py-4 whitespace-nowrap">
-                    <div className="flex flex-col">
+                  <td className="px-8 py-4 whitespace-normal">
+                    <div className="flex flex-col gap-1">
                       <span className="text-sm font-bold text-text-primary">
                         {order.shippingAddress?.name || order.user?.name || 'Guest'}
                       </span>
                       <span className="text-[10px] text-text-muted">{order.shippingAddress?.email}</span>
                       <span className="text-[10px] text-text-muted">{order.shippingAddress?.phoneNumber || order.shippingAddress?.phone}</span>
+                      <span className="text-xs text-text-secondary max-w-[200px] break-words mt-1">
+                        {order.shippingAddress ? `${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}` : 'No Address Provided'}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-8 py-4 whitespace-nowrap">
-                    <div className="flex flex-col max-w-[200px]">
-                      <span className="text-xs text-text-secondary truncate font-medium">
-                        {(order.orderItems || order.items)?.map((it: any) => it.name).join(', ')}
+                  <td className="px-8 py-4 whitespace-normal">
+                    <div className="flex flex-col max-w-[250px] gap-2">
+                      {(order.orderItems || order.items || []).map((it: any, idx: number) => (
+                        <div key={idx} className="flex flex-col">
+                          <span className="text-xs text-text-secondary font-medium whitespace-normal break-words">
+                            {it.name} <span className="text-text-muted ml-1">x{it.qty}</span>
+                          </span>
+                          <span className="text-[10px] text-text-muted">₹{it.price?.toLocaleString('en-IN')}</span>
+                        </div>
+                      ))}
+                      <span className="text-[10px] text-text-muted font-bold mt-1">
+                        {(order.orderItems || order.items || []).length} item(s)
                       </span>
-                      <span className="text-[10px] text-text-muted">{(order.orderItems || order.items)?.length || 0} item(s)</span>
                     </div>
                   </td>
                   <td className="px-8 py-4 whitespace-nowrap">
