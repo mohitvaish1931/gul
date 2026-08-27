@@ -48,6 +48,23 @@ const CartScreen = () => {
       const res = await fetch(`${API_ENDPOINTS.COUPONS}/validate/${couponCode}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Invalid coupon');
+
+      // Check max price threshold
+      if (data.maxPriceThreshold !== null && data.maxPriceThreshold !== undefined) {
+        const hasExpensiveItem = cartItems.some(item => item.price > data.maxPriceThreshold);
+        if (hasExpensiveItem) {
+          throw new Error(`Coupon is invalid! Only valid on items up to ₹${data.maxPriceThreshold}`);
+        }
+      }
+
+      // Check categories
+      if (data.applicableCategories && data.applicableCategories.length > 0) {
+        const hasValidCategory = cartItems.some(item => data.applicableCategories.includes(item.category));
+        if (!hasValidCategory) {
+          throw new Error(`Coupon only valid on ${data.applicableCategories.join(' and ')}`);
+        }
+      }
+
       setAppliedCoupon(data);
       setCouponMessage({ type: 'success', text: `Coupon applied! ${data.discountPercent}% off.` });
       setCouponCode('');
@@ -57,6 +74,28 @@ const CartScreen = () => {
     } finally {
       setCouponLoading(false);
     }
+  };
+
+  const calculateDiscountAmount = (items: any[], coupon: any) => {
+    if (!coupon) return 0;
+    let eligibleSubtotal = 0;
+    for (const item of items) {
+      let isEligible = true;
+      if (coupon.applicableCategories && coupon.applicableCategories.length > 0) {
+        if (!coupon.applicableCategories.includes(item.category)) {
+          isEligible = false;
+        }
+      }
+      if (coupon.maxPriceThreshold !== null && coupon.maxPriceThreshold !== undefined) {
+        if (item.price > coupon.maxPriceThreshold) {
+          isEligible = false;
+        }
+      }
+      if (isEligible) {
+        eligibleSubtotal += (item.qty * item.price);
+      }
+    }
+    return Math.round((eligibleSubtotal * coupon.discountPercent) / 100);
   };
 
   const removeCouponHandler = () => {
@@ -95,7 +134,7 @@ const CartScreen = () => {
     }
 
     const subtotalAmount = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
-    const discountAmount = appliedCoupon ? Math.round((subtotalAmount * appliedCoupon.discountPercent) / 100) : 0;
+    const discountAmount = calculateDiscountAmount(cartItems, appliedCoupon);
     const totalAmount = subtotalAmount - discountAmount;
 
     try {
@@ -305,7 +344,7 @@ const CartScreen = () => {
                 {appliedCoupon && (
                   <div className="summary-row" style={{ color: '#16a34a' }}>
                     <span>Discount ({appliedCoupon.discountPercent}%)</span>
-                    <span>-₹{Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100).toLocaleString('en-IN')}</span>
+                    <span>-₹{calculateDiscountAmount(cartItems, appliedCoupon).toLocaleString('en-IN')}</span>
                   </div>
                 )}
                 
@@ -313,7 +352,7 @@ const CartScreen = () => {
                   <span style={{ fontWeight: '800' }}>Total</span>
                   <span className="summary-total">₹{(
                     cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - 
-                    (appliedCoupon ? Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100) : 0)
+                    calculateDiscountAmount(cartItems, appliedCoupon)
                   ).toLocaleString('en-IN')}</span>
                 </div>
                 
@@ -343,7 +382,7 @@ const CartScreen = () => {
                   <span>Total Amount to Pay</span>
                   <span className="summary-total">₹{(
                     cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - 
-                    (appliedCoupon ? Math.round((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) * appliedCoupon.discountPercent) / 100) : 0)
+                    calculateDiscountAmount(cartItems, appliedCoupon)
                   ).toLocaleString('en-IN')}</span>
                 </div>
 

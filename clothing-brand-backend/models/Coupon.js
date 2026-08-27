@@ -7,7 +7,9 @@ const CouponSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: null },
   expiresAt: Date,
   usageLimit: Number,
-  used: { type: Number, default: 0 }
+  used: { type: Number, default: 0 },
+  applicableCategories: { type: [String], default: [] },
+  maxPriceThreshold: { type: Number, default: null }
 }, { timestamps: true });
 
 const Coupon = mongoose.model('Coupon', CouponSchema);

@@ -38,7 +38,11 @@ router.get('/validate/:code', async (req, res) => {
 
   res.json({
     code: coupon.code,
-    discountPercent: coupon.discountPercent
+    discountPercent: coupon.discountPercent,
+    applicableCategories: coupon.applicableCategories,
+    maxPriceThreshold: coupon.maxPriceThreshold,
+    usageLimit: coupon.usageLimit,
+    used: coupon.used
   });
 });
 

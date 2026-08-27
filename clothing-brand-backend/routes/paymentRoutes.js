@@ -2,6 +2,7 @@ import express from 'express';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import Order from '../models/Order.js';
+import Coupon from '../models/Coupon.js';
 import { createShipmozoOrder } from '../utils/shipmozo.js';
 
 const router = express.Router();
@@ -109,6 +110,13 @@ router.post('/verify', async (req, res) => {
       order.orderStatus = 'packed'; // Auto-pack since AWB is generated
     }
 
+    if (order.couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: order.couponCode },
+        { $inc: { used: 1 } }
+      );
+    }
+
     const updatedOrder = await order.save();
     res.status(200).json({ message: 'Payment verified and order processed successfully', order: updatedOrder });
 
@@ -144,6 +152,13 @@ router.post('/bypass', async (req, res) => {
       order.courierName = shipmozoData.courierName;
       order.trackingUrl = shipmozoData.trackingUrl;
       order.labelPdf = shipmozoData.labelPdf;
+    }
+
+    if (order.couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: order.couponCode },
+        { $inc: { used: 1 } }
+      );
     }
 
     await order.save();
