@@ -188,6 +188,26 @@ const ProfileScreen = () => {
                             )}
                           </div>
                         )}
+                        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9fa', borderRadius: '8px' }}>
+                          <h4 style={{ margin: '0 0 10px 0', fontSize: '0.9rem', color: '#2D0A4E' }}>Shipping Address</h4>
+                          <p style={{ margin: 0, fontSize: '0.85rem', color: '#555' }}>
+                            {order.shippingAddress?.name}<br/>
+                            {order.shippingAddress?.address}<br/>
+                            {order.shippingAddress?.city}, {order.shippingAddress?.postalCode}<br/>
+                            {order.shippingAddress?.phoneNumber}
+                          </p>
+                        </div>
+                        <div style={{ marginTop: '15px' }}>
+                          <h4 style={{ margin: '0 0 10px 0', fontSize: '0.9rem', color: '#2D0A4E' }}>Items ({order.orderItems?.length || 0})</h4>
+                          {(order.orderItems || []).map((item: any, i: number) => (
+                            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#444' }}>
+                              <div style={{ flex: 1, paddingRight: '15px' }}>
+                                <span style={{ fontWeight: '500' }}>{item.name}</span> <span style={{ color: '#888' }}>x{item.qty}</span>
+                              </div>
+                              <div style={{ fontWeight: '600' }}>₹{item.price?.toLocaleString('en-IN')}</div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
                         {order.labelPdf && (
