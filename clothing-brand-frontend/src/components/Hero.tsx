@@ -17,7 +17,7 @@ const Hero = ({ products = [] }: HeroProps) => {
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
   const topsProduct = list.find(p => p.category === 'Tops');
 
-  const slides = [
+  let slides = [
     suitsProduct ? {
       type: 'image',
       src: suitsProduct.image,
@@ -37,6 +37,19 @@ const Hero = ({ products = [] }: HeroProps) => {
       link: topsProduct ? `/product/${topsProduct._id}` : `/product/${kurtaProduct?._id}`
     } : null
   ].filter(Boolean) as any[];
+
+  // Fallback slide to ensure instant LCP render even while API is fetching
+  if (slides.length === 0) {
+    slides = [{
+      type: 'image',
+      src: 'https://res.cloudinary.com/drjnbrsfj/image/upload/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg',
+      title: 'Premium Suit Sets',
+      subtitle: 'Experience the royal legacy of Jaipur craftsmanship.',
+      btnPrimary: 'SHOP SUIT SETS',
+      btnOutline: 'OUR STORY',
+      link: `/shop?category=Suit%20Sets`
+    }];
+  }
 
   useEffect(() => {
     if (videoRef.current) {
