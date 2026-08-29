@@ -72,11 +72,14 @@ const Hero = ({ products = [] }: HeroProps) => {
               />
             ) : (
               <img 
-                src={getImageUrl(slide.src, 1920)} 
+                src={getImageUrl(slide.src, 1200)} 
+                srcSet={`${getImageUrl(slide.src, 600)} 600w, ${getImageUrl(slide.src, 1200)} 1200w, ${getImageUrl(slide.src, 1920)} 1920w`}
+                sizes="(max-width: 768px) 600px, (max-width: 1200px) 1200px, 1920px"
                 alt={slide.title} 
                 className="hero-media hero-image" 
                 fetchPriority={idx === 0 ? "high" : "auto"}
                 loading={idx === 0 ? "eager" : "lazy"}
+                decoding={idx === 0 ? "sync" : "async"}
               />
             )}
             <div className="hero-overlay"></div>

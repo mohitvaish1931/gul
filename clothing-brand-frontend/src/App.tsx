@@ -3,44 +3,47 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MobileBottomNav from './components/MobileBottomNav';
+import { lazy, Suspense } from 'react';
+
 import HomePage from './pages/HomePage';
-import ProductListPage from './pages/ProductListPage';
-import ProductScreen from './pages/ProductScreen';
-import CartScreen from './pages/CartScreen';
-import LoginScreen from './pages/LoginScreen';
-import RegisterScreen from './pages/RegisterScreen';
-import ProfileScreen from './pages/ProfileScreen';
+// const HomePage = lazy(() => import('./pages/HomePage')); // Reverted to eager load for LCP performance
+const ProductListPage = lazy(() => import('./pages/ProductListPage'));
+const ProductScreen = lazy(() => import('./pages/ProductScreen'));
+const CartScreen = lazy(() => import('./pages/CartScreen'));
+const LoginScreen = lazy(() => import('./pages/LoginScreen'));
+const RegisterScreen = lazy(() => import('./pages/RegisterScreen'));
+const ProfileScreen = lazy(() => import('./pages/ProfileScreen'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
+const AdminAddProduct = lazy(() => import('./pages/admin/AdminAddProduct'));
+const AdminEditProduct = lazy(() => import('./pages/admin/AdminEditProduct'));
+const AdminFirstPhotoSection = lazy(() => import('./pages/admin/AdminFirstPhotoSection'));
+const AdminInventory = lazy(() => import('./pages/admin/AdminInventory'));
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
+const AdminCustomers = lazy(() => import('./pages/admin/AdminCustomers'));
+const AdminBanners = lazy(() => import('./pages/admin/AdminBanners'));
+const AdminPromotions = lazy(() => import('./pages/admin/AdminPromotions'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const AdminSalesReports = lazy(() => import('./pages/admin/AdminSalesReports'));
+const AdminProductReports = lazy(() => import('./pages/admin/AdminProductReports'));
+const AdminCustomerReports = lazy(() => import('./pages/admin/AdminCustomerReports'));
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
+const AdminRoles = lazy(() => import('./pages/admin/AdminRoles'));
+const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+const Contact = lazy(() => import('./pages/Contact'));
+const AboutUs = lazy(() => import('./pages/AboutUs'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions'));
+const ApparelCareGuide = lazy(() => import('./pages/ApparelCareGuide'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
+const Accessibility = lazy(() => import('./pages/Accessibility'));
+
 import ScrollToTop from './components/ScrollToTop';
 import { AppProvider } from './context/AppContext';
 import { HelmetProvider } from 'react-helmet-async';
-
-import AdminLayout from './pages/admin/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminProducts from './pages/admin/AdminProducts';
-import AdminAddProduct from './pages/admin/AdminAddProduct';
-import AdminEditProduct from './pages/admin/AdminEditProduct';
-import AdminFirstPhotoSection from './pages/admin/AdminFirstPhotoSection';
-import AdminInventory from './pages/admin/AdminInventory';
-import AdminOrders from './pages/admin/AdminOrders';
-import AdminCustomers from './pages/admin/AdminCustomers';
-import AdminBanners from './pages/admin/AdminBanners';
-import AdminPromotions from './pages/admin/AdminPromotions';
-import AdminSettings from './pages/admin/AdminSettings';
-import AdminSalesReports from './pages/admin/AdminSalesReports';
-import AdminProductReports from './pages/admin/AdminProductReports';
-import AdminCustomerReports from './pages/admin/AdminCustomerReports';
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminRoles from './pages/admin/AdminRoles';
-import TrackOrder from './pages/TrackOrder';
-import Contact from './pages/Contact';
-import AboutUs from './pages/AboutUs';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsConditions from './pages/TermsConditions';
-import ApparelCareGuide from './pages/ApparelCareGuide';
-import FAQ from './pages/FAQ';
-import ShippingPolicy from './pages/ShippingPolicy';
-import RefundPolicy from './pages/RefundPolicy';
-import Accessibility from './pages/Accessibility';
 
 const MainLayout = () => {
   const location = useLocation();
@@ -111,43 +114,45 @@ const MainLayout = () => {
     <div className="app-container flex flex-col w-full" style={{minHeight: '100vh', position: 'relative'}}>
       {!isAdmin && <Header />}
       <main className="w-full" style={{flex: 1}}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ProductListPage />} />
-          <Route path="/product/:id" element={<ProductScreen />} />
-          <Route path="/cart/:id?" element={<CartScreen />} />
-          <Route path="/login" element={<LoginScreen />} />
-          <Route path="/register" element={<RegisterScreen />} />
-          <Route path="/profile" element={<ProfileScreen />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="products/add" element={<AdminAddProduct />} />
-            <Route path="products/:id/edit" element={<AdminEditProduct />} />
-            <Route path="first-photo" element={<AdminFirstPhotoSection />} />
-            <Route path="inventory" element={<AdminInventory />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="banners" element={<AdminBanners />} />
-            <Route path="promotions" element={<AdminPromotions />} />
-            <Route path="settings" element={<AdminSettings />} />
-            <Route path="reports/sales" element={<AdminSalesReports />} />
-            <Route path="reports/products" element={<AdminProductReports />} />
-            <Route path="reports/customers" element={<AdminCustomerReports />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="roles" element={<AdminRoles />} />
-          </Route>
-          <Route path="/track-order" element={<TrackOrder />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermsConditions />} />
-          <Route path="/care-guide" element={<ApparelCareGuide />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/shipping-policy" element={<ShippingPolicy />} />
-          <Route path="/refund-policy" element={<RefundPolicy />} />
-          <Route path="/accessibility" element={<Accessibility />} />
-        </Routes>
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh]"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-purple"></div></div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop" element={<ProductListPage />} />
+            <Route path="/product/:id" element={<ProductScreen />} />
+            <Route path="/cart/:id?" element={<CartScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="products/add" element={<AdminAddProduct />} />
+              <Route path="products/:id/edit" element={<AdminEditProduct />} />
+              <Route path="first-photo" element={<AdminFirstPhotoSection />} />
+              <Route path="inventory" element={<AdminInventory />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="customers" element={<AdminCustomers />} />
+              <Route path="banners" element={<AdminBanners />} />
+              <Route path="promotions" element={<AdminPromotions />} />
+              <Route path="settings" element={<AdminSettings />} />
+              <Route path="reports/sales" element={<AdminSalesReports />} />
+              <Route path="reports/products" element={<AdminProductReports />} />
+              <Route path="reports/customers" element={<AdminCustomerReports />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="roles" element={<AdminRoles />} />
+            </Route>
+            <Route path="/track-order" element={<TrackOrder />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/care-guide" element={<ApparelCareGuide />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/accessibility" element={<Accessibility />} />
+          </Routes>
+        </Suspense>
       </main>
       {!isAdmin && <Footer />}
       
