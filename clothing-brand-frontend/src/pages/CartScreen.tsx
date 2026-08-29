@@ -66,7 +66,7 @@ const CartScreen = () => {
       }
 
       setAppliedCoupon(data);
-      setCouponMessage({ type: 'success', text: `Coupon applied! ${data.discountPercent}% off.` });
+      setCouponMessage({ type: 'success', text: `Coupon applied! ${data.discountPercent}% off (Max ₹800).` });
       setCouponCode('');
     } catch (err: any) {
       setCouponMessage({ type: 'error', text: err.message });
@@ -95,7 +95,11 @@ const CartScreen = () => {
         eligibleSubtotal += (item.qty * item.price);
       }
     }
-    return Math.round((eligibleSubtotal * coupon.discountPercent) / 100);
+    let calculatedDiscount = Math.round((eligibleSubtotal * coupon.discountPercent) / 100);
+    if (calculatedDiscount > 800) {
+      calculatedDiscount = 800;
+    }
+    return calculatedDiscount;
   };
 
   const removeCouponHandler = () => {
