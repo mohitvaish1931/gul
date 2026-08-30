@@ -17,6 +17,7 @@ router.post('/', async (req, res) => {
       discountAmount,
       couponCode,
       totalPrice,
+      user, // Extract user from request body
     } = req.body;
 
     if (orderItems && orderItems.length === 0) {
@@ -25,6 +26,7 @@ router.post('/', async (req, res) => {
     }
 
     const order = new Order({
+      user: user || null, // Associate user if provided
       orderItems: orderItems.map((x) => ({
         ...x,
         product: x._id,
