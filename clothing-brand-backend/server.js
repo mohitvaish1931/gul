@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
+import compression from 'compression';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
@@ -24,7 +25,10 @@ connectDB();
 
 const app = express();
 
-// Middleware
+// Middleware - Compression middleware (must be before routes)
+app.use(compression()); // Compress responses
+
+// Middleware - CORS
 app.use(cors({
   origin: function (origin, callback) {
     // Explicitly allow the origin that is making the request.

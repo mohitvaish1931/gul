@@ -29,10 +29,34 @@ const parseField = (field) => {
   }
 };
 
-// @desc    Fetch all products
-// @route   GET /api/products
+// Simple in-memory cache
+const productCache = {
+  data: null,
+  timestamp: 0,
+  TTL: 5 * 60 * 1000 // 5 minutes cache
+};
+
+function getCachedProducts() {
+  const now = Date.now();
+  if (productCache.data && (now - productCache.timestamp) < productCache.TTL) {
+    return productCache.data;
+  }
+  return null;
+}
+
+function setCachedProducts(data) {
+  productCache.data = data;
+  productCache.timestamp = Date.now();
+}
+
+// @desc    Fetch all products with pagination
+// @route   GET /api/products?page=1&limit=20&category=tops
 router.get('/', async (req, res) => {
   try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit) || 20); // Max 100 per page
+    const skip = (page - 1) * limit;
+
     let query = {};
 
     if (req.query.category) {
@@ -46,18 +70,66 @@ router.get('/', async (req, res) => {
       };
     }
 
-    const products = await Product.find(query).sort({ displayOrder: 1, createdAt: -1 });
-    res.json(products);
+    // Check cache for homepage products (no filters)
+    let products = null;
+    let total = 0;
+    
+    if (!req.query.keyword && !req.query.category) {
+      const cached = getCachedProducts();
+      if (cached) {
+        products = cached.slice(skip, skip + limit);
+        total = cached.length;
+      }
+    }
+
+    if (!products) {
+      // Query only needed fields for list view (reduce network payload)
+      const selectFields = page === 1 && limit === 20 
+        ? 'name price originalPrice image category brand soldOut showOnHomepage displayOrder _id'
+        : 'name price originalPrice image category brand soldOut showOnHomepage displayOrder _id images description';
+      
+      products = await Product.find(query)
+        .select(selectFields)
+        .sort({ displayOrder: 1, createdAt: -1 })
+        .lean() // Use lean() for faster query execution
+        .skip(skip)
+        .limit(limit);
+
+      total = await Product.countDocuments(query);
+
+      // Cache full product list if no filters
+      if (!req.query.keyword && !req.query.category && page === 1) {
+        const allProducts = await Product.find({})
+          .sort({ displayOrder: 1, createdAt: -1 })
+          .lean();
+        setCachedProducts(allProducts);
+      }
+    }
+
+    res.json({
+      products,
+      page,
+      pages: Math.ceil(total / limit),
+      total,
+      limit
+    });
   } catch (error) {
+    console.error('Fetch products error:', error);
     res.status(500).json({ message: 'Server Error: unable to fetch products' });
   }
 });
+
+// Clear cache on product changes
+function invalidateCache() {
+  productCache.data = null;
+  productCache.timestamp = 0;
+}
 
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id)
 
     if (product) {
       res.json(product);
@@ -105,6 +177,7 @@ router.post('/', upload.array('image', 10), async (req, res) => {
     });
 
     const createdProduct = await product.save();
+    invalidateCache(); // Clear cache after product creation
     res.status(201).json(createdProduct);
   } catch (error) {
     console.error('Create product error:', error);
@@ -165,6 +238,7 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
       }
 
       const updatedProduct = await product.save();
+      invalidateCache(); // Clear cache after product update
       res.json(updatedProduct);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -183,6 +257,7 @@ router.delete('/:id', async (req, res) => {
 
     if (product) {
       await Product.findByIdAndDelete(req.params.id);
+      invalidateCache(); // Clear cache after product deletion
       res.json({ message: 'Product removed' });
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -210,6 +285,7 @@ router.post('/reorder', async (req, res) => {
     }));
 
     await Product.bulkWrite(bulkOps);
+    invalidateCache(); // Clear cache after reordering
     res.json({ success: true, message: 'Products reordered successfully' });
   } catch (error) {
     console.error('Reorder error:', error);

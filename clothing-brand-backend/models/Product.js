@@ -124,6 +124,13 @@ const productSchema = mongoose.Schema(
   }
 );
 
+// Add indexes for performance
+productSchema.index({ category: 1 });
+productSchema.index({ name: 'text', category: 'text' });
+productSchema.index({ displayOrder: 1, createdAt: -1 });
+productSchema.index({ showOnHomepage: 1 });
+productSchema.index({ soldOut: 1 });
+
 const Product = mongoose.model('Product', productSchema);
 
 export default Product;
