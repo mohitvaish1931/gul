@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Gul Fashion | Premium Women's Ethnic & Casual Wear</title>
     <meta name="description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion. Explore our wide collection of Kurtis, Tops, Co-ord sets, and more with premium quality." />
     <meta name="keywords" content="women's clothing, kurtis, tops, ethnic wear, casual wear, co-ord sets, Gul Fashion, Indian wear, premium quality tops" />
@@ -16,42 +16,53 @@
     <meta name="twitter:title" content="Gul Fashion | Premium Women's Ethnic & Casual Wear" />
     <meta name="twitter:description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion." />
     
-    <!-- Performance Optimizations -->
+    <!-- Performance: Critical Resource Hints -->
     <link rel="preconnect" href="https://gul-275k.onrender.com" crossorigin="anonymous" />
     <link rel="dns-prefetch" href="https://gul-275k.onrender.com" />
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-
-    <!-- Preload the hero LCP image so browser starts downloading immediately -->
+    
+    <!-- Performance: HTTP/2 Server Push Hints -->
+    <link rel="preload" as="script" href="/src/main.tsx" />
+    
+    <!-- Performance: Hero LCP Image - Highest Priority -->
     <link rel="preload" as="image" href="https://res.cloudinary.com/drjnbrsfj/image/upload/c_scale,w_600,q_auto,f_auto/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg" fetchpriority="high" />
 
-    <!-- Non-render-blocking Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Performance: Google Fonts with Media Swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet" /></noscript>
 
+    <!-- Performance: Early API Prefetch to Hide Backend Latency -->
     <script>
-      // Preload the main products API request immediately when HTML is parsed
-      // This eliminates the waterfall delay of downloading/parsing JS before making the API call
-      window.__INITIAL_PRODUCTS_PROMISE__ = fetch("https://gul-275k.onrender.com/api/products")
-        .then(res => res.json())
-        .catch(err => { console.error('Prefetch failed', err); return null; });
+      if (navigator.onLine) {
+        window.__INITIAL_PRODUCTS_PROMISE__ = fetch("https://gul-275k.onrender.com/api/products", {
+          priority: 'high'
+        }).then(res => res.json()).catch(() => null);
+      }
+      // Progressive Enhancement: Track if page is interactive
+      window.__INTERACTIVE__ = false;
     </script>
+    
+    <!-- Performance: Critical CSS Inline for Instant Rendering -->
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body, #root { width: 100%; height: 100%; }
+      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .shell-header { background: #2D0A4E; color: #fff; text-align: center; padding: 8px; font-size: 11px; letter-spacing: 2px; }
+      .shell-hero { position: relative; width: 100%; height: 70vh; overflow: hidden; background: #1a0530; }
+      .shell-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .shell-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.6), transparent); pointer-events: none; }
+    </style>
   </head>
   <body>
     <div id="root">
       <!-- Static shell for instant FCP/LCP before React hydrates -->
-      <style>
-        .shell-header{background:#2D0A4E;color:#fff;text-align:center;padding:8px;font-size:11px;letter-spacing:2px}
-        .shell-hero{position:relative;width:100%;height:70vh;overflow:hidden;background:#1a0530}
-        .shell-hero img{width:100%;height:100%;object-fit:cover}
-        .shell-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent)}
-      </style>
       <div class="shell-header">COD AVAILABLE | WORLDWIDE SHIPPING | FREE DELIVERY</div>
       <div class="shell-hero">
-        <img src="https://res.cloudinary.com/drjnbrsfj/image/upload/c_scale,w_600,q_auto,f_auto/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg" alt="Gul Fashion" fetchpriority="high" />
+        <img src="https://res.cloudinary.com/drjnbrsfj/image/upload/c_scale,w_600,q_auto,f_auto/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg" alt="Gul Fashion Hero" width="1200" height="900" fetchpriority="high" decoding="async" />
         <div class="shell-hero-overlay"></div>
       </div>
     </div>
