@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
@@ -12,7 +12,11 @@ const RegisterScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   const navigate = useNavigate();
+  const location = useLocation();
   const { dispatch } = useAppContext();
+
+  const queryParams = new URLSearchParams(location.search);
+  const redirect = queryParams.get('redirect') || '/profile';
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +53,7 @@ const RegisterScreen = () => {
         } 
       });
 
-      navigate('/profile');
+      navigate(redirect);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -203,7 +207,7 @@ const RegisterScreen = () => {
         </form>
 
         <div style={{ marginTop: '30px', fontSize: '0.9rem', color: '#666' }}>
-          Already a member? <Link to="/login" style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Sign In</Link>
+          Already have an account? <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Sign In</Link>
         </div>
       </div>
     </div>

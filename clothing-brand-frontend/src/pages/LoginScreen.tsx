@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 
@@ -9,7 +9,11 @@ const LoginScreen = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { dispatch } = useAppContext();
+
+  const queryParams = new URLSearchParams(location.search);
+  const redirect = queryParams.get('redirect') || '/profile';
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +47,7 @@ const LoginScreen = () => {
       if (data.isAdmin) {
         navigate('/admin');
       } else {
-        navigate('/profile');
+        navigate(redirect);
       }
     } catch (err: any) {
       setError(err.message);
@@ -162,7 +166,7 @@ const LoginScreen = () => {
         </form>
 
         <div style={{ marginTop: '30px', fontSize: '0.9rem', color: '#666' }}>
-          New to Gul Fashion? <Link to="/register" style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Create Account</Link>
+          New to Gul Fashion? <Link to={`/register?redirect=${encodeURIComponent(redirect)}`} style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Create Account</Link>
         </div>
       </div>
     </div>

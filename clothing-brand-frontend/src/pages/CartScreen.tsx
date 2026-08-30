@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
+import { useAppContext } from '../context/AppContext';
 
 const CartScreen = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { state } = useAppContext();
+  const { user } = state;
   
   const queryParams = new URLSearchParams(location.search);
   const qty = Number(queryParams.get('qty')) || 1;
@@ -160,6 +163,7 @@ const CartScreen = () => {
           discountAmount,
           couponCode: appliedCoupon ? appliedCoupon.code : null,
           totalPrice: totalAmount,
+          user: user ? (user.id || user._id) : undefined,
         })
       });
       const orderData = await orderResponse.json();
@@ -363,7 +367,13 @@ const CartScreen = () => {
                 <button 
                   type="button" 
                   className="btn btn-primary w-full"
-                  onClick={() => setIsCheckingOut(true)}
+                  onClick={() => {
+                    if (!user) {
+                      navigate(`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`);
+                    } else {
+                      setIsCheckingOut(true);
+                    }
+                  }}
                 >
                   PROCEED TO CHECKOUT
                 </button>
