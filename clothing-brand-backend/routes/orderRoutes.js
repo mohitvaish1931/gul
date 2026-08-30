@@ -20,6 +20,11 @@ router.post('/', async (req, res) => {
       user, // Extract user from request body
     } = req.body;
 
+    if (!user) {
+      res.status(401).json({ message: 'Authentication required to place an order. Please log in.' });
+      return;
+    }
+
     if (orderItems && orderItems.length === 0) {
       res.status(400).json({ message: 'No order items' });
       return;
