@@ -192,7 +192,7 @@ const Header = () => {
               )}
               <Link to="/cart" className="header-icon-link cart-link">
                 <ShoppingBag size={20} />
-                {cart.length > 0 && <span className="cart-badge">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>}
+                {cart.length > 0 && <span className="cart-badge">{cart.reduce((acc, item) => acc + (item.qty || 1), 0)}</span>}
               </Link>
             </div>
           </div>
@@ -276,7 +276,7 @@ const Header = () => {
             <div className="nav-icons-mini">
               <Link to="/cart" className="nav-icon-link">
                 <ShoppingBag size={18} />
-                {cart.length > 0 && <span className="cart-badge-mini">{cart.reduce((acc, item) => acc + item.quantity, 0)}</span>}
+                {cart.length > 0 && <span className="cart-badge-mini">{cart.reduce((acc, item) => acc + (item.qty || 1), 0)}</span>}
               </Link>
             </div>
           )}

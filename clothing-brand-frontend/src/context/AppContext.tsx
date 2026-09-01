@@ -62,7 +62,7 @@ export interface Coupon {
 }
 
 export interface CartItem extends Product {
-  quantity: number;
+  qty: number;
 }
 
 export interface User {
@@ -106,9 +106,9 @@ type AppAction =
   | { type: 'ADD_COUPON'; payload: Coupon }
   | { type: 'UPDATE_COUPON'; payload: Coupon }
   | { type: 'REMOVE_COUPON'; payload: string }
-  | { type: 'ADD_TO_CART'; payload: Product }
-  | { type: 'REMOVE_FROM_CART'; payload: string | number }
-  | { type: 'UPDATE_CART_QUANTITY'; payload: { id: string | number; quantity: number } }
+  | { type: 'ADD_TO_CART'; payload: Product & { qty?: number } }
+  | { type: 'REMOVE_FROM_CART'; payload: { id: string | number; selectedSize?: string; selectedColor?: string } }
+  | { type: 'UPDATE_CART_QUANTITY'; payload: { id: string | number; qty: number; selectedSize?: string; selectedColor?: string } }
   | { type: 'UPDATE_CART_SHAPE'; payload: { id: string | number; shape: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'ADD_TO_WISHLIST'; payload: Product }
@@ -118,7 +118,8 @@ type AppAction =
   | { type: 'SET_SEARCH_RESULTS'; payload: Product[] }
   | { type: 'TOGGLE_SEARCH'; payload?: boolean }
   | { type: 'SET_ORDERS'; payload: any[] }
-  | { type: 'UPDATE_ORDER'; payload: any };
+  | { type: 'UPDATE_ORDER'; payload: any }
+  | { type: 'SET_CART'; payload: CartItem[] };
 
 const initialState: AppState = {
   user: null,
@@ -172,35 +173,45 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     case 'REMOVE_COUPON':
       return { ...state, coupons: state.coupons.filter(c => c.code !== action.payload) };
     
+    case 'SET_CART':
+      return { ...state, cart: action.payload };
     case 'ADD_TO_CART':
-      const existingCartItem = state.cart.find(item => item.id === action.payload.id);
-      if (existingCartItem) {
-        return {
-          ...state,
-          cart: state.cart.map(item =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
+      const existingCartItemIndex = state.cart.findIndex(
+        item => item.id === action.payload.id && 
+                item.selectedSize === action.payload.selectedSize && 
+                item.selectedColor === action.payload.selectedColor
+      );
+      if (existingCartItemIndex >= 0) {
+        const newCart = [...state.cart];
+        newCart[existingCartItemIndex] = {
+          ...newCart[existingCartItemIndex],
+          qty: newCart[existingCartItemIndex].qty + (action.payload.qty || 1)
         };
+        return { ...state, cart: newCart };
       }
       return {
         ...state,
-        cart: [...state.cart, { ...action.payload, quantity: 1 }],
+        cart: [...state.cart, { ...action.payload, qty: action.payload.qty || 1 }],
       };
     
     case 'REMOVE_FROM_CART':
       return {
         ...state,
-        cart: state.cart.filter(item => item.id !== action.payload),
+        cart: state.cart.filter(item => 
+          !(item.id === action.payload.id && 
+            item.selectedSize === action.payload.selectedSize && 
+            item.selectedColor === action.payload.selectedColor)
+        ),
       };
     
     case 'UPDATE_CART_QUANTITY':
       return {
         ...state,
         cart: state.cart.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: action.payload.quantity }
+          item.id === action.payload.id && 
+          item.selectedSize === action.payload.selectedSize && 
+          item.selectedColor === action.payload.selectedColor
+            ? { ...item, qty: action.payload.qty }
             : item
         ),
       };
@@ -274,17 +285,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     let mounted = true;
     const hydrate = async () => {
-      // Restore user from localStorage
-      try {
-        const rawUser = localStorage.getItem('rr_user');
-        if (rawUser && mounted) {
-          const parsedUser = JSON.parse(rawUser);
-          dispatch({ type: 'SET_USER', payload: { id: parsedUser.id, email: parsedUser.email, name: parsedUser.name, isAdmin: parsedUser.isAdmin } });
-        }
-      } catch (e) {
-        // ignore
-      }
-
       // Try to fetch from MongoDB backend
       try {
         const [prodRes, vidRes, banRes, coupRes] = await Promise.all([
@@ -331,7 +331,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return () => { mounted = false; };
   }, []);
 
-  // Only persist user to localStorage, NOT products/videos/banners/coupons
+  // Persist user and cart to localStorage
   useEffect(() => {
     try {
       if (state.user) {
@@ -343,6 +343,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       // ignore
     }
   }, [state.user]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('rr_cart', JSON.stringify(state.cart));
+    } catch (e) {
+      // ignore
+    }
+  }, [state.cart]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

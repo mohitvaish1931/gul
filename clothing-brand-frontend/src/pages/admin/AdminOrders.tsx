@@ -87,13 +87,18 @@ const AdminOrders = () => {
                   <td className="px-8 py-4 whitespace-normal">
                     <div className="flex flex-col max-w-[250px] gap-2">
                       {(order.orderItems || order.items || []).map((it: any, idx: number) => (
-                        <div key={idx} className="flex flex-col">
-                          <span className="text-xs text-text-secondary font-medium whitespace-normal break-words">
-                            {it.name} <span className="text-text-muted ml-1">x{it.qty}</span>
-                            {it.selectedSize && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Size: {it.selectedSize})</span>}
-                            {it.selectedColor && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Color: {it.selectedColor})</span>}
-                          </span>
-                          <span className="text-[10px] text-text-muted">₹{it.price?.toLocaleString('en-IN')}</span>
+                        <div key={idx} className="flex items-start gap-3">
+                          {it.image && (
+                            <img src={it.image} alt={it.name} className="w-10 h-12 object-cover rounded-md border border-gray-200 shrink-0" />
+                          )}
+                          <div className="flex flex-col">
+                            <span className="text-xs text-text-secondary font-medium whitespace-normal break-words">
+                              {it.name} <span className="text-text-muted ml-1">x{it.qty}</span>
+                              {it.selectedSize && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Size: {it.selectedSize})</span>}
+                              {it.selectedColor && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Color: {it.selectedColor})</span>}
+                            </span>
+                            <span className="text-[10px] text-text-muted">₹{it.price?.toLocaleString('en-IN')}</span>
+                          </div>
                         </div>
                       ))}
                       <span className="text-[10px] text-text-muted font-bold mt-1">

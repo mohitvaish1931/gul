@@ -333,6 +333,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
 const ProductScreen = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { dispatch } = useAppContext();
   const [product, setProduct] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -377,9 +378,14 @@ const ProductScreen = () => {
   const addToCartHandler = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       setSizeError(true);
+      window.alert("Please choose your size!");
       return;
     }
-    navigate(`/cart/${id}?qty=${qty}&size=${selectedSize}&color=${selectedColor}`);
+    dispatch({ 
+      type: 'ADD_TO_CART', 
+      payload: { ...product, id: product.id || product._id, qty: qty || 1, selectedSize, selectedColor } 
+    });
+    navigate('/cart');
   };
 
   const handleSizeSelect = (size: string) => {

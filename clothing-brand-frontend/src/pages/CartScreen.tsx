@@ -1,47 +1,29 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { useAppContext } from '../context/AppContext';
 
 const CartScreen = () => {
-  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const { user } = state;
+  const cartItems = state.cart;
   
-  const queryParams = new URLSearchParams(location.search);
-  const qty = Number(queryParams.get('qty')) || 1;
-  const size = queryParams.get('size') || '';
-  const color = queryParams.get('color') || '';
-
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
     name: '', email: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
   });
-  const [cartItems, setCartItems] = useState<any[]>([]);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{code: string, discountPercent: number} | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{code: string, discountPercent: number, maxDiscountAmount?: number} | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponMessage, setCouponMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
   useEffect(() => {
-    // In a real app we'd dispatch to Redux/Context. Here we'll simulate adding.
-    if (id) {
-      const fetchItem = async () => {
-        try {
-          const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
-          const data = await res.json();
-          setCartItems([{...data, qty, selectedSize: size, selectedColor: color}]);
-        } catch (e) {
-          console.error('Error adding to cart');
-        }
-      };
-      fetchItem();
-    }
-  }, [id, qty, size, color]);
+    // Cart is now managed globally via AppContext
+  }, []);
 
   const applyCouponHandler = async () => {
     if (!couponCode.trim()) return;
@@ -112,9 +94,14 @@ const CartScreen = () => {
     setCouponMessage(null);
   };
 
-  const removeFromCartHandler = (removeId: any) => {
-    setCartItems(cartItems.filter(x => x._id !== removeId));
-    navigate('/cart');
+  const updateQtyHandler = (id: any, selectedSize: string | undefined, selectedColor: string | undefined, newQty: number) => {
+    if(newQty > 0) {
+      dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { id, selectedSize, selectedColor, qty: newQty } });
+    }
+  };
+  
+  const removeFromCartHandler = (removeId: any, selectedSize?: string, selectedColor?: string) => {
+    dispatch({ type: 'REMOVE_FROM_CART', payload: { id: removeId, selectedSize, selectedColor } });
   };
 
   const loadRazorpayScript = () => {
@@ -183,7 +170,7 @@ const CartScreen = () => {
         
         if (bypassRes.ok) {
           alert('Order Placed Successfully! (100% Discount Applied). Your AWB has been generated.');
-          setCartItems([]);
+          dispatch({ type: 'CLEAR_CART' });
           navigate('/profile');
         } else {
           alert('Failed to process 100% off order');
@@ -226,7 +213,7 @@ const CartScreen = () => {
           
           if (verifyRes.ok) {
             alert('Payment Successful! Order Confirmed. Your AWB has been generated.');
-            setCartItems([]);
+            dispatch({ type: 'CLEAR_CART' });
             navigate('/profile');
           } else {
             alert('Payment verification failed');
@@ -288,7 +275,11 @@ const CartScreen = () => {
                       </Link>
                       <div className="item-meta">
                         <span className="item-price">₹{item.price.toLocaleString('en-IN')}</span>
-                        <span className="item-qty">Qty: {item.qty}</span>
+                        <div className="qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
+                          <button onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) - 1)} style={{ padding: '5px 10px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>-</button>
+                          <span style={{ fontWeight: 'bold' }}>{item.qty || 1}</span>
+                          <button onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) + 1)} style={{ padding: '5px 10px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>+</button>
+                        </div>
                       </div>
                       {(item.selectedSize || item.selectedColor) && (
                         <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#666', display: 'flex', gap: '15px' }}>
@@ -298,7 +289,7 @@ const CartScreen = () => {
                       )}
                     </div>
                     <div className="cart-item-actions">
-                      <button onClick={() => removeFromCartHandler(item._id)} className="btn-remove">
+                      <button onClick={() => removeFromCartHandler(item.id || item._id, item.selectedSize, item.selectedColor)} className="btn-remove">
                         REMOVE
                       </button>
                     </div>

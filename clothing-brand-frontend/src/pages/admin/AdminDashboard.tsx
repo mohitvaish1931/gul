@@ -149,7 +149,13 @@ const AdminDashboard = () => {
     const colorIndex = customerName.length % bgColors.length;
 
     const firstItem = order.orderItems?.[0] || order.items?.[0] || {};
-    const productName = firstItem.name || 'Various Items';
+    let productName = firstItem.name || 'Various Items';
+    if (firstItem.selectedSize) {
+      productName += ` (Size: ${firstItem.selectedSize})`;
+    }
+    if (firstItem.selectedColor) {
+      productName += ` (Color: ${firstItem.selectedColor})`;
+    }
     const image = firstItem.image || '';
     
     const status = order.isDelivered ? 'Delivered' : (order.isPaid ? 'Processing' : (order.status || 'Pending'));
