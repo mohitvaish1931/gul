@@ -9,7 +9,8 @@ const CouponSchema = new mongoose.Schema({
   usageLimit: Number,
   used: { type: Number, default: 0 },
   applicableCategories: { type: [String], default: [] },
-  maxPriceThreshold: { type: Number, default: null }
+  maxPriceThreshold: { type: Number, default: null },
+  maxDiscountAmount: { type: Number, default: 800 }
 }, { timestamps: true });
 
 const Coupon = mongoose.model('Coupon', CouponSchema);
