@@ -203,6 +203,8 @@ const ProfileScreen = () => {
                             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#444' }}>
                               <div style={{ flex: 1, paddingRight: '15px' }}>
                                 <span style={{ fontWeight: '500' }}>{item.name}</span> <span style={{ color: '#888' }}>x{item.qty}</span>
+                                {item.selectedSize && <span style={{ fontSize: '0.75rem', color: '#D4AF37', marginLeft: '8px', fontWeight: 'bold' }}>(Size: {item.selectedSize})</span>}
+                                {item.selectedColor && <span style={{ fontSize: '0.75rem', color: '#D4AF37', marginLeft: '4px', fontWeight: 'bold' }}>(Color: {item.selectedColor})</span>}
                               </div>
                               <div style={{ fontWeight: '600' }}>₹{item.price?.toLocaleString('en-IN')}</div>
                             </div>

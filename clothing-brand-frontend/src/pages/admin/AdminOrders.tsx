@@ -90,6 +90,8 @@ const AdminOrders = () => {
                         <div key={idx} className="flex flex-col">
                           <span className="text-xs text-text-secondary font-medium whitespace-normal break-words">
                             {it.name} <span className="text-text-muted ml-1">x{it.qty}</span>
+                            {it.selectedSize && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Size: {it.selectedSize})</span>}
+                            {it.selectedColor && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Color: {it.selectedColor})</span>}
                           </span>
                           <span className="text-[10px] text-text-muted">₹{it.price?.toLocaleString('en-IN')}</span>
                         </div>
