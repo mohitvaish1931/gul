@@ -121,9 +121,23 @@ type AppAction =
   | { type: 'UPDATE_ORDER'; payload: any }
   | { type: 'SET_CART'; payload: CartItem[] };
 
+const loadInitialUser = () => {
+  try {
+    const item = localStorage.getItem('rr_user');
+    return item ? JSON.parse(item) : null;
+  } catch { return null; }
+};
+
+const loadInitialCart = () => {
+  try {
+    const item = localStorage.getItem('rr_cart');
+    return item ? JSON.parse(item) : [];
+  } catch { return []; }
+};
+
 const initialState: AppState = {
-  user: null,
-  cart: [],
+  user: loadInitialUser(),
+  cart: loadInitialCart(),
   wishlist: [],
   isSignInOpen: false,
   searchQuery: '',
