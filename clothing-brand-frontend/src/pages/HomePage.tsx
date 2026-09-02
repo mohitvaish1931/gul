@@ -31,8 +31,10 @@ const HomePage = () => {
           data = await res.json();
         }
 
-        if (Array.isArray(data)) {
-          setProducts(data);
+        const productsArray = Array.isArray(data) ? data : (data.products || []);
+        
+        if (productsArray.length >= 0) {
+          setProducts(productsArray);
           setError(null);
         } else {
           setProducts([]);

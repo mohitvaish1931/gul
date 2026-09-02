@@ -28,7 +28,8 @@ const ProductListPage = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setProducts(data);
+        const productsArray = Array.isArray(data) ? data : (data.products || []);
+        setProducts(productsArray);
         setLoading(false);
       } catch (err: any) {
         console.error('Fetch error:', err);

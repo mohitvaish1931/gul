@@ -311,9 +311,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         let hasBackendData = false;
         
         if (prodRes.ok) {
-          const prods = await prodRes.json();
-          if (mounted && prods && prods.length > 0) {
-            dispatch({ type: 'SET_PRODUCTS', payload: prods });
+          const prodsData = await prodRes.json();
+          const prodsArray = Array.isArray(prodsData) ? prodsData : (prodsData.products || []);
+          if (mounted && prodsArray && prodsArray.length > 0) {
+            dispatch({ type: 'SET_PRODUCTS', payload: prodsArray });
             hasBackendData = true;
           }
         }

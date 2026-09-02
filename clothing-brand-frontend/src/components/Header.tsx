@@ -46,7 +46,8 @@ const Header = () => {
         try {
           const res = await fetch(`${API_ENDPOINTS.PRODUCTS}?keyword=${searchTerm}`);
           const data = await res.json();
-          setSuggestions(Array.isArray(data) ? data.slice(0, 4) : []);
+          const dataArray = Array.isArray(data) ? data : (data.products || []);
+          setSuggestions(dataArray.slice(0, 4));
           setShowSuggestions(true);
         } catch (error) {
           console.error("Suggestions failed", error);
