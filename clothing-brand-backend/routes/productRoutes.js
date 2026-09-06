@@ -54,7 +54,7 @@ function setCachedProducts(data) {
 router.get('/', async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(100, parseInt(req.query.limit) || 20); // Max 100 per page
+    const limit = parseInt(req.query.limit) || 1000; // Increased limit to 1000 to show all products
     const skip = (page - 1) * limit;
 
     let query = {};
@@ -84,9 +84,9 @@ router.get('/', async (req, res) => {
 
     if (!products) {
       // Query only needed fields for list view (reduce network payload)
-      const selectFields = page === 1 && limit === 20 
-        ? 'name price originalPrice image category brand soldOut showOnHomepage displayOrder _id'
-        : 'name price originalPrice image category brand soldOut showOnHomepage displayOrder _id images description';
+      const selectFields = page === 1 && limit === 1000 
+        ? 'name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id'
+        : 'name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id description';
       
       products = await Product.find(query)
         .select(selectFields)
