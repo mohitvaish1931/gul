@@ -131,6 +131,10 @@ const AdminProducts = () => {
                         <img 
                           src={getImageUrl(product.images?.[0] || product.image)} 
                           alt={product.name}
+                          loading="lazy"
+                          decoding="async"
+                          width="48"
+                          height="64"
                           className="w-full h-full object-cover"
                         />
                       </div>

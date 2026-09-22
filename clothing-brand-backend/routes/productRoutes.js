@@ -100,6 +100,7 @@ router.get('/', async (req, res) => {
       // Cache full product list if no filters
       if (!req.query.keyword && !req.query.category && page === 1) {
         const allProducts = await Product.find({})
+          .select('name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id')
           .sort({ displayOrder: 1, createdAt: -1 })
           .lean();
         setCachedProducts(allProducts);
