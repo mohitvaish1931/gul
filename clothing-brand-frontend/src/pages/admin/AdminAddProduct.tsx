@@ -115,7 +115,7 @@ const AdminAddProduct = () => {
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Add New Acquisition</h1>
+            <h1 className="text-xl font-bold text-gray-800">Add New Product</h1>
             <p className="text-xs text-gray-500 font-medium">Create a new premium catalog entry</p>
           </div>
         </div>
