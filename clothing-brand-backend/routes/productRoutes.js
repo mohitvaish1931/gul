@@ -6,13 +6,13 @@ import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
 
-// Multer & Cloudinary Storage Config for Product Images
+// Multer & Cloudinary Storage Config for Product Images and Videos
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'gul-products',
-    resource_type: 'image',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    resource_type: 'auto',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'mov'],
   },
 });
 
@@ -143,16 +143,28 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Create new product
 // @route   POST /api/products
-router.post('/', upload.array('image', 10), async (req, res) => {
+router.post('/', upload.any(), async (req, res) => {
   try {
-    const imageUrls = req.files ? req.files.map(f => f.secure_url || f.url || f.path) : [];
+    const imageFiles = req.files ? req.files.filter(f => f.fieldname === 'image') : [];
+    const videoFiles = req.files ? req.files.filter(f => f.fieldname === 'videos_file') : [];
+
+    const imageUrls = imageFiles.map(f => f.secure_url || f.url || f.path);
+    const videoUrlsList = videoFiles.map(f => f.secure_url || f.url || f.path);
     
     const parsedSizes = parseField(req.body.sizes);
     const parsedColors = parseField(req.body.colors);
     const parsedMaterials = parseField(req.body.materials);
     const parsedSpecifications = parseField(req.body.specifications);
     const parsedCareInstructions = parseField(req.body.careInstructions);
-    const parsedVideos = parseField(req.body.videos);
+    
+    let parsedVideos = parseField(req.body.videos);
+    parsedVideos = parsedVideos.map(v => {
+      if (typeof v === 'string' && v.startsWith('__file_')) {
+        const index = parseInt(v.split('_')[2]);
+        return videoUrlsList[index] || '';
+      }
+      return v;
+    }).filter(v => v);
 
     const product = new Product({
       name: req.body.name,
@@ -187,13 +199,16 @@ router.post('/', upload.array('image', 10), async (req, res) => {
 
 // @desc    Update a product
 // @route   PUT /api/products/:id
-router.put('/:id', upload.array('image', 10), async (req, res) => {
+router.put('/:id', upload.any(), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      // New uploaded images from Cloudinary
-      const newUploadedUrls = req.files ? req.files.map(f => f.secure_url || f.url || f.path) : [];
+      const imageFiles = req.files ? req.files.filter(f => f.fieldname === 'image') : [];
+      const videoFiles = req.files ? req.files.filter(f => f.fieldname === 'videos_file') : [];
+
+      const newUploadedUrls = imageFiles.map(f => f.secure_url || f.url || f.path);
+      const videoUrlsList = videoFiles.map(f => f.secure_url || f.url || f.path);
       
       // Existing images that user chose to keep (may have deleted some)
       const existingImages = req.body.existing_images ? parseField(req.body.existing_images) : [];
@@ -225,7 +240,17 @@ router.put('/:id', upload.array('image', 10), async (req, res) => {
       if (req.body.materials) product.materials = parseField(req.body.materials);
       if (req.body.specifications) product.specifications = parseField(req.body.specifications);
       if (req.body.careInstructions) product.careInstructions = parseField(req.body.careInstructions);
-      if (req.body.videos) product.videos = parseField(req.body.videos);
+      if (req.body.videos) {
+        let parsedVideos = parseField(req.body.videos);
+        parsedVideos = parsedVideos.map(v => {
+          if (typeof v === 'string' && v.startsWith('__file_')) {
+            const index = parseInt(v.split('_')[2]);
+            return videoUrlsList[index] || '';
+          }
+          return v;
+        }).filter(v => v);
+        product.videos = parsedVideos;
+      }
 
       if (req.body.soldOut !== undefined) {
         product.soldOut = req.body.soldOut === 'true' || req.body.soldOut === true;
