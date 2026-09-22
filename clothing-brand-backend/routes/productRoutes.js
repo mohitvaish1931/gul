@@ -167,6 +167,7 @@ router.post('/', upload.any(), async (req, res) => {
     }).filter(v => v);
 
     const product = new Product({
+      user: req.body.user || undefined,
       name: req.body.name,
       price: Number(req.body.price || 0),
       originalPrice: Number(req.body.originalPrice || 0),

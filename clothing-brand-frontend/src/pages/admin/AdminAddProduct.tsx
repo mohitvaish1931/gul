@@ -38,6 +38,17 @@ const AdminAddProduct = () => {
     
     const form = e.target as HTMLFormElement;
     const fd = new FormData(form);
+
+    const storedUser = localStorage.getItem('rr_user');
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        const userId = user?._id || user?.id || user?.userId;
+        if (userId) fd.append('user', String(userId));
+      } catch {
+        // Ignore malformed local session data; the API will return the auth error.
+      }
+    }
     
     fd.delete('image');
     imageFiles.forEach((file) => {
