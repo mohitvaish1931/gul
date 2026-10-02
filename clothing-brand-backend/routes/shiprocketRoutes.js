@@ -1,5 +1,6 @@
 import express from 'express';
 import Order from '../models/Order.js';
+import { notifyOrderStatusChange } from '../utils/orderNotifications.js';
 
 const router = express.Router();
 
@@ -38,6 +39,8 @@ router.post('/webhook', async (req, res) => {
       return res.status(404).json({ error: 'Order not found' });
     }
 
+    const previousStatus = order.status;
+
     // Update tracking info
     if (awb) order.awbNumber = awb;
     if (current_status) order.trackingStatus = current_status;
@@ -54,6 +57,7 @@ router.post('/webhook', async (req, res) => {
     }
 
     await order.save();
+    notifyOrderStatusChange(order, previousStatus);
 
     res.json({ success: true });
   } catch (err) {

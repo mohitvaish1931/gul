@@ -5,6 +5,7 @@ import Order from '../models/Order.js';
 import Coupon from '../models/Coupon.js';
 import { createShipmozoOrder } from '../utils/shipmozo.js';
 import { protect, canAccess } from '../middleware/authMiddleware.js';
+import { notifyOrderPaid } from '../utils/orderNotifications.js';
 
 const router = express.Router();
 
@@ -143,6 +144,7 @@ router.post('/verify', protect, async (req, res) => {
     }
 
     const updatedOrder = await order.save();
+    notifyOrderPaid(updatedOrder);
     res.status(200).json({ message: 'Payment verified and order processed successfully', order: updatedOrder });
 
   } catch (error) {
@@ -191,6 +193,7 @@ router.post('/bypass', protect, async (req, res) => {
     }
 
     await order.save();
+    notifyOrderPaid(order);
     res.json({ success: true, order });
   } catch (error) {
     console.error('Bypass Payment Error:', error);

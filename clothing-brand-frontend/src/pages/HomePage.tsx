@@ -5,6 +5,10 @@ import Categories from '../components/Categories';
 import CircleCategories from '../components/CircleCategories';
 import { API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
+import WishlistButton from '../components/WishlistButton';
+import FeaturedReviews from '../components/FeaturedReviews';
+import { splitProductName } from '../utils/productName';
+import { OCCASIONS } from '../utils/occasions';
 import { getImageUrl } from '../utils/mediaHelper';
 import './HomePage.css';
 
@@ -62,10 +66,11 @@ const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAll
                 {discount > 0 && (
                   <div className="discount-badge">{discount}% OFF</div>
                 )}
+                <WishlistButton product={product} size={16} style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 2 }} />
               </div>
             </Link>
           <div className="carousel-product-details">
-            <Link to={`/product/${product._id}`}><h3 className="cp-name">{product.name}</h3></Link>
+            <Link to={`/product/${product._id}`}><h3 className="cp-name">{splitProductName(product.name).title}</h3></Link>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               {discount > 0 && (
                 <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', fontWeight: 500 }}>
@@ -81,6 +86,36 @@ const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAll
     </div>
   </section>
 );
+
+// Occasion tiles, each showing a product from that collection
+const ShopByOccasion = ({ products }: { products: any[] }) => {
+  const tiles = OCCASIONS.map((occasion) => ({
+    ...occasion,
+    image: products.find((p) => occasion.match.test(p.name))?.image,
+  })).filter((tile) => tile.image);
+
+  if (tiles.length === 0) return null;
+
+  return (
+    <section className="container section" style={{ padding: '20px 16px 60px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <span className="small-gold-tag">SHOP BY OCCASION</span>
+        <h2 className="title font-serif" style={{ fontSize: '2.5rem', margin: '6px 0 0' }}>Dressed for Every <i style={{ color: 'var(--primary-purple)' }}>Moment</i></h2>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '18px' }}>
+        {tiles.map((tile) => (
+          <Link key={tile.key} to={`/shop?occasion=${tile.key}`} style={{ position: 'relative', display: 'block', borderRadius: '18px', overflow: 'hidden', aspectRatio: '3 / 4', textDecoration: 'none' }}>
+            <img src={getImageUrl(tile.image!, 600)} alt={tile.label} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(45,10,78,0.85) 0%, rgba(45,10,78,0) 55%)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '22px' }}>
+              <span className="font-serif" style={{ color: '#fff', fontSize: '1.6rem', lineHeight: 1.2 }}>{tile.label}</span>
+              <span style={{ color: '#e9ddf7', fontSize: '0.85rem', marginTop: '4px' }}>{tile.tagline}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -215,6 +250,8 @@ const HomePage = () => {
             />
           )}
 
+          <ShopByOccasion products={homepageProducts} />
+
           <section className="bridal-edit-section reveal-on-scroll">
             <div className="bridal-split">
               <div className="bridal-img-side">
@@ -226,12 +263,12 @@ const HomePage = () => {
                 
                 <div className="bridal-stats-grid">
                   <div className="stat-item">
-                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>100K+</h3>
-                    <p>HAPPY CLIENTS</p>
+                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>Jaipur</h3>
+                    <p>HANDCRAFTED IN</p>
                   </div>
                   <div className="stat-item">
-                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>2000+</h3>
-                    <p>UNIQUE DESIGNS</p>
+                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>{products.length > 0 ? `${products.length}+` : '100+'}</h3>
+                    <p>DESIGNS ONLINE</p>
                   </div>
                   <div className="stat-item">
                     <h3 className="font-serif" style={{color: 'var(--primary-purple)', fontSize: '2rem'}}>21 <span style={{fontSize: '1rem'}}>Yrs</span></h3>
@@ -288,12 +325,14 @@ const HomePage = () => {
             />
           )}
 
+          <FeaturedReviews />
+
           <section className="store-locator-banner reveal-on-scroll" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
             <div className="store-locator-overlay" style={{backgroundColor: 'rgba(45, 0, 77, 0.7)'}}>
               <div className="store-locator-content text-center">
                 <h2 className="title font-serif" style={{color: '#fff', fontSize: '3.5rem', marginBottom: '20px'}}>Find Your Perfect Look, <i style={{color: 'var(--gold-primary)'}}>In-Store</i></h2>
-                <p style={{color: '#ddd', fontSize: '1.2rem', marginBottom: '30px'}}>Discover elegance firsthand at our exclusive boutique showrooms in Jaipur.</p>
-                <button className="btn btn-primary" style={{padding: '15px 40px', backgroundColor: '#fff', color: 'var(--primary-purple)'}}>FIND YOUR NEAREST STORE</button>
+                <p style={{color: '#ddd', fontSize: '1.2rem', marginBottom: '30px'}}>Discover our collection in person at our studio in Pahadiya Chowk, Jaipur.</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=455+Mandhi+Khatikan+Pahadiya+Chowk+Jaipur+302002" target="_blank" rel="noreferrer" className="btn btn-primary" style={{padding: '15px 40px', backgroundColor: '#fff', color: 'var(--primary-purple)', display: 'inline-block', textDecoration: 'none'}}>GET DIRECTIONS</a>
               </div>
             </div>
           </section>

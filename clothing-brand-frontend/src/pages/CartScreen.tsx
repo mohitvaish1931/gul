@@ -23,6 +23,7 @@ const CartScreen = () => {
     name: '', email: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
   });
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{code: string, discountPercent: number, maxDiscountAmount?: number} | null>(null);
@@ -129,10 +130,11 @@ const CartScreen = () => {
   const processPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setPaymentLoading(true);
+    setCheckoutError(null);
 
     const res = await loadRazorpayScript();
     if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
+      setCheckoutError('Payment service could not load. Please check your internet connection and try again.');
       setPaymentLoading(false);
       return;
     }
@@ -165,7 +167,7 @@ const CartScreen = () => {
       const orderData = await orderResponse.json();
 
       if (!orderResponse.ok) {
-        alert(orderData.message || 'Failed to create order');
+        setCheckoutError(orderData.message || 'We could not place your order. Please try again.');
         return;
       }
 
@@ -179,11 +181,10 @@ const CartScreen = () => {
         });
         
         if (bypassRes.ok) {
-          alert('Order Placed Successfully! (100% Discount Applied). Your AWB has been generated.');
           dispatch({ type: 'CLEAR_CART' });
-          navigate('/profile');
+          navigate(`/order/${orderData._id}/success`);
         } else {
-          alert('Failed to process 100% off order');
+          setCheckoutError('We could not confirm your order. Please contact us on WhatsApp.');
         }
         setPaymentLoading(false);
         return;
@@ -209,6 +210,7 @@ const CartScreen = () => {
         order_id: rzpData.id,
         handler: async function (response: any) {
           // 5. Verify payment & Trigger Shipmozo
+          setPaymentLoading(true);
           const verifyRes = await fetch(`${API_BASE_URL}/api/payment/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -222,11 +224,11 @@ const CartScreen = () => {
           });
           
           if (verifyRes.ok) {
-            alert('Payment Successful! Order Confirmed. Your AWB has been generated.');
             dispatch({ type: 'CLEAR_CART' });
-            navigate('/profile');
+            navigate(`/order/${orderData._id}/success`);
           } else {
-            alert('Payment verification failed');
+            setPaymentLoading(false);
+            setCheckoutError('Your payment could not be verified. If money was deducted, please WhatsApp us your order details and we will sort it out right away.');
           }
         },
         prefill: {
@@ -254,7 +256,7 @@ const CartScreen = () => {
 
     } catch (err) {
       console.error(err);
-      alert('Error initiating checkout. Please try again.');
+      setCheckoutError('Something went wrong while starting checkout. Please try again.');
     } finally {
       setPaymentLoading(false);
     }
@@ -403,10 +405,16 @@ const CartScreen = () => {
                   ).toLocaleString('en-IN')}</span>
                 </div>
 
+                {checkoutError && (
+                  <div role="alert" style={{ padding: '12px 16px', backgroundColor: '#FFF5F5', color: '#C53030', border: '1px solid #FED7D7', borderRadius: '8px', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                    {checkoutError}
+                  </div>
+                )}
+                <p style={{ fontSize: '0.8rem', color: '#777', margin: 0 }}>Free shipping · Pay securely with UPI, cards or netbanking</p>
                 <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
                   <button type="button" className="btn btn-outline" onClick={() => setIsCheckingOut(false)} style={{flex: 1}}>BACK TO CART</button>
                   <button type="submit" className="btn btn-primary" disabled={paymentLoading} style={{flex: 2}}>
-                    {paymentLoading ? 'PROCESSING...' : 'PAY NOW (RAZORPAY)'}
+                    {paymentLoading ? 'PROCESSING...' : 'PAY SECURELY'}
                   </button>
                 </div>
               </form>

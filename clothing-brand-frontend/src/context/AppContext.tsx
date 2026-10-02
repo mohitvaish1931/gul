@@ -21,6 +21,7 @@ export interface Product {
   weight?: string;
   specifications?: string[];
   careInstructions?: string[];
+  fitNote?: string;
   averageRating?: number;
   reviewCount?: number;
   stock?: number;

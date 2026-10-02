@@ -73,6 +73,11 @@ const productSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
+    // Fit guidance shown on the product page, e.g. "Model is 5'6" and wears size M"
+    fitNote: {
+      type: String,
+      default: '',
+    },
     sizes: {
       type: [String],
       default: [],

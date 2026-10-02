@@ -30,6 +30,9 @@ const AdminProductReports = lazy(() => import('./pages/admin/AdminProductReports
 const AdminCustomerReports = lazy(() => import('./pages/admin/AdminCustomerReports'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const AdminReviews = lazy(() => import('./pages/admin/AdminReviews'));
+const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 const AdminRoles = lazy(() => import('./pages/admin/AdminRoles'));
 const TrackOrder = lazy(() => import('./pages/TrackOrder'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -123,6 +126,8 @@ const MainLayout = () => {
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/order/:id/success" element={<OrderSuccess />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="products" element={<AdminProducts />} />
@@ -133,6 +138,7 @@ const MainLayout = () => {
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="reviews" element={<AdminReviews />} />
+              <Route path="messages" element={<AdminMessages />} />
               <Route path="banners" element={<AdminBanners />} />
               <Route path="promotions" element={<AdminPromotions />} />
               <Route path="settings" element={<AdminSettings />} />

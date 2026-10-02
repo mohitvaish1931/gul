@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { 
   Mail, Phone, MapPin, Send, MessageCircle, 
-  Calendar, Star, Sun, Truck, ShieldCheck, 
+  Calendar, Sun, Truck, ShieldCheck,
   RefreshCcw, Globe, ExternalLink
 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
+import { API_BASE_URL } from '../utils/api';
+import FeaturedReviews from '../components/FeaturedReviews';
 import './Contact.css';
 
 const Contact = () => {
@@ -31,11 +33,27 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [sendState, setSendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [sendError, setSendError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you! Your style consultation request has been received.');
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    setSendState('sending');
+    setSendError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'Could not send your message');
+      setSendState('sent');
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch (err) {
+      setSendState('error');
+      setSendError(err instanceof Error ? err.message : 'Could not send your message');
+    }
   };
 
   return (
@@ -207,9 +225,20 @@ const Contact = () => {
                 </div>
               </div>
 
-              <button type="submit" className="btn-submit-consult">
+              {sendState === 'sent' && (
+                <p role="status" style={{ padding: '12px 16px', background: '#F0FDF4', color: '#15803D', border: '1px solid #BBF7D0', borderRadius: '8px', marginBottom: '16px' }}>
+                  Thank you! Your message has reached us — we'll reply within 24 hours. For anything urgent, WhatsApp us.
+                </p>
+              )}
+              {sendState === 'error' && (
+                <p role="alert" style={{ padding: '12px 16px', background: '#FFF5F5', color: '#C53030', border: '1px solid #FED7D7', borderRadius: '8px', marginBottom: '16px' }}>
+                  {sendError}. Please try again or WhatsApp us.
+                </p>
+              )}
+
+              <button type="submit" className="btn-submit-consult" disabled={sendState === 'sending'}>
                 <Send size={18} />
-                START YOUR STYLE CONSULTATION
+                {sendState === 'sending' ? 'SENDING...' : 'START YOUR STYLE CONSULTATION'}
               </button>
             </form>
 
@@ -254,29 +283,8 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="contact-testimonials container">
-        <div className="section-title-wrap">
-          <h2 className="font-serif">Loved by 1000+ Customers</h2>
-          <div className="gold-divider"></div>
-        </div>
-
-        <div className="testimonials-grid">
-          {[
-            { name: 'Neha Sharma', text: 'Amazing collection and perfect fitting. The staff is so friendly and helpful!' },
-            { name: 'Priya Aggarwal', text: 'Best ethnic wear in Jaipur. Highly recommended for bridal shopping!' },
-            { name: 'Riya Kapoor', text: 'Loved the custom stitching. Exactly what I wanted for my sister\'s wedding!' }
-          ].map((test, idx) => (
-            <div key={idx} className="test-card">
-              <div className="stars">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="var(--gold-primary)" />)}
-              </div>
-              <p className="test-text">"{test.text}"</p>
-              <h5 className="test-author">— {test.name}</h5>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Testimonials - real approved reviews only */}
+      <FeaturedReviews heading="What Our Customers Say" />
 
       {/* Trust Bar */}
       <section className="trust-bar">

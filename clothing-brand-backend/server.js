@@ -18,6 +18,7 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
 import merchantRoutes from './routes/merchantRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -63,6 +64,7 @@ app.use('/api/shiprocket', shiprocketRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/merchant', merchantRoutes);
+app.use('/api/contact', contactRoutes);
 app.use('/api', sitemapRoutes);
 
 const __filename = fileURLToPath(import.meta.url);

@@ -4,6 +4,11 @@ import User from '../models/User.js';
 import { priceOrder } from '../utils/orderPricing.js';
 import { protect, adminOnly, canAccess } from '../middleware/authMiddleware.js';
 import { rateLimit } from '../middleware/rateLimit.js';
+import { notifyOrderStatusChange } from '../utils/orderNotifications.js';
+import { sendMailInBackground, getStoreEmail } from '../utils/mailer.js';
+import { exchangeRequestOwnerEmail, exchangeRequestCustomerEmail, orderRecipient } from '../utils/emailTemplates.js';
+
+const EXCHANGE_WINDOW_DAYS = 7;
 
 const router = express.Router();
 
@@ -150,6 +155,7 @@ router.put('/:id/status', adminOnly, async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    const previousStatus = order.status;
     order.status = req.body.status || order.status;
     if (req.body.status === 'Delivered') {
       order.isDelivered = true;
@@ -164,11 +170,66 @@ router.put('/:id/status', adminOnly, async (req, res) => {
     }
 
     const updatedOrder = await order.save();
+    await updatedOrder.populate('user', 'name email');
+    notifyOrderStatusChange(updatedOrder, previousStatus);
     res.json(updatedOrder);
   } catch (error) {
     console.error('Update order status error:', error);
     res.status(500).json({ message: 'Failed to update order status', error: error.message });
   }
+});
+
+// @desc    Request a size exchange (customer, within 7 days of delivery)
+// @route   POST /api/orders/:id/exchange
+router.post('/:id/exchange', protect, async (req, res) => {
+  const order = await Order.findById(req.params.id).populate('user', 'name email');
+  if (!order || !canAccess(req, order.user)) {
+    return res.status(404).json({ message: 'Order not found' });
+  }
+  if (order.status !== 'Delivered') {
+    return res.status(400).json({ message: 'Exchanges can be requested after your order is delivered.' });
+  }
+  const deliveredAt = order.deliveredAt || order.updatedAt;
+  if (Date.now() - new Date(deliveredAt).getTime() > EXCHANGE_WINDOW_DAYS * 24 * 60 * 60 * 1000) {
+    return res.status(400).json({ message: 'The 7-day exchange window for this order has ended.' });
+  }
+  if (order.exchangeRequest?.status) {
+    return res.status(400).json({ message: 'An exchange has already been requested for this order.' });
+  }
+
+  const reason = String(req.body.reason || '').trim().slice(0, 200);
+  if (!reason) {
+    return res.status(400).json({ message: 'Please choose a reason for the exchange.' });
+  }
+
+  order.exchangeRequest = {
+    reason,
+    preferredSize: String(req.body.preferredSize || '').trim().slice(0, 20),
+    details: String(req.body.details || '').trim().slice(0, 1000),
+    status: 'requested',
+    requestedAt: new Date(),
+  };
+  const saved = await order.save();
+
+  sendMailInBackground({ to: getStoreEmail(), replyTo: orderRecipient(saved) || undefined, ...exchangeRequestOwnerEmail(saved) });
+  sendMailInBackground({ to: orderRecipient(saved), ...exchangeRequestCustomerEmail(saved) });
+
+  res.json(saved);
+});
+
+// @desc    Update an exchange request status (Admin)
+// @route   PUT /api/orders/:id/exchange
+router.put('/:id/exchange', adminOnly, async (req, res) => {
+  const allowed = ['requested', 'approved', 'rejected', 'completed'];
+  if (!allowed.includes(req.body.status)) {
+    return res.status(400).json({ message: 'Invalid exchange status' });
+  }
+  const order = await Order.findById(req.params.id);
+  if (!order || !order.exchangeRequest?.status) {
+    return res.status(404).json({ message: 'Exchange request not found' });
+  }
+  order.exchangeRequest.status = req.body.status;
+  res.json(await order.save());
 });
 
 // @desc    Delete an order (Admin)

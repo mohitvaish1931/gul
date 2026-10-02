@@ -4,22 +4,35 @@ import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 import './ProductStyles.css';
 import { useSEO } from '../utils/useSEO';
+import WishlistButton from '../components/WishlistButton';
+import { splitProductName } from '../utils/productName';
+import { findOccasion } from '../utils/occasions';
+
+type SortOption = 'featured' | 'newest' | 'price-asc' | 'price-desc';
 
 const ProductListPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get('keyword') || '';
   const category = queryParams.get('category') || '';
+  const occasion = category ? undefined : findOccasion(queryParams.get('occasion'));
 
-  const pageHeading = category || (keyword ? `Search: "${keyword}"` : 'All Collections');
+  const pageHeading = category || occasion?.label || (keyword ? `Search: "${keyword}"` : 'All Collections');
+  const canonicalUrl = category
+    ? `https://gulfashion.store/shop?category=${encodeURIComponent(category)}`
+    : occasion
+      ? `https://gulfashion.store/shop?occasion=${occasion.key}`
+      : 'https://gulfashion.store/shop';
   useSEO({
     title: `${pageHeading} | Gul Fashion`,
-    description: category
-      ? `Shop ${category} for women at Gul Fashion. Handcrafted ethnic and casual wear from Jaipur with free shipping across India.`
+    description: category || occasion
+      ? `Shop ${pageHeading} for women at Gul Fashion. Handcrafted ethnic and casual wear from Jaipur with free shipping across India.`
       : 'Shop kurta sets, suits, tops and dresses for women at Gul Fashion. Handcrafted in Jaipur with free shipping across India.',
-    url: category ? `https://gulfashion.store/shop?category=${encodeURIComponent(category)}` : 'https://gulfashion.store/shop',
+    url: canonicalUrl,
     noindex: Boolean(keyword), // search result pages shouldn't be indexed
   });
+
+  const [sort, setSort] = useState<SortOption>('featured');
 
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +44,8 @@ const ProductListPage = () => {
         let url = API_ENDPOINTS.PRODUCTS;
         if (category) {
           url += `?category=${encodeURIComponent(category)}`;
+        } else if (occasion) {
+          url += `?occasion=${occasion.key}`;
         } else if (keyword) {
           url += `?keyword=${encodeURIComponent(keyword)}`;
         }
@@ -50,7 +65,14 @@ const ProductListPage = () => {
     };
 
     fetchProducts();
-  }, [keyword, category]);
+  }, [keyword, category, occasion]);
+
+  const sortedProducts = [...products].sort((a, b) => {
+    if (sort === 'price-asc') return a.price - b.price;
+    if (sort === 'price-desc') return b.price - a.price;
+    if (sort === 'newest') return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+    return 0; // featured = the order set in admin
+  });
 
   return (
     <div className="shop-page" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', paddingBottom: '100px' }}>
@@ -59,10 +81,10 @@ const ProductListPage = () => {
          <div className="container">
             <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>CURATED SELECTION</span>
             <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>
-               {category ? category : (keyword ? `Search: "${keyword}"` : 'Shop The Collection')}
+               {category || occasion?.label || (keyword ? `Search: "${keyword}"` : 'Shop The Collection')}
             </h1>
             <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
-               Experience the finest Jaipur craftsmanship, meticulously curated for the modern connoisseur.
+               {occasion ? occasion.tagline : 'Experience the finest Jaipur craftsmanship, meticulously curated for the modern connoisseur.'}
             </p>
          </div>
       </section>
@@ -84,8 +106,25 @@ const ProductListPage = () => {
              <Link to="/shop" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', textDecoration: 'none', borderRadius: '12px', fontWeight: '800', letterSpacing: '1px' }}>VIEW ALL PRODUCTS</Link>
           </div>
         ) : (
+          <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <span style={{ color: '#666', fontSize: '0.9rem' }}>{products.length} {products.length === 1 ? 'design' : 'designs'}</span>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#2D0A4E', fontWeight: 700, letterSpacing: '1px' }}>
+              SORT BY
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortOption)}
+                style={{ padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', background: '#fff', fontSize: '0.9rem', color: '#333' }}
+              >
+                <option value="featured">Featured</option>
+                <option value="newest">Newest first</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+              </select>
+            </label>
+          </div>
           <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
-            {products.map((product, idx) => {
+            {sortedProducts.map((product, idx) => {
               const discount = product.originalPrice && product.price && product.originalPrice > product.price 
                 ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
                 : 0;
@@ -104,9 +143,10 @@ const ProductListPage = () => {
                       {discount > 0 && (
                         <div className="discount-badge">{discount}% OFF</div>
                       )}
+                      <WishlistButton product={product} size={16} style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 2 }} />
                     </div>
                     <div className="luxury-card-details">
-                      <h3 className="font-serif luxury-name">{product.name}</h3>
+                      <h3 className="font-serif luxury-name">{splitProductName(product.name).title}</h3>
                       <div className="luxury-price-row">
                          <div style={{ display: 'flex', flexDirection: 'column' }}>
                            {discount > 0 && (
@@ -124,6 +164,7 @@ const ProductListPage = () => {
               );
             })}
           </div>
+          </>
         )}
       </div>
 

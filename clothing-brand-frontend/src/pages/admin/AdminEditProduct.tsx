@@ -288,6 +288,11 @@ const AdminEditProduct = () => {
             <textarea name="careInstructions_raw" rows={3} defaultValue={localForm.careInstructions_raw} className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-2xl text-sm focus:bg-white focus:border-indigo-600/20 transition-all outline-none" placeholder="Wash with cold water&#10;Do not bleach" />
           </div>
 
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Fit Note (shown under sizes)</label>
+            <input name="fitNote" type="text" maxLength={300} defaultValue={localForm.fitNote || ''} className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-2xl text-sm focus:bg-white focus:border-indigo-600/20 transition-all outline-none" placeholder={`Model is 5'6" and wears size M. Kurta length 44 inches.`} />
+          </div>
+
           {/* Status & Visibility */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-4">

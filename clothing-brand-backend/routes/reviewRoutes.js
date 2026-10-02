@@ -1,9 +1,26 @@
 import express from 'express';
 import Review from '../models/Review.js';
 import Product from '../models/Product.js';
+import Order from '../models/Order.js';
+import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from '../config/cloudinary.js';
 import { protect, adminOnly, canAccess } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+// Customer photos attached to reviews (max 3 images, 5 MB each)
+const reviewUpload = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: 'gul-reviews',
+      resource_type: 'image',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    },
+  }),
+  limits: { files: 3, fileSize: 5 * 1024 * 1024 },
+});
 
 // Recalculate a product's rating from its approved reviews
 async function updateProductRating(productId) {
@@ -64,6 +81,16 @@ router.get('/product/:productId', async (req, res) => {
     console.error('GET /api/reviews/product/:productId error:', err.message);
     res.status(500).json({ error: 'Failed to fetch reviews' });
   }
+});
+
+// Latest good reviews across the store (homepage / contact page testimonials)
+router.get('/featured', async (req, res) => {
+  const reviews = await Review.find({ status: 'approved', rating: { $gte: 4 } })
+    .select('userName rating title comment images verified createdAt productId')
+    .populate('productId', 'name')
+    .sort({ createdAt: -1 })
+    .limit(6);
+  res.json(reviews);
 });
 
 // Get pending reviews (admin only)
@@ -142,9 +169,10 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create a review (logged-in users)
-router.post('/', protect, async (req, res) => {
+router.post('/', protect, reviewUpload.array('images', 3), async (req, res) => {
   try {
-    const { productId, rating, title, comment } = req.body;
+    const { productId, title, comment } = req.body;
+    const rating = Number(req.body.rating);
 
     if (!productId || !rating || !title || !comment) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -165,14 +193,19 @@ router.post('/', protect, async (req, res) => {
       return res.status(400).json({ error: 'You have already reviewed this product' });
     }
 
+    // "Verified purchase" when this customer has a paid order containing the product
+    const purchased = await Order.exists({ user: req.user._id, isPaid: true, 'orderItems.product': productId });
+
     const review = new Review({
       productId,
       userId: req.user._id,
       userName: req.user.name,
       userEmail: req.user.email,
       rating,
-      title,
-      comment,
+      title: String(title).slice(0, 150),
+      comment: String(comment).slice(0, 3000),
+      images: (req.files || []).map((f) => f.secure_url || f.path).filter(Boolean),
+      verified: Boolean(purchased),
       status: 'pending' // Reviews need admin approval
     });
 

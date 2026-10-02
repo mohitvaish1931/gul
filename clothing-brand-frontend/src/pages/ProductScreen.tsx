@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
-import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star, BadgeCheck, MapPin } from 'lucide-react';
+import WishlistButton from '../components/WishlistButton';
+import { splitProductName } from '../utils/productName';
+import { addRecentlyViewed, useRecentlyViewed } from '../utils/savedProducts';
+import { estimateDelivery, isValidPincode } from '../utils/delivery';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 import { useAppContext } from '../context/AppContext';
@@ -57,6 +61,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
   const [formRating, setFormRating] = useState(5);
   const [formTitle, setFormTitle] = useState('');
   const [formComment, setFormComment] = useState('');
+  const [formImages, setFormImages] = useState<File[]>([]);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -99,16 +104,17 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
     setSubmitSuccess(false);
 
     try {
+      // multipart so customers can attach photos
+      const body = new FormData();
+      body.append('productId', productId);
+      body.append('rating', String(formRating));
+      body.append('title', formTitle);
+      body.append('comment', formComment);
+      formImages.forEach((file) => body.append('images', file));
+
       const res = await fetch(`${API_BASE_URL}/api/reviews`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          productId,
-          rating: formRating,
-          title: formTitle,
-          comment: formComment
-        })
+        body,
       });
       
       const data = await res.json();
@@ -121,6 +127,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
       setFormTitle('');
       setFormComment('');
       setFormRating(5);
+      setFormImages([]);
       // Refresh list
       setReloadKey((key) => key + 1);
     } catch (err: any) {
@@ -275,6 +282,26 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
                 />
               </div>
 
+              <div style={{ marginBottom: '30px' }}>
+                <label htmlFor="review-photos" style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>ADD PHOTOS (OPTIONAL, UP TO 3)</label>
+                <input
+                  id="review-photos"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []).slice(0, 3);
+                    const tooBig = files.find((f) => f.size > 5 * 1024 * 1024);
+                    setSubmitError(tooBig ? 'Each photo must be under 5 MB' : null);
+                    setFormImages(tooBig ? [] : files);
+                  }}
+                  style={{ fontSize: '0.9rem' }}
+                />
+                {formImages.length > 0 && (
+                  <p style={{ fontSize: '0.8rem', color: '#666', margin: '6px 0 0' }}>{formImages.length} photo{formImages.length > 1 ? 's' : ''} selected</p>
+                )}
+              </div>
+
               <button
                 type="submit"
                 disabled={submitLoading}
@@ -319,11 +346,25 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <StarRating rating={rev.rating} size={14} />
                     <span style={{ fontSize: '0.85rem', color: '#2D0A4E', fontWeight: '700' }}>by {rev.userName || 'Anonymous'}</span>
+                    {rev.verified && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '0.8rem', color: '#15803D', fontWeight: 600 }}>
+                        <BadgeCheck size={14} /> Verified buyer
+                      </span>
+                    )}
                   </div>
                 </div>
                 <span style={{ fontSize: '0.8rem', color: '#999' }}>{new Date(rev.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
               </div>
               <p style={{ color: '#555', lineHeight: '1.6', fontSize: '0.95rem', margin: 0 }}>{rev.comment}</p>
+              {rev.images && rev.images.length > 0 && (
+                <div style={{ display: 'flex', gap: '10px', marginTop: '12px', flexWrap: 'wrap' }}>
+                  {rev.images.map((img: string) => (
+                    <a key={img} href={img} target="_blank" rel="noreferrer">
+                      <img src={getImageUrl(img, 300)} alt={`Photo from ${rev.userName || 'a customer'}`} style={{ width: '90px', height: '110px', objectFit: 'cover', borderRadius: '10px' }} loading="lazy" />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -348,6 +389,19 @@ const ProductScreen = () => {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [sizeError, setSizeError] = useState(false);
 
+  // Delivery estimate (pincode is remembered for next time)
+  const [pincode, setPincode] = useState(() => {
+    try { return localStorage.getItem('gul_pincode') || ''; } catch { return ''; }
+  });
+  const [checkedPincode, setCheckedPincode] = useState(() => (isValidPincode(pincode) ? pincode : ''));
+  const [pincodeError, setPincodeError] = useState('');
+
+  // Back-in-stock alert
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifyState, setNotifyState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+
+  const recentlyViewed = useRecentlyViewed().filter((p) => p._id !== id).slice(0, 6);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -358,6 +412,7 @@ const ProductScreen = () => {
         const data = await response.json();
         setProduct(data);
         setSelectedImage(data.image || '');
+        addRecentlyViewed(data);
         
         // Auto-select size/color if they only have 1 option
         if (data.sizes && data.sizes.length === 1) {
@@ -380,7 +435,7 @@ const ProductScreen = () => {
   const addToCartHandler = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       setSizeError(true);
-      window.alert("Please choose your size!");
+      document.getElementById('size-picker')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     dispatch({ 
@@ -394,6 +449,35 @@ const ProductScreen = () => {
     setSelectedSize(size);
     setSizeError(false);
   };
+
+  const checkPincode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValidPincode(pincode)) {
+      setPincodeError('Please enter a valid 6-digit pincode');
+      return;
+    }
+    setPincodeError('');
+    setCheckedPincode(pincode);
+    try { localStorage.setItem('gul_pincode', pincode); } catch { /* not saved */ }
+  };
+
+  const requestStockAlert = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNotifyState('sending');
+    try {
+      const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${product._id}/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: notifyEmail }),
+      });
+      setNotifyState(res.ok ? 'done' : 'error');
+    } catch {
+      setNotifyState('error');
+    }
+  };
+
+  const { title: displayTitle, subtitle: displaySubtitle } = splitProductName(product.name);
+  const delivery = estimateDelivery(checkedPincode || undefined);
 
   const productRating = product.rating !== undefined ? product.rating : (product.averageRating || 0);
   const productReviewsCount = product.numReviews !== undefined ? product.numReviews : (product.reviewCount || 0);
@@ -466,6 +550,7 @@ const ProductScreen = () => {
               <div className="product-image-section">
                 <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
                    <img src={getImageUrl(selectedImage || product.image, 1200)} alt={product.name} style={{ width: '100%', display: 'block' }} loading="eager" fetchPriority="high" />
+                   <WishlistButton product={product} size={20} style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 2 }} />
                    {!inStock && (
                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
@@ -523,7 +608,10 @@ const ProductScreen = () => {
               {/* Info Section */}
               <div className="product-info-section">
                 <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '15px' }}>{product.category}</span>
-                <h1 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: '10px', lineHeight: '1.2' }}>{product.name}</h1>
+                <h1 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: displaySubtitle ? '6px' : '10px', lineHeight: '1.2' }}>{displayTitle}</h1>
+                {displaySubtitle && (
+                  <p style={{ color: '#777', fontSize: '1rem', letterSpacing: '0.5px', margin: '0 0 14px' }}>{displaySubtitle}</p>
+                )}
                 
                 {/* Rating summary below title */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
@@ -553,7 +641,7 @@ const ProductScreen = () => {
                      <>
                       {/* Sizes Selection */}
                       {product.sizes && product.sizes.length > 0 && (
-                        <div style={{ marginBottom: '25px' }}>
+                        <div id="size-picker" style={{ marginBottom: '25px', scrollMarginTop: '120px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                             <span style={{ fontWeight: '800', color: '#2D0A4E', fontSize: '0.85rem', letterSpacing: '1px' }}>SELECT SIZE</span>
                             <button
@@ -588,7 +676,10 @@ const ProductScreen = () => {
                             ))}
                           </div>
                           {sizeError && (
-                            <p style={{ color: '#C53030', fontSize: '0.8rem', fontWeight: '700', marginTop: '8px', margin: '8px 0 0 0' }}>Please select a size before adding to collection.</p>
+                            <p role="alert" style={{ color: '#C53030', fontSize: '0.8rem', fontWeight: '700', marginTop: '8px', margin: '8px 0 0 0' }}>Please select a size before adding to collection.</p>
+                          )}
+                          {product.fitNote && (
+                            <p style={{ color: '#666', fontSize: '0.85rem', margin: '10px 0 0' }}>{product.fitNote}</p>
                           )}
                         </div>
                       )}
@@ -652,11 +743,59 @@ const ProductScreen = () => {
                       >
                         <ShoppingCart size={20} /> ADD TO COLLECTION
                       </button>
+
+                      {/* Delivery estimate */}
+                      <form onSubmit={checkPincode} style={{ marginTop: '22px', paddingTop: '18px', borderTop: '1px solid #f3f3f3' }}>
+                        <label htmlFor="pincode" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '800', color: '#2D0A4E', fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '10px' }}>
+                          <MapPin size={15} /> CHECK DELIVERY DATE
+                        </label>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <input
+                            id="pincode"
+                            inputMode="numeric"
+                            maxLength={6}
+                            placeholder="Enter pincode"
+                            value={pincode}
+                            onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
+                            style={{ flex: 1, minWidth: 0, padding: '12px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '0.95rem' }}
+                          />
+                          <button type="submit" style={{ padding: '12px 18px', border: '1.5px solid #2D0A4E', background: '#fff', color: '#2D0A4E', borderRadius: '8px', fontWeight: '800', cursor: 'pointer' }}>CHECK</button>
+                        </div>
+                        {pincodeError ? (
+                          <p role="alert" style={{ color: '#C53030', fontSize: '0.8rem', margin: '8px 0 0' }}>{pincodeError}</p>
+                        ) : (
+                          <p style={{ color: '#555', fontSize: '0.85rem', margin: '8px 0 0' }}>
+                            {checkedPincode ? <>Delivery to <strong>{checkedPincode}</strong> by </> : 'Usually delivered by '}
+                            <strong style={{ color: '#15803D' }}>{delivery.label}</strong> · Free shipping
+                          </p>
+                        )}
+                      </form>
                      </>
                    ) : (
                      <div style={{ textAlign: 'center', padding: '10px 0' }}>
                         <p style={{ color: '#C53030', fontWeight: '800', letterSpacing: '1px' }}>WE ARE CURRENTLY OUT OF STOCK</p>
-                        <button disabled style={{ width: '100%', padding: '18px', backgroundColor: '#eee', color: '#999', border: 'none', borderRadius: '12px', marginTop: '15px', fontWeight: '800' }}>NOTIFY ME</button>
+                        {notifyState === 'done' ? (
+                          <p role="status" style={{ color: '#15803D', fontWeight: 600, margin: '15px 0 0' }}>Done! We'll email you as soon as it's back.</p>
+                        ) : (
+                          <form onSubmit={requestStockAlert} style={{ marginTop: '15px' }}>
+                            <label htmlFor="notify-email" style={{ display: 'block', color: '#555', fontSize: '0.9rem', marginBottom: '10px' }}>Get an email when it's back in stock</label>
+                            <input
+                              id="notify-email"
+                              type="email"
+                              required
+                              placeholder="Your email address"
+                              value={notifyEmail}
+                              onChange={(e) => setNotifyEmail(e.target.value)}
+                              style={{ width: '100%', padding: '14px 16px', border: '1px solid #ddd', borderRadius: '10px', fontSize: '0.95rem', marginBottom: '10px' }}
+                            />
+                            <button type="submit" disabled={notifyState === 'sending'} style={{ width: '100%', padding: '18px', backgroundColor: '#2D0A4E', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: '800', letterSpacing: '1px', cursor: 'pointer' }}>
+                              {notifyState === 'sending' ? 'SAVING...' : 'NOTIFY ME'}
+                            </button>
+                            {notifyState === 'error' && (
+                              <p role="alert" style={{ color: '#C53030', fontSize: '0.85rem', margin: '8px 0 0' }}>Couldn't save that. Please check the email and try again.</p>
+                            )}
+                          </form>
+                        )}
                      </div>
                    )}
                 </div>
@@ -747,13 +886,29 @@ const ProductScreen = () => {
                 </div>
 
                 {/* 3. Reviews Section */}
-                <div>
+                <div id="reviews" style={{ scrollMarginTop: '120px' }}>
                   <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>FEEDBACK</span>
                   <ReviewsTab productId={product._id} />
                 </div>
 
               </div>
             </div>
+
+            {/* Recently viewed */}
+            {recentlyViewed.length > 0 && (
+              <section style={{ marginTop: '80px' }}>
+                <h2 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '24px' }}>Recently Viewed</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '18px' }}>
+                  {recentlyViewed.map((item) => (
+                    <Link key={item._id} to={`/product/${item._id}`} style={{ textDecoration: 'none', color: '#2D0A4E' }}>
+                      <img src={getImageUrl(item.image, 400)} alt={item.name} loading="lazy" style={{ width: '100%', aspectRatio: '3 / 4', objectFit: 'cover', borderRadius: '14px', display: 'block' }} />
+                      <p style={{ fontSize: '0.85rem', margin: '8px 0 2px', lineHeight: 1.4 }}>{splitProductName(item.name).title}</p>
+                      <p style={{ fontWeight: 700, margin: 0 }}>₹{Number(item.price).toLocaleString('en-IN')}</p>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
           </>
         )}
       </div>

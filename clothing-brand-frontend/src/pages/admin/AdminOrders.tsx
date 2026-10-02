@@ -9,6 +9,22 @@ const AdminOrders = () => {
   const { dispatch } = useAppContext();
   const [orders, setOrders] = useState<any[]>([]);
 
+  const updateExchange = async (orderId: string, status: string) => {
+    try {
+      const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${orderId}/exchange`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setOrders((list) => list.map((o) => (o._id === orderId ? { ...o, exchangeRequest: updated.exchangeRequest } : o)));
+      }
+    } catch (err) {
+      console.error('Failed to update exchange:', err);
+    }
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -129,6 +145,24 @@ const AdminOrders = () => {
                       }`}></span>
                       {order.status || 'Processing'}
                     </span>
+                    {order.exchangeRequest?.status && (
+                      <div className="mt-2 p-2 rounded-lg bg-amber-50 border border-amber-100 text-[10px] text-amber-800 whitespace-normal max-w-[220px]">
+                        <p className="font-bold uppercase tracking-widest mb-1">Exchange request</p>
+                        <p>{order.exchangeRequest.reason}{order.exchangeRequest.preferredSize ? ` → size ${order.exchangeRequest.preferredSize}` : ''}</p>
+                        {order.exchangeRequest.details && <p className="mt-1 text-amber-700">{order.exchangeRequest.details}</p>}
+                        <select
+                          aria-label="Exchange status"
+                          value={order.exchangeRequest.status}
+                          onChange={(e) => updateExchange(order._id, e.target.value)}
+                          className="mt-1 w-full bg-white border border-amber-200 rounded px-1 py-0.5 text-[10px]"
+                        >
+                          <option value="requested">Requested</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Rejected</option>
+                          <option value="completed">Completed</option>
+                        </select>
+                      </div>
+                    )}
                   </td>
                   <td className="px-8 py-4 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-3">
@@ -152,6 +186,7 @@ const AdminOrders = () => {
                         }}
                         className="bg-white border border-gray-100 rounded-lg py-1 px-3 text-[10px] font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-purple/20 transition-all"
                       >
+                        <option value="Pending">Pending</option>
                         <option value="Processing">Processing</option>
                         <option value="Shipped">Shipped</option>
                         <option value="Delivered">Delivered</option>

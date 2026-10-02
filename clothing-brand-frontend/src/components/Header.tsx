@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, ShoppingBag, User, Menu, X, Phone, Truck, ShieldCheck } from 'lucide-react';
+import { Search, ShoppingBag, User, Menu, X, Phone, Truck, ShieldCheck, Heart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
+import { useWishlist } from '../utils/savedProducts';
 import logoImg from '../assets/logo.png';
 import './Header.css';
 
@@ -25,6 +26,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { state } = useAppContext();
   const { user, cart } = state;
+  const wishlistCount = useWishlist().length;
 
   const [announcementIdx, setAnnouncementIdx] = useState(0);
   const [fadeProp, setFadeProp] = useState('fade-in');
@@ -192,6 +194,10 @@ const Header = () => {
                   <ShieldCheck size={20} />
                 </Link>
               )}
+              <Link to="/wishlist" className="header-icon-link cart-link" aria-label="Wishlist" title="Wishlist">
+                <Heart size={20} />
+                {wishlistCount > 0 && <span className="cart-badge">{wishlistCount}</span>}
+              </Link>
               <Link to="/cart" className="header-icon-link cart-link">
                 <ShoppingBag size={20} />
                 {cart.length > 0 && <span className="cart-badge">{cart.reduce((acc, item) => acc + (item.qty || 1), 0)}</span>}

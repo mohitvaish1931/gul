@@ -31,7 +31,15 @@ const FAQ = () => {
     },
     {
       question: "Can I return or exchange a product?",
-      answer: "We accept size exchanges for unworn garments with original tags within 7 days of delivery. For returns, we only accept damaged products with mandatory unboxing video proof."
+      answer: "We accept size exchanges for unworn garments with original tags within 7 days of delivery. Go to My Account, open your delivered order and tap \"Request Size Exchange\". For returns, we only accept damaged products with mandatory unboxing video proof."
+    },
+    {
+      question: "How will I know when my order ships?",
+      answer: "You'll get an order confirmation email right after payment, and another email with your tracking link as soon as your order is shipped. You can also track it anytime on our Track Order page using your order number and email."
+    },
+    {
+      question: "My size is sold out. Can I get notified?",
+      answer: "Yes! On any sold-out product page, enter your email under \"Notify Me\" and we'll email you as soon as it's back in stock."
     },
     {
       question: "Is your clothing authentic?",

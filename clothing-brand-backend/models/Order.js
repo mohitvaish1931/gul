@@ -112,6 +112,14 @@ const orderSchema = mongoose.Schema(
     labelPdf: {
       type: String,
     },
+    // Size exchange requested by the customer from My Account (7-day exchange policy)
+    exchangeRequest: {
+      reason: { type: String },
+      preferredSize: { type: String },
+      details: { type: String },
+      status: { type: String, enum: ['requested', 'approved', 'rejected', 'completed'] },
+      requestedAt: { type: Date },
+    },
   },
   {
     timestamps: true,

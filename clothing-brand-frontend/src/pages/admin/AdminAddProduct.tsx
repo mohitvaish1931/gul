@@ -224,6 +224,10 @@ const AdminAddProduct = () => {
                   <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Colors (Comma separated)</label>
                   <input name="colors_raw" type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl text-xs outline-none" placeholder="Emerald, Ruby, Sapphire" />
                 </div>
+                <div>
+                  <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2">Fit Note (shown under sizes)</label>
+                  <input name="fitNote" type="text" maxLength={300} className="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl text-xs outline-none" placeholder={`Model is 5'6" and wears size M. Kurta length 44 inches.`} />
+                </div>
               </div>
             </div>
           </div>

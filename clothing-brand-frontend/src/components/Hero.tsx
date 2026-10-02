@@ -17,24 +17,34 @@ const Hero = ({ products = [] }: HeroProps) => {
   const kurtaProduct = list.find(p => p.category === 'Kurta Sets');
   const topsProduct = list.find(p => p.category === 'Tops');
 
+  // Editorial headlines (first word bold, rest in gold italic); product photos come from the catalog
   let slides = [
     suitsProduct ? {
       type: 'image',
       src: suitsProduct.image,
-      title: suitsProduct.name,
-      subtitle: suitsProduct.description,
+      title: 'The Festive Edit',
+      subtitle: 'Hand-finished angrakha suit sets in breathable cotton, made in Jaipur for every celebration.',
       btnPrimary: 'SHOP SUIT SETS',
       btnOutline: 'OUR STORY',
-      link: `/product/${suitsProduct._id}`
+      link: '/shop?category=Suit%20Sets'
     } : null,
-    topsProduct || kurtaProduct ? {
+    kurtaProduct ? {
       type: 'image',
-      src: topsProduct?.image || kurtaProduct?.image,
-      title: topsProduct ? topsProduct.name : (kurtaProduct ? kurtaProduct.name : ''),
-      subtitle: topsProduct ? topsProduct.description : (kurtaProduct ? kurtaProduct.description : ''),
-      btnPrimary: 'EXPLORE STYLES',
-      btnOutline: 'SHOP ALL',
-      link: topsProduct ? `/product/${topsProduct._id}` : `/product/${kurtaProduct?._id}`
+      src: kurtaProduct.image,
+      title: 'Everyday Elegance',
+      subtitle: 'Comfortable cotton kurta sets with the details that make a simple day feel special.',
+      btnPrimary: 'SHOP KURTA SETS',
+      btnOutline: 'OUR STORY',
+      link: '/shop?category=Kurta%20Sets'
+    } : null,
+    topsProduct ? {
+      type: 'image',
+      src: topsProduct.image,
+      title: 'Easy Cotton Tops',
+      subtitle: 'Printed tops and short kurtis for college, work and weekends.',
+      btnPrimary: 'SHOP TOPS',
+      btnOutline: 'OUR STORY',
+      link: '/shop?category=Tops'
     } : null
   ].filter(Boolean) as any[];
 

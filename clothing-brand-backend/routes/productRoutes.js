@@ -5,6 +5,35 @@ import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.js';
 import { syncProductInBackground, deleteProductInBackground } from '../utils/googleMerchant.js';
 import { adminOnly } from '../middleware/authMiddleware.js';
+import { rateLimit } from '../middleware/rateLimit.js';
+import StockAlert from '../models/StockAlert.js';
+import { sendMailInBackground } from '../utils/mailer.js';
+import { backInStockEmail } from '../utils/emailTemplates.js';
+
+// "Shop by occasion" collections, matched against product names
+const OCCASIONS = {
+  festive: /festive|wedding|party|embroider|designer|anarkali|premium/i,
+  daily: /daily|everyday|casual|comfort|regular|simple/i,
+  cotton: /cotton/i,
+  embroidered: /embroider/i,
+};
+
+const escapeRegex = (text) => String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const isInStock = (product) => !product.soldOut && Number(product.countInStock) > 0;
+
+// Email everyone waiting for this product, once
+async function sendBackInStockAlerts(product) {
+  const alerts = await StockAlert.find({ product: product._id, notifiedAt: null });
+  for (const alert of alerts) {
+    sendMailInBackground({ to: alert.email, ...backInStockEmail(product) });
+  }
+  if (alerts.length) {
+    await StockAlert.updateMany({ _id: { $in: alerts.map((a) => a._id) } }, { notifiedAt: new Date() });
+  }
+}
+
+const notifyLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
 
 const router = express.Router();
 
@@ -61,22 +90,27 @@ router.get('/', async (req, res) => {
 
     let query = {};
 
+    const occasion = OCCASIONS[req.query.occasion];
     if (req.query.category) {
       query.category = req.query.category;
+    } else if (occasion) {
+      query.name = occasion;
     } else if (req.query.keyword) {
+      const keyword = escapeRegex(String(req.query.keyword).slice(0, 100));
       query = {
         $or: [
-          { name: { $regex: req.query.keyword, $options: 'i' } },
-          { category: { $regex: req.query.keyword, $options: 'i' } }
+          { name: { $regex: keyword, $options: 'i' } },
+          { category: { $regex: keyword, $options: 'i' } }
         ],
       };
     }
+    const isFiltered = Boolean(req.query.keyword || req.query.category || occasion);
 
     // Check cache for homepage products (no filters)
     let products = null;
     let total = 0;
     
-    if (!req.query.keyword && !req.query.category) {
+    if (!isFiltered) {
       const cached = getCachedProducts();
       if (cached) {
         products = cached.slice(skip, skip + limit);
@@ -87,8 +121,8 @@ router.get('/', async (req, res) => {
     if (!products) {
       // Query only needed fields for list view (reduce network payload)
       const selectFields = page === 1 && limit === 1000 
-        ? 'name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id'
-        : 'name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id description';
+        ? 'name price originalPrice image images category brand soldOut countInStock showOnHomepage displayOrder createdAt _id'
+        : 'name price originalPrice image images category brand soldOut countInStock showOnHomepage displayOrder createdAt _id description';
       
       products = await Product.find(query)
         .select(selectFields)
@@ -100,9 +134,9 @@ router.get('/', async (req, res) => {
       total = await Product.countDocuments(query);
 
       // Cache full product list if no filters
-      if (!req.query.keyword && !req.query.category && page === 1) {
+      if (!isFiltered && page === 1) {
         const allProducts = await Product.find({})
-          .select('name price originalPrice image images category brand soldOut showOnHomepage displayOrder _id')
+          .select('name price originalPrice image images category brand soldOut countInStock showOnHomepage displayOrder createdAt _id')
           .sort({ displayOrder: 1, createdAt: -1 })
           .lean();
         setCachedProducts(allProducts);
@@ -186,6 +220,7 @@ router.post('/', adminOnly, upload.any(), async (req, res) => {
       materials: parsedMaterials,
       specifications: parsedSpecifications,
       careInstructions: parsedCareInstructions,
+      fitNote: String(req.body.fitNote || '').trim().slice(0, 300),
       videos: parsedVideos,
       soldOut: req.body.soldOut === 'true' || req.body.soldOut === true,
       showOnHomepage: req.body.showOnHomepage !== undefined ? (req.body.showOnHomepage === 'true' || req.body.showOnHomepage === true) : true,
@@ -209,6 +244,7 @@ router.put('/:id', adminOnly, upload.any(), async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
+      const wasInStock = isInStock(product);
       const imageFiles = req.files ? req.files.filter(f => f.fieldname === 'image') : [];
       const videoFiles = req.files ? req.files.filter(f => f.fieldname === 'videos_file') : [];
 
@@ -245,6 +281,7 @@ router.put('/:id', adminOnly, upload.any(), async (req, res) => {
       if (req.body.materials) product.materials = parseField(req.body.materials);
       if (req.body.specifications) product.specifications = parseField(req.body.specifications);
       if (req.body.careInstructions) product.careInstructions = parseField(req.body.careInstructions);
+      if (req.body.fitNote !== undefined) product.fitNote = String(req.body.fitNote).trim().slice(0, 300);
       if (req.body.videos) {
         let parsedVideos = parseField(req.body.videos);
         parsedVideos = parsedVideos.map(v => {
@@ -268,6 +305,9 @@ router.put('/:id', adminOnly, upload.any(), async (req, res) => {
       }
 
       const updatedProduct = await product.save();
+      if (!wasInStock && isInStock(updatedProduct)) {
+        sendBackInStockAlerts(updatedProduct).catch((err) => console.error('Back-in-stock alerts failed:', err.message));
+      }
       invalidateCache(); // Clear cache after product update
       syncProductInBackground(updatedProduct); // Push to Google Merchant Center
       res.json(updatedProduct);
@@ -298,6 +338,24 @@ router.delete('/:id', adminOnly, async (req, res) => {
     console.error('Delete product error:', error);
     res.status(500).json({ message: 'Server Error: unable to delete product', error: error.message });
   }
+});
+
+// @desc    Ask to be emailed when an out-of-stock product is available again
+// @route   POST /api/products/:id/notify
+router.post('/:id/notify', notifyLimiter, async (req, res) => {
+  const email = String(req.body.email || '').trim().toLowerCase();
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ message: 'Please enter a valid email address' });
+  }
+  const product = await Product.findById(req.params.id).select('_id');
+  if (!product) return res.status(404).json({ message: 'Product not found' });
+
+  await StockAlert.updateOne(
+    { product: product._id, email },
+    { $set: { notifiedAt: null }, $setOnInsert: { product: product._id, email } },
+    { upsert: true }
+  );
+  res.status(201).json({ success: true });
 });
 
 // @desc    Reorder products displayOrder

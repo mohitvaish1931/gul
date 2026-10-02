@@ -4,6 +4,7 @@ import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { ShoppingBag, LogOut, Package, Settings } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
+import ExchangeRequest from '../components/ExchangeRequest';
 
 const ProfileScreen = () => {
   useSEO({
@@ -218,13 +219,10 @@ const ProfileScreen = () => {
                             </div>
                           ))}
                         </div>
-                      </div>
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        {order.labelPdf && (
-                          <a href={order.labelPdf} target="_blank" rel="noreferrer" style={{ padding: '8px 15px', border: '1px solid #E2E8F0', borderRadius: '8px', color: '#4A5568', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 'bold' }}>
-                            Invoice
-                          </a>
-                        )}
+                        <ExchangeRequest
+                          order={order}
+                          onUpdated={(updated) => setOrders((list) => list.map((o: any) => (o._id === updated._id ? updated : o)))}
+                        />
                       </div>
                     </div>
                   </div>
