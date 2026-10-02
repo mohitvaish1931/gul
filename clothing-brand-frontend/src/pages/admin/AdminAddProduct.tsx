@@ -5,6 +5,7 @@ import {
 import { useAppContext } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
+import { STORE_CATEGORIES } from '../../utils/categories';
 
 
 
@@ -155,12 +156,9 @@ const AdminAddProduct = () => {
                 onChange={() => {}}
               >
                 <option value="">Select category</option>
-                <option value="Kurta Sets">Kurta Sets</option>
-                <option value="Suits">Suits</option>
-                <option value="Tops">Tops</option>
-                <option value="Three Piece Tops">Three Piece Tops</option>
-                <option value="Sarees">Sarees</option>
-                <option value="Lehengas">Lehengas</option>
+                {STORE_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
               </select>
             </div>
           </div>

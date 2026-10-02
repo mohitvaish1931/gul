@@ -32,7 +32,6 @@ const Footer = () => {
             <h4 className="footer-heading-purple">Collections</h4>
             <ul className="footer-links-purple">
               <li><Link to="/shop?category=Kurta%20Sets">Kurta Sets</Link></li>
-              <li><Link to="/shop?category=Suits">Designer Suits</Link></li>
               <li><Link to="/shop?category=Suit%20Sets">Suit Sets</Link></li>
               <li><Link to="/shop?category=Tops">Tops & Tunics</Link></li>
               <li><Link to="/shop?category=Maxis%20%26%20Dresses">Maxis & Dresses</Link></li>

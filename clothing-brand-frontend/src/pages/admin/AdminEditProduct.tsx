@@ -4,6 +4,7 @@ import { Edit, X, Plus, Trash2 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';
 import { getImageUrl } from '../../utils/mediaHelper';
+import { STORE_CATEGORIES } from '../../utils/categories';
 
 const AdminEditProduct = () => {
   const { id } = useParams();
@@ -151,10 +152,13 @@ const AdminEditProduct = () => {
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Category</label>
               <select name="category" defaultValue={localForm.category} className="w-full px-5 py-4 bg-gray-50 border border-transparent rounded-2xl text-sm focus:bg-white focus:border-indigo-600/20 transition-all outline-none">
                 <option value="">Select category</option>
-                <option value="Kurta Sets">Kurta Sets</option>
-                <option value="Suits">Suits</option>
-                <option value="Tops">Tops</option>
-                <option value="Three Piece Tops">Three Piece Tops</option>
+                {STORE_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+                {/* Keep an old category selectable so editing other fields doesn't lose it */}
+                {localForm.category && !(STORE_CATEGORIES as readonly string[]).includes(localForm.category) && (
+                  <option value={localForm.category}>{localForm.category} (not shown in store)</option>
+                )}
               </select>
             </div>
           </div>
