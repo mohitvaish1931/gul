@@ -46,13 +46,13 @@ const ApparelCareGuide = () => {
       color: '#2d0a4e', 
       minHeight: '100vh', 
       padding: '80px 20px',
-      fontFamily: "'Inter', sans-serif"
+      fontFamily: 'var(--font-body)'
     }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Garment Care Guide</h1>
-          <div style={{ width: '60px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <div style={{ width: '60px', height: '2px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
           <p style={{ fontSize: '1.1rem', color: '#666' }}>Preserve the beauty and longevity of your handcrafted ethnic wear with these expert tips.</p>
         </div>
 
@@ -101,7 +101,7 @@ const ApparelCareGuide = () => {
           textAlign: 'center'
         }}>
           <h2 className="font-serif" style={{ fontSize: '2.5rem', marginBottom: '15px', color: '#2d0a4e' }}>NEED ADVICE?</h2>
-          <div style={{ width: '40px', height: '2px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <div style={{ width: '40px', height: '2px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
           <p style={{ color: '#666', marginBottom: '40px' }}>Our styling experts are here to help you preserve your heirloom pieces:</p>
           
           <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>

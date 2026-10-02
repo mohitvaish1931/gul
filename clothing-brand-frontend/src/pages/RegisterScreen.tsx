@@ -81,7 +81,7 @@ const RegisterScreen = () => {
         textAlign: 'center'
       }}>
         <span style={{ 
-          color: '#D4AF37', 
+          color: 'var(--brass)', 
           letterSpacing: '4px', 
           fontWeight: '800', 
           fontSize: '0.7rem', 
@@ -207,7 +207,7 @@ const RegisterScreen = () => {
         </form>
 
         <div style={{ marginTop: '30px', fontSize: '0.9rem', color: '#666' }}>
-          Already have an account? <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} style={{ color: '#D4AF37', fontWeight: '800', textDecoration: 'none' }}>Sign In</Link>
+          Already have an account? <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} style={{ color: 'var(--brass)', fontWeight: '800', textDecoration: 'none' }}>Sign In</Link>
         </div>
       </div>
     </div>

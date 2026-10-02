@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
-import Categories from '../components/Categories';
 import CircleCategories from '../components/CircleCategories';
 import { API_ENDPOINTS } from '../utils/api';
 import { useSEO } from '../utils/useSEO';
@@ -10,84 +9,82 @@ import FeaturedReviews from '../components/FeaturedReviews';
 import { splitProductName } from '../utils/productName';
 import { OCCASIONS } from '../utils/occasions';
 import { getImageUrl } from '../utils/mediaHelper';
+import { Truck, RefreshCcw, ShieldCheck, MessageCircle } from 'lucide-react';
 import './HomePage.css';
 
 // Defined outside HomePage so they aren't recreated (and remounted) on every render
+
+const TRUST_POINTS = [
+  { icon: Truck, title: 'Free shipping', text: 'On every order across India' },
+  { icon: RefreshCcw, title: '7-day size exchange', text: 'Request it from My Account' },
+  { icon: ShieldCheck, title: 'Secure payments', text: 'UPI, cards and netbanking' },
+  { icon: MessageCircle, title: 'Styling help', text: 'Ask us anything on WhatsApp' },
+];
+
 const TrustBadges = () => (
-  <div className="trust-badges-section">
-    <div className="container">
-      <div className="badges-grid">
-        <div className="badge-item">
-          <h4 className="badge-title font-serif">OUR STUDIO</h4>
-          <p className="badge-desc">Jaipur studio, Pahadiya Chowk</p>
-        </div>
-        <div className="badge-item">
-          <h4 className="badge-title font-serif">FREE SHIPPING</h4>
-          <p className="badge-desc">On all orders across India</p>
-        </div>
-        <div className="badge-item">
-          <h4 className="badge-title font-serif">EASY EXCHANGE</h4>
-          <p className="badge-desc">7 Days exchange</p>
-        </div>
-        <div className="badge-item">
-          <h4 className="badge-title font-serif">STYLING CONCIERGE</h4>
-          <p className="badge-desc">Personal advice via WhatsApp</p>
+  <section className="trust-row container" aria-label="Why shop with us">
+    {TRUST_POINTS.map(({ icon: Icon, title, text }) => (
+      <div key={title} className="trust-point">
+        <Icon size={22} strokeWidth={1.4} aria-hidden="true" />
+        <div>
+          <p className="trust-title">{title}</p>
+          <p className="trust-text">{text}</p>
         </div>
       </div>
-    </div>
-  </div>
+    ))}
+  </section>
 );
 
-const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAllLink = '/shop' }: any) => (
-  <section className="carousel-section container section">
-    <div className="carousel-header flex justify-between items-center reveal-on-scroll" style={{marginBottom: '40px'}}>
+interface RailProps {
+  title: string;
+  subtext?: string;
+  items: any[];
+  viewAllLink?: string;
+}
+
+// A row of product cards: a grid on desktop, a swipeable row on phones
+const ProductRail = ({ title, subtext, items, viewAllLink = '/shop' }: RailProps) => (
+  <section className="rail container">
+    <div className="rail-header">
       <div>
-        <span className="small-gold-tag">{tag}</span>
-        <h2 className="title" style={{fontSize: '2.5rem'}}><span style={{fontWeight: 700}}>{titleLight}</span> <i className="font-serif" style={{color: 'var(--primary-purple)'}}>{titleItalic}</i></h2>
-        {subtext && <p className="subtext mt-2 text-gray-500 font-serif">{subtext}</p>}
+        <h2 className="section-heading">{title}</h2>
+        {subtext && <p className="section-subtext">{subtext}</p>}
       </div>
-      <Link to={viewAllLink} className="view-all-link">VIEW ALL</Link>
+      <Link to={viewAllLink} className="view-all-link">View all</Link>
     </div>
-    
+
     <div className="products-carousel-grid">
-      {items.map((product: any, idx: number) => {
-        const discount = product.originalPrice && product.price && product.originalPrice > product.price 
-          ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+      {items.map((product: any) => {
+        const discount = product.originalPrice && product.price && product.originalPrice > product.price
+          ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
           : 0;
+        const { title: name } = splitProductName(product.name);
 
         return (
-          <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
-            <Link to={`/product/${product._id}`}>
-              <div className="carousel-img-wrapper">
-                <img src={getImageUrl(product.image, 600)} alt={product.name} className="primary-img" loading="lazy" />
-                {product.images && product.images.length > 1 && (
-                  <img src={getImageUrl(product.images[1], 600)} alt={`${product.name} alternate`} className="secondary-img" loading="lazy" />
-                )}
-                {discount > 0 && (
-                  <div className="discount-badge">{discount}% OFF</div>
-                )}
-                <WishlistButton product={product} size={16} style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 2 }} />
-              </div>
-            </Link>
-          <div className="carousel-product-details">
-            <Link to={`/product/${product._id}`}><h3 className="cp-name">{splitProductName(product.name).title}</h3></Link>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {discount > 0 && (
-                <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', fontWeight: 500 }}>
-                  ₹{product.originalPrice.toLocaleString('en-IN')}
-                </span>
+          <article key={product._id} className="carousel-product-card">
+            <Link to={`/product/${product._id}`} className="carousel-img-wrapper" aria-label={name}>
+              <img src={getImageUrl(product.image, 600)} alt={name} className="primary-img" loading="lazy" />
+              {product.images && product.images.length > 1 && (
+                <img src={getImageUrl(product.images[1], 600)} alt="" className="secondary-img" loading="lazy" />
               )}
-              <p className="cp-price" style={{ marginTop: 0 }}>₹{product.price.toLocaleString('en-IN')}</p>
+              {discount > 0 && <span className="discount-badge">{discount}% off</span>}
+            </Link>
+            <WishlistButton product={product} size={16} className="card-wishlist" />
+            <div className="carousel-product-details">
+              <Link to={`/product/${product._id}`} className="cp-name">{name}</Link>
+              <p className="cp-price">
+                ₹{product.price.toLocaleString('en-IN')}
+                {discount > 0 && <s className="cp-mrp">₹{product.originalPrice.toLocaleString('en-IN')}</s>}
+              </p>
             </div>
-          </div>
-        </div>
-      );
-    })}
+          </article>
+        );
+      })}
     </div>
   </section>
 );
 
-// Occasion tiles, each showing a product from that collection
+// Occasion collections, framed in the jharokha arch used across the store's navigation
 const ShopByOccasion = ({ products }: { products: any[] }) => {
   const tiles = OCCASIONS.map((occasion) => ({
     ...occasion,
@@ -97,25 +94,51 @@ const ShopByOccasion = ({ products }: { products: any[] }) => {
   if (tiles.length === 0) return null;
 
   return (
-    <section className="container section" style={{ padding: '20px 16px 60px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <span className="small-gold-tag">SHOP BY OCCASION</span>
-        <h2 className="title font-serif" style={{ fontSize: '2.5rem', margin: '6px 0 0' }}>Dressed for Every <i style={{ color: 'var(--primary-purple)' }}>Moment</i></h2>
+    <section className="occasions container">
+      <div className="rail-header">
+        <div>
+          <h2 className="section-heading">Shop by occasion</h2>
+          <p className="section-subtext">From festive evenings to everyday errands.</p>
+        </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '18px' }}>
+      <div className="occasion-grid">
         {tiles.map((tile) => (
-          <Link key={tile.key} to={`/shop?occasion=${tile.key}`} style={{ position: 'relative', display: 'block', borderRadius: '18px', overflow: 'hidden', aspectRatio: '3 / 4', textDecoration: 'none' }}>
-            <img src={getImageUrl(tile.image!, 600)} alt={tile.label} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(45,10,78,0.85) 0%, rgba(45,10,78,0) 55%)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '22px' }}>
-              <span className="font-serif" style={{ color: '#fff', fontSize: '1.6rem', lineHeight: 1.2 }}>{tile.label}</span>
-              <span style={{ color: '#e9ddf7', fontSize: '0.85rem', marginTop: '4px' }}>{tile.tagline}</span>
-            </div>
+          <Link key={tile.key} to={`/shop?occasion=${tile.key}`} className="occasion-tile">
+            <span className="arch-frame">
+              <img src={getImageUrl(tile.image!, 600)} alt="" loading="lazy" />
+            </span>
+            <span className="occasion-label">{tile.label}</span>
+            <span className="occasion-tagline">{tile.tagline}</span>
           </Link>
         ))}
       </div>
     </section>
   );
 };
+
+// Brand story with facts the store can stand behind
+const StoryBand = ({ image, designCount }: { image?: string; designCount: number }) => (
+  <section className="story-band">
+    {image && (
+      <div className="story-media">
+        <img src={getImageUrl(image, 1000)} alt="A Gul Fashion suit set" loading="lazy" />
+      </div>
+    )}
+    <div className="story-copy">
+      <h2 className="section-heading">Designed and finished in Jaipur</h2>
+      <p className="story-text">
+        Every piece is made at our studio in Pahadiya Chowk — breathable cottons, angrakha ties and
+        embroidery finished by hand, so what arrives at your door feels as good as it looks.
+      </p>
+      <dl className="story-facts">
+        <div><dt>2005</dt><dd>Established in Jaipur</dd></div>
+        <div><dt>{designCount > 0 ? designCount : '100+'}</dt><dd>Designs online</dd></div>
+        <div><dt>7 days</dt><dd>Size exchange</dd></div>
+      </dl>
+      <Link to="/about" className="text-link">Read our story</Link>
+    </div>
+  </section>
+);
 
 const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -234,138 +257,42 @@ const HomePage = () => {
         </div>
       ) : (
         <>
-          <div className="container text-center" style={{marginBottom: '40px'}}>
-            <span className="small-gold-tag text-center" style={{display: 'inline-block'}}>CURATED FOR YOU</span>
-          </div>
-          <Categories products={homepageProducts} />
-
           {newArrivals.length > 0 && (
-            <CarouselSection 
-              tag="JUST IN" 
-              titleLight="NEW" 
-              titleItalic="ARRIVALS" 
-              subtext="Handpicked for this season"
-              items={newArrivals}
-              viewAllLink="/shop"
-            />
+            <ProductRail title="New arrivals" subtext="The latest pieces from our Jaipur studio." items={newArrivals} viewAllLink="/shop" />
           )}
 
           <ShopByOccasion products={homepageProducts} />
 
-          <section className="bridal-edit-section reveal-on-scroll">
-            <div className="bridal-split">
-              <div className="bridal-img-side">
-                <img src="/images/bridal-edit.png" alt="Bridal Edit 2026" loading="lazy" />
-              </div>
-              <div className="bridal-content-side">
-                <span className="gold-capsule">THE BRIDAL EDIT 2026</span>
-                <h2 className="font-serif bridal-title">Dressed for Your<br/>Most Precious Moments</h2>
-                
-                <div className="bridal-stats-grid">
-                  <div className="stat-item">
-                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>Jaipur</h3>
-                    <p>HANDCRAFTED IN</p>
-                  </div>
-                  <div className="stat-item">
-                    <h3 className="font-serif" style={{color: 'var(--secondary-color)', fontSize: '2rem'}}>{products.length > 0 ? `${products.length}+` : '100+'}</h3>
-                    <p>DESIGNS ONLINE</p>
-                  </div>
-                  <div className="stat-item">
-                    <h3 className="font-serif" style={{color: 'var(--primary-purple)', fontSize: '2rem'}}>21 <span style={{fontSize: '1rem'}}>Yrs</span></h3>
-                    <p>OF GUL FASHION</p>
-                  </div>
-                </div>
-                
-                <p className="bridal-desc">
-                  Experience the royal legacy of Jaipur's intricate craftsmanship, where every thread weaves a tale of timeless beauty, creating heirlooms meant to be treasured forever.
-                </p>
-              </div>
-            </div>
-          </section>
+          <StoryBand image={suitSets[0]?.image || kurtaSets[0]?.image} designCount={products.length} />
 
           {kurtaSets.length > 0 && (
-            <CarouselSection 
-              tag="BEST SELLING CATEGORY" 
-              titleLight="KURTA" 
-              titleItalic="SETS" 
-              items={kurtaSets} 
-              viewAllLink="/shop?category=Kurta%20Sets"
-            />
+            <ProductRail title="Kurta sets" items={kurtaSets} viewAllLink="/shop?category=Kurta%20Sets" />
+          )}
+
+          {suitSets.length > 0 && (
+            <ProductRail title="Suit sets" items={suitSets} viewAllLink="/shop?category=Suit%20Sets" />
           )}
 
           <TrustBadges />
-          
-          {suitSets.length > 0 && (
-            <CarouselSection 
-              tag="TOP CATEGORY" 
-              titleLight="SUIT" 
-              titleItalic="SETS" 
-              items={suitSets} 
-              viewAllLink="/shop?category=Suit%20Sets"
-            />
-          )}
 
           {topsCoOrds.length > 0 && (
-            <CarouselSection 
-              tag="DAILY CHIC" 
-              titleLight="TOPS" 
-              titleItalic="" 
-              items={topsCoOrds} 
-              viewAllLink="/shop?category=Tops"
-            />
+            <ProductRail title="Tops and short kurtis" items={topsCoOrds} viewAllLink="/shop?category=Tops" />
           )}
 
           {maxisDresses.length > 0 && (
-            <CarouselSection 
-              tag="ELEGANT FLOW" 
-              titleLight="MAXIS &" 
-              titleItalic="DRESSES" 
-              items={maxisDresses} 
-              viewAllLink="/shop?category=Maxis%20%26%20Dresses"
-            />
+            <ProductRail title="Maxis and dresses" items={maxisDresses} viewAllLink="/shop?category=Maxis%20%26%20Dresses" />
           )}
 
           <FeaturedReviews />
 
-          <section className="store-locator-banner reveal-on-scroll" style={{backgroundImage: 'url(/images/store-locator.png)'}}>
-            <div className="store-locator-overlay" style={{backgroundColor: 'rgba(45, 0, 77, 0.7)'}}>
-              <div className="store-locator-content text-center">
-                <h2 className="title font-serif" style={{color: '#fff', fontSize: '3.5rem', marginBottom: '20px'}}>Find Your Perfect Look, <i style={{color: 'var(--gold-primary)'}}>In-Store</i></h2>
-                <p style={{color: '#ddd', fontSize: '1.2rem', marginBottom: '30px'}}>Discover our collection in person at our studio in Pahadiya Chowk, Jaipur.</p>
-                <a href="https://www.google.com/maps/search/?api=1&query=455+Mandhi+Khatikan+Pahadiya+Chowk+Jaipur+302002" target="_blank" rel="noreferrer" className="btn btn-primary" style={{padding: '15px 40px', backgroundColor: '#fff', color: 'var(--primary-purple)', display: 'inline-block', textDecoration: 'none'}}>GET DIRECTIONS</a>
+          <section className="studio-band">
+            <div className="studio-band-inner container">
+              <h2 className="section-heading">Visit our Jaipur studio</h2>
+              <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur 302002. See the fabrics in person and get help with sizing.</p>
+              <div className="studio-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=455+Mandhi+Khatikan+Pahadiya+Chowk+Jaipur+302002" target="_blank" rel="noreferrer" className="btn btn-light">Get directions</a>
+                <a href="https://wa.me/919351325459" target="_blank" rel="noreferrer" className="text-link text-link-light">Message us before you visit</a>
               </div>
-            </div>
-          </section>
-
-          <section className="worn-with-love container section reveal-on-scroll">
-            <h2 className="title text-center font-serif" style={{fontSize: '3rem', margin: '40px 0'}}>Worn with <i style={{color: 'var(--primary-purple)'}}>Love</i></h2>
-            <div className="social-proof-grid">
-               {homepageProducts.slice(0, 4).map((product, i) => (
-                 <div className={`social-card reveal-on-scroll delay-${i * 100}`} key={i}>
-                    <img src={getImageUrl(product.image, 600)} alt="Social Proof" loading="lazy" />
-                    <div className="social-hover">Instagram ♥ 1.2k</div>
-                 </div>
-               ))}
-            </div>
-          </section>
-
-          <section className="featured-in text-center section" style={{backgroundColor: '#f8f8f8'}}>
-            <span className="small-gold-tag">FEATURED IN</span>
-            <div className="featured-logos flex justify-center items-center" style={{gap: '60px', marginTop: '30px', opacity: 0.6, filter: 'grayscale(100%)'}}>
-              <h3 className="font-serif text-xl">VOGUE</h3>
-              <h3 className="font-serif text-xl">ELLE</h3>
-              <h3 className="font-serif text-xl">COSMOPOLITAN</h3>
-              <h3 className="font-serif text-xl">FEMINA</h3>
-            </div>
-          </section>
-
-          <section className="testimonials text-center section container reveal-on-scroll" style={{padding: '80px 0'}}>
-            <h2 className="title font-serif" style={{fontSize: '2.5rem', marginBottom: '40px'}}>What Our <i style={{color: 'var(--primary-purple)'}}>Patrons Say</i></h2>
-            <div style={{maxWidth: '800px', margin: '0 auto'}}>
-               <p className="font-serif italic" style={{fontSize: '1.5rem', lineHeight: '1.8', color: '#444'}}>
-                 "The craftsmanship is unparalleled. I wore a GUL FASHION kurta set for my wedding and it made me feel like royalty. Every thread is intricately woven with magic."
-               </p>
-               <p style={{marginTop: '20px', letterSpacing: '2px', fontWeight: 'bold'}}>- PRIYANKA SHARMA</p>
             </div>
           </section>
         </>

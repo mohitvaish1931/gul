@@ -77,9 +77,8 @@ const OrderSuccess = () => {
     <div className="order-success-page" style={{ backgroundColor: '#FDFBFD', minHeight: '80vh', padding: '60px 16px 100px' }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <CheckCircle2 size={56} color="#15803D" strokeWidth={1.5} style={{ marginBottom: '16px' }} />
-          <span style={{ display: 'block', color: '#D4AF37', letterSpacing: '4px', fontWeight: 800, fontSize: '0.7rem', marginBottom: '10px' }}>ORDER CONFIRMED</span>
-          <h1 className="font-serif" style={{ color: '#2D0A4E', fontSize: '2.4rem', margin: '0 0 12px' }}>
+          <CheckCircle2 size={48} color="var(--ink)" strokeWidth={1.25} style={{ marginBottom: '16px' }} aria-hidden="true" />
+                    <h1 className="font-serif" style={{ color: '#2D0A4E', fontSize: '2.4rem', margin: '0 0 12px' }}>
             Thank you{order.shippingAddress?.name ? `, ${order.shippingAddress.name.split(' ')[0]}` : ''}!
           </h1>
           <p style={{ color: '#555', lineHeight: 1.7, margin: 0 }}>
@@ -90,7 +89,7 @@ const OrderSuccess = () => {
 
         <div style={{ background: '#fff', border: '1px solid #f0e8f7', borderRadius: '20px', padding: '24px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '18px', marginBottom: '8px', borderBottom: '1px solid #f3f3f3' }}>
-            <Truck size={22} color="#D4AF37" />
+            <Truck size={22} color="var(--brass)" />
             <div>
               <div style={{ fontWeight: 700, color: '#2D0A4E' }}>Estimated delivery: {delivery.label}</div>
               <div style={{ fontSize: '0.85rem', color: '#777' }}>
@@ -124,11 +123,11 @@ const OrderSuccess = () => {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '32px' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: '#fff', border: '1px solid #f0e8f7', borderRadius: '14px', padding: '16px', fontSize: '0.85rem', color: '#555' }}>
-            <RefreshCcw size={18} color="#D4AF37" style={{ flexShrink: 0 }} />
+            <RefreshCcw size={18} color="var(--brass)" style={{ flexShrink: 0 }} />
             <span>Wrong size? Request an exchange from My Account within 7 days of delivery.</span>
           </div>
           <a href="https://wa.me/919351325459" target="_blank" rel="noreferrer" style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: '#fff', border: '1px solid #f0e8f7', borderRadius: '14px', padding: '16px', fontSize: '0.85rem', color: '#555', textDecoration: 'none' }}>
-            <MessageCircle size={18} color="#D4AF37" style={{ flexShrink: 0 }} />
+            <MessageCircle size={18} color="var(--brass)" style={{ flexShrink: 0 }} />
             <span>Questions about your order? Chat with us on WhatsApp.</span>
           </a>
         </div>

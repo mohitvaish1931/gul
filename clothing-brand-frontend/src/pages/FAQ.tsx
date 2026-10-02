@@ -52,7 +52,7 @@ const FAQ = () => {
       backgroundColor: '#fdfbff', 
       color: '#2d0a4e', 
       minHeight: '100vh', 
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: 'var(--font-body)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -67,9 +67,9 @@ const FAQ = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>SUPPORT</span>
+          <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>SUPPORT</span>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>FAQs</h1>
-          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
           <p style={{ fontSize: '1.1rem', color: '#666' }}>Find answers to common questions about our products and services.</p>
         </div>
 
@@ -108,7 +108,7 @@ const FAQ = () => {
              </div>
              <div>
                 <h2 className="font-serif" style={{ fontSize: '1.8rem', marginBottom: '5px', color: '#2d0a4e' }}>Still have questions?</h2>
-                <div style={{ width: '30px', height: '1.5px', backgroundColor: '#D4AF37', marginBottom: '10px' }}></div>
+                <div style={{ width: '30px', height: '1.5px', backgroundColor: 'var(--brass)', marginBottom: '10px' }}></div>
                 <p style={{ color: '#666', fontSize: '0.9rem', maxWidth: '400px' }}>Our luxury consultants are available to assist you with any inquiries you may have.</p>
              </div>
           </div>
@@ -179,7 +179,7 @@ const AccordionItem = ({ question, answer }: { question: string, answer: string 
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flexShrink: 0 }}>
            <div style={{ width: '26px', height: '26px', backgroundColor: '#2d0a4e', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: '800' }}>Q</div>
-           <div style={{ width: '26px', height: '26px', backgroundColor: '#D4AF37', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: '800' }}>A</div>
+           <div style={{ width: '26px', height: '26px', backgroundColor: 'var(--brass)', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: '800' }}>A</div>
         </div>
         <span style={{ flex: 1, fontSize: '1rem', fontWeight: '700', color: '#2d0a4e' }}>{question}</span>
         <ChevronDown 

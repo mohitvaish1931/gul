@@ -33,17 +33,16 @@ const FeaturedReviews = ({ heading = 'Loved by Our Customers' }: { heading?: str
   if (reviews.length === 0) return null;
 
   return (
-    <section className="container" style={{ padding: '60px 16px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-        <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: 800, fontSize: '0.7rem' }}>REAL REVIEWS</span>
-        <h2 className="font-serif" style={{ color: '#2D0A4E', fontSize: '2.2rem', margin: '8px 0 0' }}>{heading}</h2>
+    <section className="container" style={{ paddingTop: 'clamp(48px, 6vw, 88px)' }}>
+      <div style={{ marginBottom: '24px' }}>
+                <h2 className="section-heading">{heading}</h2>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
         {reviews.map((review) => (
-          <article key={review._id} style={{ background: '#fff', border: '1px solid #f0e8f7', borderRadius: '18px', padding: '22px' }}>
+          <article key={review._id} style={{ background: '#fff', border: '1px solid var(--line)', borderRadius: '2px', padding: '22px' }}>
             <div style={{ display: 'flex', gap: '2px', marginBottom: '10px' }} aria-label={`${review.rating} out of 5 stars`}>
               {[1, 2, 3, 4, 5].map((n) => (
-                <Star key={n} size={14} fill={n <= review.rating ? '#D4AF37' : 'none'} color={n <= review.rating ? '#D4AF37' : '#ddd'} />
+                <Star key={n} size={14} fill={n <= review.rating ? 'var(--brass)' : 'none'} color={n <= review.rating ? 'var(--brass)' : '#ddd'} />
               ))}
             </div>
             <h3 style={{ fontSize: '1rem', color: '#2D0A4E', margin: '0 0 6px' }}>{review.title}</h3>

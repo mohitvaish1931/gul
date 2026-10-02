@@ -75,16 +75,20 @@ const ProductListPage = () => {
   });
 
   return (
-    <div className="shop-page" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', paddingBottom: '100px' }}>
-      {/* Category Header */}
-      <section style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '100px 20px', textAlign: 'center', marginBottom: '60px' }}>
+    <div className="shop-page">
+      {/* Collection header */}
+      <section className="shop-header">
          <div className="container">
-            <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>CURATED SELECTION</span>
-            <h1 className="font-serif" style={{ fontSize: '3.5rem', marginBottom: '20px' }}>
-               {category || occasion?.label || (keyword ? `Search: "${keyword}"` : 'Shop The Collection')}
+            <nav className="pdp-breadcrumb" aria-label="Breadcrumb">
+              <Link to="/">Home</Link>
+              <span aria-hidden="true">/</span>
+              <Link to="/shop">Shop</Link>
+            </nav>
+            <h1 className="section-heading shop-title">
+               {category || occasion?.label || (keyword ? `Results for "${keyword}"` : 'All designs')}
             </h1>
-            <p style={{ fontSize: '1.1rem', opacity: 0.8, maxWidth: '600px', margin: '0 auto' }}>
-               {occasion ? occasion.tagline : 'Experience the finest Jaipur craftsmanship, meticulously curated for the modern connoisseur.'}
+            <p className="section-subtext">
+               {occasion ? occasion.tagline : 'Kurta sets, suits and everyday cottons, made at our studio in Jaipur.'}
             </p>
          </div>
       </section>
@@ -93,7 +97,7 @@ const ProductListPage = () => {
         {loading ? (
           <div style={{ textAlign: 'center', padding: '100px 0' }}>
              <div className="loader-spinner" style={{ border: '3px solid #f3f3f3', borderTop: '3px solid #2D0A4E', borderRadius: '50%', width: '40px', height: '40px', animation: 'spin 1s linear infinite', margin: '0 auto' }}></div>
-             <p style={{ marginTop: '20px', color: '#666', fontFamily: 'serif' }}>Curating your collection...</p>
+             <p style={{ marginTop: '20px', color: 'var(--ink-soft)' }}>Loading designs…</p>
           </div>
         ) : error ? (
           <div style={{ textAlign: 'center', padding: '100px 20px', backgroundColor: '#FFF5F5', borderRadius: '24px', border: '1px solid #FED7D7' }}>
@@ -101,16 +105,16 @@ const ProductListPage = () => {
           </div>
         ) : products.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '100px 0' }}>
-             <h2 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '20px' }}>No treasures found.</h2>
-             <p style={{ color: '#666', marginBottom: '30px' }}>Try a different search term or explore our full collection.</p>
-             <Link to="/shop" style={{ padding: '15px 30px', backgroundColor: '#2D0A4E', color: '#fff', textDecoration: 'none', borderRadius: '12px', fontWeight: '800', letterSpacing: '1px' }}>VIEW ALL PRODUCTS</Link>
+             <h2 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '20px' }}>Nothing matches that search</h2>
+             <p style={{ color: '#666', marginBottom: '30px' }}>Try another word, like kurta, suit or cotton.</p>
+             <Link to="/shop" className="btn btn-primary">See all designs</Link>
           </div>
         ) : (
           <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
             <span style={{ color: '#666', fontSize: '0.9rem' }}>{products.length} {products.length === 1 ? 'design' : 'designs'}</span>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#2D0A4E', fontWeight: 700, letterSpacing: '1px' }}>
-              SORT BY
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 500 }}>
+              Sort by
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
@@ -123,7 +127,7 @@ const ProductListPage = () => {
               </select>
             </label>
           </div>
-          <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '40px' }}>
+          <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(240px, 100%), 1fr))', gap: '32px 20px' }}>
             {sortedProducts.map((product, idx) => {
               const discount = product.originalPrice && product.price && product.originalPrice > product.price 
                 ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
@@ -141,12 +145,12 @@ const ProductListPage = () => {
                         <span className="new-arrival-tag">NEW ARRIVAL</span>
                       )}
                       {discount > 0 && (
-                        <div className="discount-badge">{discount}% OFF</div>
+                        <span className="discount-badge">{discount}% off</span>
                       )}
                       <WishlistButton product={product} size={16} style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 2 }} />
                     </div>
                     <div className="luxury-card-details">
-                      <h3 className="font-serif luxury-name">{splitProductName(product.name).title}</h3>
+                      <h3 className="luxury-name">{splitProductName(product.name).title}</h3>
                       <div className="luxury-price-row">
                          <div style={{ display: 'flex', flexDirection: 'column' }}>
                            {discount > 0 && (
@@ -156,7 +160,7 @@ const ProductListPage = () => {
                            )}
                            <span className="luxury-price">₹{product.price.toLocaleString('en-IN')}</span>
                          </div>
-                         <span className="luxury-atelier">JAIPUR ATELIER</span>
+                         
                       </div>
                     </div>
                   </Link>

@@ -12,17 +12,16 @@
 }
 
 .header-top-bar {
-  background-color: var(--primary-purple);
+  background-color: var(--ink);
   color: #fff;
-  padding: 10px 0;
+  padding: 9px 16px;
   text-align: center;
 }
 
 .promo-text {
-  font-size: 0.6rem;
-  font-weight: 800;
-  letter-spacing: 4px;
-  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
 }
 
 .announcement-fade {
@@ -57,7 +56,7 @@
 .search-form {
   display: flex;
   align-items: center;
-  border-bottom: 1.5px solid #eee;
+  border-bottom: 1px solid var(--line);
   padding: 5px 0;
   width: 280px;
 }
@@ -66,11 +65,14 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-size: 0.88rem;
+  font-weight: 400;
   width: 100%;
-  color: var(--primary-purple);
+  color: var(--ink);
+}
+
+.search-input::placeholder {
+  color: var(--ink-muted);
 }
 
 .search-btn {
@@ -122,7 +124,7 @@
 }
 
 .suggestion-name {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   color: var(--primary-purple);
   margin-bottom: 3px;
@@ -187,7 +189,7 @@
 }
 
 .logo-text {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 600;
   color: var(--primary-purple);
@@ -213,24 +215,27 @@
 }
 
 .header-icon-link {
-  color: var(--primary-purple);
-  transition: all 0.3s ease;
+  position: relative; /* anchors the count badge to its icon */
+  display: inline-flex;
+  color: var(--ink);
+  transition: color 0.2s ease;
 }
 
 .cart-badge {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  background: var(--accent-purple);
+  top: -7px;
+  right: -9px;
+  background: var(--ink);
   color: #fff;
-  font-size: 0.6rem;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
+  font-size: 0.65rem;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 /* Navigation */
@@ -261,18 +266,17 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #2D004D;
-  transition: all 0.3s ease;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  transition: color 0.2s ease;
   padding: 10px 0;
   position: relative;
 }
 
 .nav-link:hover {
-  color: var(--accent-purple);
+  color: var(--brass-ink);
 }
 
 /* Sticky Nav */
@@ -280,7 +284,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 0 10px 40px rgba(75, 0, 130, 0.08);
+  box-shadow: 0 10px 40px rgba(45, 10, 78, 0.08);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(15px);
   border: none;
@@ -300,7 +304,7 @@
 }
 
 .mini-logo-text {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -459,7 +463,7 @@
   width: 100%;
   background: #fff;
   border: 1px solid #f0e6ff;
-  box-shadow: 0 10px 30px rgba(75, 0, 130, 0.1);
+  box-shadow: 0 10px 30px rgba(45, 10, 78, 0.1);
   border-radius: 12px;
   transition: all 0.3s ease;
   padding: 10px 0;

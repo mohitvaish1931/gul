@@ -9,9 +9,9 @@ import logoImg from '../assets/logo.png';
 import './Header.css';
 
 const announcements = [
-  "FREE DELIVERY ACROSS INDIA | SECURE ONLINE PAYMENTS",
-  "7-DAY SIZE EXCHANGE ON UNWORN GARMENTS",
-  "FREE SHIPPING ON ALL ORDERS ACROSS INDIA"
+  "Free delivery across India",
+  "7-day size exchange on unworn garments",
+  "Handcrafted in Jaipur since 2005"
 ];
 
 const Header = () => {
@@ -140,7 +140,7 @@ const Header = () => {
               <form onSubmit={submitSearch} className="search-form">
                 <input 
                   type="text" 
-                  placeholder="SEARCH..." 
+                  placeholder="Search kurtas, suits, tops" 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onFocus={() => { if(searchTerm.length > 1) setShowSuggestions(true); }}
@@ -213,7 +213,7 @@ const Header = () => {
           <form onSubmit={submitSearch} className="mobile-search-form">
             <input 
               type="text" 
-              placeholder="SEARCH THE STORE..." 
+              placeholder="Search kurtas, suits, tops" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => { if(searchTerm.length > 1) setShowSuggestions(true); }}

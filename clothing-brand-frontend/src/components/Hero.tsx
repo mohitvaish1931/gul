@@ -24,8 +24,8 @@ const Hero = ({ products = [] }: HeroProps) => {
       src: suitsProduct.image,
       title: 'The Festive Edit',
       subtitle: 'Hand-finished angrakha suit sets in breathable cotton, made in Jaipur for every celebration.',
-      btnPrimary: 'SHOP SUIT SETS',
-      btnOutline: 'OUR STORY',
+      btnPrimary: 'Shop suit sets',
+      btnOutline: 'Our story',
       link: '/shop?category=Suit%20Sets'
     } : null,
     kurtaProduct ? {
@@ -33,8 +33,8 @@ const Hero = ({ products = [] }: HeroProps) => {
       src: kurtaProduct.image,
       title: 'Everyday Elegance',
       subtitle: 'Comfortable cotton kurta sets with the details that make a simple day feel special.',
-      btnPrimary: 'SHOP KURTA SETS',
-      btnOutline: 'OUR STORY',
+      btnPrimary: 'Shop kurta sets',
+      btnOutline: 'Our story',
       link: '/shop?category=Kurta%20Sets'
     } : null,
     topsProduct ? {
@@ -42,8 +42,8 @@ const Hero = ({ products = [] }: HeroProps) => {
       src: topsProduct.image,
       title: 'Easy Cotton Tops',
       subtitle: 'Printed tops and short kurtis for college, work and weekends.',
-      btnPrimary: 'SHOP TOPS',
-      btnOutline: 'OUR STORY',
+      btnPrimary: 'Shop tops',
+      btnOutline: 'Our story',
       link: '/shop?category=Tops'
     } : null
   ].filter(Boolean) as any[];
@@ -55,8 +55,8 @@ const Hero = ({ products = [] }: HeroProps) => {
       src: 'https://res.cloudinary.com/drjnbrsfj/image/upload/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg',
       title: 'Premium Suit Sets',
       subtitle: 'Experience the royal legacy of Jaipur craftsmanship.',
-      btnPrimary: 'SHOP SUIT SETS',
-      btnOutline: 'OUR STORY',
+      btnPrimary: 'Shop suit sets',
+      btnOutline: 'Our story',
       link: `/shop?category=Suit%20Sets`
     }];
   }
@@ -98,7 +98,7 @@ const Hero = ({ products = [] }: HeroProps) => {
                 src={getImageUrl(slide.src, 1200)} 
                 srcSet={`${getImageUrl(slide.src, 600)} 600w, ${getImageUrl(slide.src, 1200)} 1200w, ${getImageUrl(slide.src, 1920)} 1920w`}
                 sizes="(max-width: 768px) 600px, (max-width: 1200px) 1200px, 1920px"
-                alt={slide.title} 
+                alt="" 
                 className="hero-media hero-image" 
                 fetchPriority={idx === 0 ? "high" : "auto"}
                 loading={idx === 0 ? "eager" : "lazy"}
@@ -107,19 +107,11 @@ const Hero = ({ products = [] }: HeroProps) => {
             )}
             <div className="hero-overlay"></div>
             <div className="hero-content">
-              <span className="hero-gold-tag animate-item">THE LUXURY EDIT</span>
-              <h2 className="hero-title font-serif animate-item">
-                <span className="title-bold">{slide.title.split(' ')[0]}</span>{' '}
-                <span className="title-italic font-serif" style={{color: 'var(--gold-primary)'}}>
-                  {slide.title.split(' ').slice(1).join(' ')}
-                </span>
-              </h2>
-              <p className="hero-subtitle animate-item" style={{ maxWidth: '800px', margin: '0 auto 45px', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                {slide.subtitle}
-              </p>
+              <h2 className="hero-title font-serif animate-item">{slide.title}</h2>
+              <p className="hero-subtitle animate-item">{slide.subtitle}</p>
               <div className="hero-actions animate-item">
                 <Link to={slide.link} className="hero-btn hero-btn-primary">{slide.btnPrimary}</Link>
-                <Link to="/about" className="hero-btn hero-btn-outline">{slide.btnOutline}</Link>
+                <Link to="/about" className="hero-link">{slide.btnOutline}</Link>
               </div>
             </div>
           </div>

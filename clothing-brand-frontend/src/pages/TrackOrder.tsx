@@ -74,7 +74,7 @@ const TrackOrder = () => {
       backgroundColor: '#fdfbff', 
       minHeight: '100vh', 
       paddingBottom: '100px',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: 'var(--font-body)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -89,10 +89,10 @@ const TrackOrder = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
         {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>REAL-TIME UPDATES</span>
+          <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>REAL-TIME UPDATES</span>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', color: '#2D0A4E', marginBottom: '15px' }}>Track Your Order</h1>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
-             <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37' }}></div>
+             <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)' }}></div>
           </div>
           <p style={{ color: '#666', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
             Enter your order details below to see the current status of your handcrafted apparel.
@@ -197,7 +197,7 @@ const TrackOrder = () => {
                       <span style={{ fontSize: '0.6rem', fontWeight: '700', letterSpacing: '3px', opacity: 0.6, textTransform: 'uppercase' }}>Shipment Status</span>
                       <h2 className="font-serif" style={{ fontSize: '2.5rem', marginTop: '5px' }}>{trackingResult.order.status}</h2>
                     </div>
-                    <Truck size={40} color="#D4AF37" />
+                    <Truck size={40} color="var(--brass)" />
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
@@ -218,7 +218,7 @@ const TrackOrder = () => {
         <div style={{ backgroundColor: '#F9F6FF', borderRadius: '24px', padding: '60px 40px', marginBottom: '40px' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '10px' }}>Need Help?</h3>
-            <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto' }}></div>
+            <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)', margin: '0 auto' }}></div>
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '25px' }}>

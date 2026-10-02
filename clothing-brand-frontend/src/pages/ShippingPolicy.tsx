@@ -48,7 +48,7 @@ const ShippingPolicy = () => {
       backgroundColor: '#fdfbff', 
       color: '#2d0a4e', 
       minHeight: '100vh', 
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: 'var(--font-body)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -63,9 +63,9 @@ const ShippingPolicy = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '80px 20px', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>LOGISTICS</span>
+          <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>LOGISTICS</span>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Shipping Policy</h1>
-          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
           <p style={{ fontSize: '1.1rem', color: '#666' }}>Learn about our delivery times, shipping costs, and order tracking.</p>
         </div>
 
@@ -117,7 +117,7 @@ const ShippingPolicy = () => {
              </div>
           </div>
           <h2 className="font-serif" style={{ fontSize: '2.2rem', marginBottom: '10px', color: '#2d0a4e' }}>NEED HELP WITH YOUR ORDER?</h2>
-          <div style={{ width: '40px', height: '1.5px', backgroundColor: '#D4AF37', margin: '0 auto 20px' }}></div>
+          <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
           <p style={{ color: '#666', marginBottom: '40px' }}>Feel free to reach us out on:</p>
           
           <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>

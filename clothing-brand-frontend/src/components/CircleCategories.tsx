@@ -47,7 +47,7 @@ const CircleCategories = ({ products = [] }: CircleCategoriesProps) => {
             <Link to={cat.path} key={index} className="circle-category-item">
               <div className="circle-image-ring">
                 <div className="circle-image-inner">
-                  <img src={imgSrc} alt={cat.label} loading="lazy" />
+                  <img src={imgSrc} alt="" loading="eager" />
                 </div>
               </div>
               <span className="circle-category-label">{cat.label}</span>

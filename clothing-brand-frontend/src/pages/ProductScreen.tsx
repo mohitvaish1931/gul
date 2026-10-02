@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductStyles.css';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star, BadgeCheck, MapPin } from 'lucide-react';
@@ -35,12 +35,12 @@ const StarRating = ({ rating, size = 16, interactive = false, onChange }: { rati
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: fill ? '#D4AF37' : '#E2E8F0',
+              color: fill ? 'var(--brass)' : '#E2E8F0',
               transition: 'color 0.1s ease',
               outline: 'none'
             }}
           >
-            <Star size={size} fill={fill ? '#D4AF37' : 'none'} strokeWidth={1.5} />
+            <Star size={size} fill={fill ? 'var(--brass)' : 'none'} strokeWidth={1.5} />
           </button>
         );
       })}
@@ -148,10 +148,11 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
 
   return (
     <div style={{ animation: 'fadeIn 0.3s ease' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px', marginBottom: '40px' }}>
+      {totalReviews > 0 && (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '24px', marginBottom: '40px' }}>
         {/* Rating Summary */}
         <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0', textAlign: 'center' }}>
-          <h4 style={{ fontSize: '1.1rem', color: '#2D0A4E', fontWeight: '800', marginBottom: '15px', letterSpacing: '1px' }}>AVERAGE RATING</h4>
+          <h4 style={{ fontSize: '0.95rem', color: 'var(--ink)', fontWeight: 500, marginBottom: '15px' }}>Average rating</h4>
           <span style={{ fontSize: '3.5rem', fontWeight: '800', color: '#2D0A4E', display: 'block', lineHeight: '1' }}>{averageRating}</span>
           <div style={{ margin: '10px 0' }}>
             <StarRating rating={Math.round(parseFloat(averageRating))} size={20} />
@@ -161,7 +162,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
 
         {/* Rating Breakdown */}
         <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0' }}>
-          <h4 style={{ fontSize: '1rem', color: '#2D0A4E', fontWeight: '800', marginBottom: '15px', letterSpacing: '1px' }}>RATING DISTRIBUTION</h4>
+          <h4 style={{ fontSize: '0.95rem', color: 'var(--ink)', fontWeight: 500, marginBottom: '15px' }}>Rating breakdown</h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[5, 4, 3, 2, 1].map((stars) => {
               const count = ratingDistribution[stars] || 0;
@@ -170,7 +171,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
                 <div key={stars} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem' }}>
                   <span style={{ width: '45px', color: '#2D0A4E', fontWeight: '700' }}>{stars} Star</span>
                   <div style={{ flex: 1, height: '8px', backgroundColor: '#F3F4F6', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${percent}%`, backgroundColor: '#D4AF37', borderRadius: '4px' }}></div>
+                    <div style={{ height: '100%', width: `${percent}%`, backgroundColor: 'var(--brass)', borderRadius: '4px' }}></div>
                   </div>
                   <span style={{ width: '30px', color: '#888', textAlign: 'right' }}>{count}</span>
                 </div>
@@ -179,10 +180,11 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
           </div>
         </div>
       </div>
+      )}
 
       {/* Write a Review Toggle */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #f0f0f0', paddingBottom: '20px' }}>
-        <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', margin: 0 }}>Customer Reviews</h3>
+        <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', margin: 0 }}>Customer reviews</h3>
         {!writeReviewOpen && (
           <button
             onClick={() => setWriteReviewOpen(true)}
@@ -202,7 +204,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            WRITE A REVIEW
+            Write a review
           </button>
         )}
       </div>
@@ -211,7 +213,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
       {writeReviewOpen && (
         <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '24px', border: '1px solid #f0f0f0', marginBottom: '40px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
-            <h4 style={{ fontSize: '1.2rem', color: '#2D0A4E', fontWeight: '800', letterSpacing: '1px' }}>SHARE YOUR EXPERIENCE</h4>
+            <h4 style={{ fontSize: '1.2rem', color: '#2D0A4E', fontWeight: '800', letterSpacing: '1px' }}>Share your experience</h4>
             <button 
               onClick={() => { setWriteReviewOpen(false); setSubmitSuccess(false); setSubmitError(null); }}
               style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#999' }}
@@ -237,7 +239,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
                   letterSpacing: '1px'
                 }}
               >
-                SIGN IN TO YOUR ACCOUNT
+                Sign in to review
               </Link>
             </div>
           ) : submitSuccess ? (
@@ -254,12 +256,12 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
               )}
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>YOUR RATING</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>Your rating</label>
                 <StarRating rating={formRating} size={24} interactive={true} onChange={setFormRating} />
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>REVIEW TITLE</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>Review title</label>
                 <input
                   type="text"
                   required
@@ -271,7 +273,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
               </div>
 
               <div style={{ marginBottom: '30px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>REVIEW DETAILS</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>Your review</label>
                 <textarea
                   required
                   rows={4}
@@ -283,7 +285,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
               </div>
 
               <div style={{ marginBottom: '30px' }}>
-                <label htmlFor="review-photos" style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>ADD PHOTOS (OPTIONAL, UP TO 3)</label>
+                <label htmlFor="review-photos" style={{ display: 'block', marginBottom: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>Add photos (optional, up to 3)</label>
                 <input
                   id="review-photos"
                   type="file"
@@ -318,7 +320,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
                   boxShadow: '0 4px 12px rgba(45,10,78,0.1)'
                 }}
               >
-                {submitLoading ? 'SUBMITTING...' : 'SUBMIT REVIEW'}
+                {submitLoading ? 'Submitting...' : 'Submit review'}
               </button>
             </form>
           )}
@@ -401,6 +403,17 @@ const ProductScreen = () => {
   const [notifyState, setNotifyState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
 
   const recentlyViewed = useRecentlyViewed().filter((p) => p._id !== id).slice(0, 6);
+
+  // Phones: show a sticky "Add to bag" bar once the main button scrolls out of view
+  const addToBagRef = useRef<HTMLButtonElement | null>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  useEffect(() => {
+    const button = addToBagRef.current;
+    if (!button || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(([entry]) => setShowStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0));
+    observer.observe(button);
+    return () => observer.disconnect();
+  }, [loading]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -518,22 +531,17 @@ const ProductScreen = () => {
   });
 
   return (
-    <div className="product-page-detail" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', padding: '60px 20px 100px' }}>
+    <div className="product-page-detail">
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <Link to="/shop" style={{ 
-          display: 'inline-flex', 
-          alignItems: 'center', 
-          gap: '10px', 
-          color: '#2D0A4E', 
-          textDecoration: 'none', 
-          fontWeight: '800', 
-          fontSize: '0.75rem', 
-          letterSpacing: '2px', 
-          marginBottom: '40px',
-          textTransform: 'uppercase'
-        }}>
-          <ArrowLeft size={16} /> BACK TO COLLECTION
-        </Link>
+        <nav className="pdp-breadcrumb" aria-label="Breadcrumb">
+          <Link to="/shop"><ArrowLeft size={14} aria-hidden="true" /> Shop</Link>
+          {product.category && (
+            <>
+              <span aria-hidden="true">/</span>
+              <Link to={`/shop?category=${encodeURIComponent(product.category)}`}>{product.category}</Link>
+            </>
+          )}
+        </nav>
         
         {loading ? (
           <div style={{ textAlign: 'center', padding: '100px 0' }}>
@@ -545,15 +553,15 @@ const ProductScreen = () => {
           </div>
         ) : (
           <>
-            <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
+            <div className="product-detail-grid">
               {/* Image Section */}
               <div className="product-image-section">
-                <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
-                   <img src={getImageUrl(selectedImage || product.image, 1200)} alt={product.name} style={{ width: '100%', display: 'block' }} loading="eager" fetchPriority="high" />
+                <div className="pdp-main-image">
+                   <img src={getImageUrl(selectedImage || product.image, 1200)} alt={displayTitle} loading="eager" fetchPriority="high" />
                    <WishlistButton product={product} size={20} style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 2 }} />
                    {!inStock && (
                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
+                        <span className="pdp-soldout">Sold out</span>
                      </div>
                    )}
                 </div>
@@ -607,79 +615,68 @@ const ProductScreen = () => {
               
               {/* Info Section */}
               <div className="product-info-section">
-                <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '15px' }}>{product.category}</span>
-                <h1 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: displaySubtitle ? '6px' : '10px', lineHeight: '1.2' }}>{displayTitle}</h1>
-                {displaySubtitle && (
-                  <p style={{ color: '#777', fontSize: '1rem', letterSpacing: '0.5px', margin: '0 0 14px' }}>{displaySubtitle}</p>
-                )}
+                <h1 className="pdp-title font-serif">{displayTitle}</h1>
+                {displaySubtitle && <p className="pdp-subtitle">{displaySubtitle}</p>}
                 
                 {/* Rating summary below title */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                  <StarRating rating={Math.round(productRating)} size={16} />
-                  <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '600' }}>
-                    ({productReviewsCount} reviews)
-                  </span>
-                </div>
+                {productReviewsCount > 0 ? (
+                  <a href="#reviews" className="pdp-rating">
+                    <StarRating rating={Math.round(productRating)} size={15} />
+                    <span>{productReviewsCount} {productReviewsCount === 1 ? 'review' : 'reviews'}</span>
+                  </a>
+                ) : (
+                  <a href="#reviews" className="pdp-rating pdp-rating-empty">Be the first to review</a>
+                )}
 
-                <div style={{ marginBottom: '30px' }}>
-                   <span style={{ fontSize: '2rem', fontWeight: '800', color: '#2D0A4E' }}>₹{product.price?.toLocaleString('en-IN')}</span>
+                <p className="pdp-price">
+                   ₹{product.price?.toLocaleString('en-IN')}
                    {hasDiscount && (
                      <>
-                       <span style={{ marginLeft: '15px', color: '#999', fontSize: '0.9rem', textDecoration: 'line-through' }}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
-                       <span style={{ marginLeft: '10px', color: '#15803D', fontSize: '0.9rem', fontWeight: '700' }}>{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF</span>
+                       <s>₹{product.originalPrice.toLocaleString('en-IN')}</s>
+                       <span className="pdp-saving">{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off</span>
                      </>
                    )}
-                </div>
+                </p>
+                <p className="pdp-tax-note">Inclusive of all taxes · Free shipping</p>
 
-                <div style={{ color: '#666', lineHeight: '1.8', fontSize: '1.05rem', marginBottom: '40px', borderBottom: '1px solid #f0f0f0', paddingBottom: '30px' }}>
-                  <p>{product.description}</p>
-                </div>
+                <p className="pdp-description">{product.description}</p>
 
-                {/* Purchase Card */}
-                <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0', marginBottom: '40px' }}>
+                {/* Purchase options */}
+                <div className="pdp-purchase">
                    {inStock ? (
                      <>
                       {/* Sizes Selection */}
                       {product.sizes && product.sizes.length > 0 && (
                         <div id="size-picker" style={{ marginBottom: '25px', scrollMarginTop: '120px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                            <span style={{ fontWeight: '800', color: '#2D0A4E', fontSize: '0.85rem', letterSpacing: '1px' }}>SELECT SIZE</span>
+                            <span className="pdp-label">Size{selectedSize ? <>: <strong>{selectedSize}</strong></> : ''}</span>
                             <button
                               type="button"
                               onClick={() => setShowSizeGuide(true)}
-                              style={{ background: 'none', border: 'none', color: '#D4AF37', fontWeight: '800', fontSize: '0.75rem', letterSpacing: '1px', cursor: 'pointer', textDecoration: 'underline' }}
+                              className="pdp-link-button"
                             >
-                              SIZE GUIDE
+                              Size guide
                             </button>
                           </div>
-                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                          <div className="pdp-chips" role="radiogroup" aria-label="Size">
                             {product.sizes.map((size: string) => (
                               <button
                                 key={size}
                                 type="button"
+                                role="radio"
+                                aria-checked={selectedSize === size}
                                 onClick={() => handleSizeSelect(size)}
-                                style={{
-                                  padding: '10px 18px',
-                                  borderRadius: '8px',
-                                  border: selectedSize === size ? '2px solid #2D0A4E' : '1px solid #ddd',
-                                  backgroundColor: selectedSize === size ? '#2D0A4E' : '#fff',
-                                  color: selectedSize === size ? '#fff' : '#2D0A4E',
-                                  fontWeight: '800',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s ease',
-                                  minWidth: '50px',
-                                  textAlign: 'center'
-                                }}
+                                className={`pdp-chip${selectedSize === size ? ' is-selected' : ''}`}
                               >
                                 {size}
                               </button>
                             ))}
                           </div>
                           {sizeError && (
-                            <p role="alert" style={{ color: '#C53030', fontSize: '0.8rem', fontWeight: '700', marginTop: '8px', margin: '8px 0 0 0' }}>Please select a size before adding to collection.</p>
+                            <p role="alert" className="pdp-error">Choose a size to add this to your bag.</p>
                           )}
                           {product.fitNote && (
-                            <p style={{ color: '#666', fontSize: '0.85rem', margin: '10px 0 0' }}>{product.fitNote}</p>
+                            <p className="pdp-fit-note">{product.fitNote}</p>
                           )}
                         </div>
                       )}
@@ -687,24 +684,16 @@ const ProductScreen = () => {
                       {/* Colors Selection */}
                       {product.colors && product.colors.length > 0 && (
                         <div style={{ marginBottom: '25px' }}>
-                          <span style={{ display: 'block', fontWeight: '800', color: '#2D0A4E', fontSize: '0.85rem', letterSpacing: '1px', marginBottom: '10px' }}>SELECT COLOR</span>
-                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                          <span className="pdp-label" style={{ display: 'block', marginBottom: '10px' }}>Colour{selectedColor ? <>: <strong>{selectedColor}</strong></> : ''}</span>
+                          <div className="pdp-chips" role="radiogroup" aria-label="Colour">
                             {product.colors.map((color: string) => (
                               <button
                                 key={color}
                                 type="button"
+                                role="radio"
+                                aria-checked={selectedColor === color}
                                 onClick={() => setSelectedColor(color)}
-                                style={{
-                                  padding: '8px 16px',
-                                  borderRadius: '20px',
-                                  border: selectedColor === color ? '2px solid #2D0A4E' : '1px solid #ddd',
-                                  backgroundColor: selectedColor === color ? '#2D0A4E' : '#fcfcfc',
-                                  color: selectedColor === color ? '#fff' : '#555',
-                                  fontWeight: '700',
-                                  fontSize: '0.85rem',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s ease'
-                                }}
+                                className={`pdp-chip pdp-chip-text${selectedColor === color ? ' is-selected' : ''}`}
                               >
                                 {color}
                               </button>
@@ -715,39 +704,25 @@ const ProductScreen = () => {
 
                       {/* Quantity Selector */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
-                        <span style={{ fontWeight: '800', color: '#2D0A4E', fontSize: '0.85rem', letterSpacing: '1px' }}>SELECT QUANTITY</span>
-                        <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #eee', borderRadius: '8px', overflow: 'hidden' }}>
-                          <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ padding: '10px 15px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '800' }}>-</button>
-                          <span style={{ padding: '10px 20px', backgroundColor: '#f9f9f9', minWidth: '40px', textAlign: 'center', fontWeight: '800' }}>{qty}</span>
-                          <button onClick={() => setQty(Math.min(product.countInStock, qty + 1))} style={{ padding: '10px 15px', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '800' }}>+</button>
+                        <span className="pdp-label">Quantity</span>
+                        <div className="pdp-stepper">
+                          <button type="button" aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+                          <span aria-live="polite">{qty}</span>
+                          <button type="button" aria-label="Increase quantity" onClick={() => setQty(Math.min(product.countInStock, qty + 1))}>+</button>
                         </div>
                       </div>
-                      <button 
+                      <button
+                        ref={addToBagRef}
+                        className="pdp-add-button"
                         onClick={addToCartHandler}
-                        style={{ 
-                          width: '100%', 
-                          padding: '20px', 
-                          backgroundColor: '#2D0A4E', 
-                          color: '#fff', 
-                          border: 'none', 
-                          borderRadius: '12px', 
-                          fontWeight: '800', 
-                          letterSpacing: '2px', 
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '12px',
-                          boxShadow: '0 10px 30px rgba(45,10,78,0.1)'
-                        }}
                       >
-                        <ShoppingCart size={20} /> ADD TO COLLECTION
+                        <ShoppingCart size={18} aria-hidden="true" /> Add to bag
                       </button>
 
                       {/* Delivery estimate */}
                       <form onSubmit={checkPincode} style={{ marginTop: '22px', paddingTop: '18px', borderTop: '1px solid #f3f3f3' }}>
                         <label htmlFor="pincode" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '800', color: '#2D0A4E', fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '10px' }}>
-                          <MapPin size={15} /> CHECK DELIVERY DATE
+                          <MapPin size={15} aria-hidden="true" /> Delivery
                         </label>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <input
@@ -759,7 +734,7 @@ const ProductScreen = () => {
                             onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
                             style={{ flex: 1, minWidth: 0, padding: '12px 14px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '0.95rem' }}
                           />
-                          <button type="submit" style={{ padding: '12px 18px', border: '1.5px solid #2D0A4E', background: '#fff', color: '#2D0A4E', borderRadius: '8px', fontWeight: '800', cursor: 'pointer' }}>CHECK</button>
+                          <button type="submit" className="pdp-check-button">Check</button>
                         </div>
                         {pincodeError ? (
                           <p role="alert" style={{ color: '#C53030', fontSize: '0.8rem', margin: '8px 0 0' }}>{pincodeError}</p>
@@ -773,7 +748,7 @@ const ProductScreen = () => {
                      </>
                    ) : (
                      <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                        <p style={{ color: '#C53030', fontWeight: '800', letterSpacing: '1px' }}>WE ARE CURRENTLY OUT OF STOCK</p>
+                        <p style={{ color: 'var(--ink)', fontWeight: 500, margin: 0 }}>This design is sold out right now.</p>
                         {notifyState === 'done' ? (
                           <p role="status" style={{ color: '#15803D', fontWeight: 600, margin: '15px 0 0' }}>Done! We'll email you as soon as it's back.</p>
                         ) : (
@@ -800,21 +775,12 @@ const ProductScreen = () => {
                    )}
                 </div>
 
-                {/* USP Section */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '20px' }}>
-                   <div style={{ textAlign: 'center' }}>
-                      <ShieldCheck size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
-                      <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>SECURE PAYMENT</p>
-                   </div>
-                   <div style={{ textAlign: 'center' }}>
-                      <Truck size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
-                      <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>FREE DELIVERY</p>
-                   </div>
-                   <div style={{ textAlign: 'center' }}>
-                      <RefreshCcw size={24} color="#D4AF37" style={{ marginBottom: '10px' }} />
-                      <p style={{ fontSize: '0.7rem', fontWeight: '800', color: '#2D0A4E', letterSpacing: '1px' }}>EASY EXCHANGE</p>
-                   </div>
-                </div>
+                {/* Service promises */}
+                <ul className="pdp-promises">
+                  <li><Truck size={18} strokeWidth={1.5} aria-hidden="true" /> Free shipping across India</li>
+                  <li><RefreshCcw size={18} strokeWidth={1.5} aria-hidden="true" /> 7-day size exchange</li>
+                  <li><ShieldCheck size={18} strokeWidth={1.5} aria-hidden="true" /> Secure payment</li>
+                </ul>
               </div>
             </div>
 
@@ -824,7 +790,7 @@ const ProductScreen = () => {
                 
                 {/* 1. Specifications Section */}
                 <div style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '40px' }}>
-                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>DETAILS</span>
+                  
                   <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '25px', marginTop: 0 }}>Specifications</h3>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
                     <tbody>
@@ -861,8 +827,7 @@ const ProductScreen = () => {
 
                 {/* 2. Care Instructions Section */}
                 <div style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '40px' }}>
-                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>MAINTENANCE</span>
-                  <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '25px', marginTop: 0 }}>Care Guide</h3>
+                  <h3 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '25px', marginTop: 0 }}>Care guide</h3>
                   {product.careInstructions && product.careInstructions.length > 0 ? (
                     <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                       {product.careInstructions.map((inst: string, idx: number) => (
@@ -875,7 +840,7 @@ const ProductScreen = () => {
                           fontSize: '1rem',
                           color: '#555'
                         }}>
-                          <span style={{ color: '#D4AF37', fontSize: '1.2rem', lineHeight: '1' }}>✦</span>
+                          <span style={{ color: 'var(--brass)', fontSize: '1.2rem', lineHeight: '1' }}>✦</span>
                           <span>{inst}</span>
                         </li>
                       ))}
@@ -887,12 +852,22 @@ const ProductScreen = () => {
 
                 {/* 3. Reviews Section */}
                 <div id="reviews" style={{ scrollMarginTop: '120px' }}>
-                  <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>FEEDBACK</span>
+                  
                   <ReviewsTab productId={product._id} />
                 </div>
 
               </div>
             </div>
+
+            {inStock && (
+              <div className={`pdp-sticky-bar${showStickyBar ? ' is-visible' : ''}`} aria-hidden={!showStickyBar}>
+                <div>
+                  <p className="pdp-sticky-name">{displayTitle}</p>
+                  <p className="pdp-sticky-price">₹{product.price?.toLocaleString('en-IN')}{selectedSize ? ` · Size ${selectedSize}` : ''}</p>
+                </div>
+                <button type="button" tabIndex={showStickyBar ? 0 : -1} onClick={addToCartHandler}>Add to bag</button>
+              </div>
+            )}
 
             {/* Recently viewed */}
             {recentlyViewed.length > 0 && (
@@ -955,7 +930,7 @@ const ProductScreen = () => {
               &times;
             </button>
             <span style={{ 
-              color: '#D4AF37', 
+              color: 'var(--brass)', 
               letterSpacing: '4px', 
               fontWeight: '800', 
               fontSize: '0.7rem', 
@@ -1009,11 +984,6 @@ const ProductScreen = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 768px) {
-          .product-page-detail h1 {
-            font-size: 2.2rem !important;
-          }
         }
       `}</style>
     </div>

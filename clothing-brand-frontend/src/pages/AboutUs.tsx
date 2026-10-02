@@ -34,8 +34,8 @@ const AboutUs = () => {
         }}></div>
         
         <div className="container" style={{ position: 'relative', maxWidth: '900px', margin: '0 auto' }}>
-          <span style={{ color: '#D4AF37', letterSpacing: '6px', fontWeight: '800', fontSize: '0.75rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>ESTABLISHED 2005</span>
-          <h1 className="font-serif" style={{ fontSize: '4.5rem', marginBottom: '30px', lineHeight: '1' }}>The Soul of <br /><i style={{ color: '#D4AF37' }}>Gul Fashion</i></h1>
+          <span style={{ color: 'var(--brass)', letterSpacing: '6px', fontWeight: '800', fontSize: '0.75rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>ESTABLISHED 2005</span>
+          <h1 className="font-serif" style={{ fontSize: '4.5rem', marginBottom: '30px', lineHeight: '1' }}>The Soul of <br /><i style={{ color: 'var(--brass)' }}>Gul Fashion</i></h1>
           <p style={{ fontSize: '1.25rem', opacity: 0.8, lineHeight: '1.8', maxWidth: '700px', margin: '0 auto' }}>
             Where ancient Jaipur artistry meets contemporary silhouettes. We don't just create apparel; we weave heirlooms for your most precious moments.
           </p>
@@ -163,13 +163,13 @@ const AboutUs = () => {
 const StatItem = ({ number, label }: { number: string, label: string }) => (
   <div>
     <h3 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: '5px' }}>{number}</h3>
-    <p style={{ color: '#D4AF37', fontWeight: '700', letterSpacing: '2px', fontSize: '0.7rem', textTransform: 'uppercase' }}>{label}</p>
+    <p style={{ color: 'var(--brass)', fontWeight: '700', letterSpacing: '2px', fontSize: '0.7rem', textTransform: 'uppercase' }}>{label}</p>
   </div>
 );
 
 const ValueCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
   <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '20px', border: '1px solid #f0f0f0', transition: 'all 0.3s' }}>
-    <div style={{ color: '#D4AF37', marginBottom: '25px' }}>{icon}</div>
+    <div style={{ color: 'var(--brass)', marginBottom: '25px' }}>{icon}</div>
     <h4 className="font-serif" style={{ fontSize: '1.5rem', color: '#2D0A4E', marginBottom: '15px' }}>{title}</h4>
     <p style={{ color: '#666', lineHeight: '1.8', fontSize: '0.95rem' }}>{desc}</p>
   </div>

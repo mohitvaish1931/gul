@@ -63,7 +63,7 @@ const ProfileScreen = () => {
              width: '100px', 
              height: '100px', 
              backgroundColor: '#2D0A4E', 
-             color: '#D4AF37', 
+             color: 'var(--brass)', 
              borderRadius: '50%', 
              display: 'flex', 
              alignItems: 'center', 
@@ -76,7 +76,7 @@ const ProfileScreen = () => {
              {user.name.charAt(0).toUpperCase()}
            </div>
            <div>
-             <span style={{ color: '#D4AF37', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>ROYAL PATRON</span>
+             <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>ROYAL PATRON</span>
              <h1 className="font-serif" style={{ fontSize: '2.8rem', color: '#2D0A4E' }}>Welcome, {user.name}</h1>
            </div>
         </div>
@@ -139,7 +139,7 @@ const ProfileScreen = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
             {orders.length === 0 ? (
               <div style={{ backgroundColor: '#fff', padding: '50px', borderRadius: '24px', border: '1px solid #f0f0f0', textAlign: 'center', boxShadow: '0 15px 40px rgba(0,0,0,0.02)' }}>
-                <div style={{ color: '#D4AF37', marginBottom: '25px' }}>
+                <div style={{ color: 'var(--brass)', marginBottom: '25px' }}>
                    <Package size={60} strokeWidth={1} />
                 </div>
                 <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '15px' }}>Your Collection Journey</h3>
@@ -212,8 +212,8 @@ const ProfileScreen = () => {
                             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#444' }}>
                               <div style={{ flex: 1, paddingRight: '15px' }}>
                                 <span style={{ fontWeight: '500' }}>{item.name}</span> <span style={{ color: '#888' }}>x{item.qty}</span>
-                                {item.selectedSize && <span style={{ fontSize: '0.75rem', color: '#D4AF37', marginLeft: '8px', fontWeight: 'bold' }}>(Size: {item.selectedSize})</span>}
-                                {item.selectedColor && <span style={{ fontSize: '0.75rem', color: '#D4AF37', marginLeft: '4px', fontWeight: 'bold' }}>(Color: {item.selectedColor})</span>}
+                                {item.selectedSize && <span style={{ fontSize: '0.75rem', color: 'var(--brass)', marginLeft: '8px', fontWeight: 'bold' }}>(Size: {item.selectedSize})</span>}
+                                {item.selectedColor && <span style={{ fontSize: '0.75rem', color: 'var(--brass)', marginLeft: '4px', fontWeight: 'bold' }}>(Color: {item.selectedColor})</span>}
                               </div>
                               <div style={{ fontWeight: '600' }}>₹{item.price?.toLocaleString('en-IN')}</div>
                             </div>

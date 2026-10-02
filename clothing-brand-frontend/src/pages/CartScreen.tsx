@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { useAppContext } from '../context/AppContext';
+import { getImageUrl } from '../utils/mediaHelper';
+import { splitProductName } from '../utils/productName';
 import { useSEO } from '../utils/useSEO';
 
 const CartScreen = () => {
@@ -237,7 +239,7 @@ const CartScreen = () => {
           contact: shippingAddress.phoneNumber
         },
         theme: {
-          color: "#4B0082"
+          color: "#2D0A4E"
         }
       };
       
@@ -264,12 +266,12 @@ const CartScreen = () => {
 
   return (
     <div className="container page-top-padding cart-screen-container">
-      <h1 className="font-serif text-center" style={{fontSize: '2.5rem', marginBottom: '30px', color: 'var(--primary-purple)'}}>Shopping Cart</h1>
+      <h1 className="section-heading cart-title">{isCheckingOut ? 'Delivery details' : 'Your bag'}</h1>
       
       {cartItems.length === 0 ? (
-        <div className="text-center" style={{padding: '50px 0', border: '1px solid #efe4ff', background: '#fdfaff', borderRadius: '4px'}}>
-          <h2 className="font-serif mb-4" style={{marginBottom: '20px'}}>Your cart is empty</h2>
-          <Link to="/shop" className="btn btn-primary">Go Back To Shop</Link>
+        <div className="cart-empty">
+          <p>Your bag is empty.</p>
+          <Link to="/shop" className="btn btn-primary">Browse the collection</Link>
         </div>
       ) : (
         <div className="cart-grid-wrap">
@@ -278,46 +280,44 @@ const CartScreen = () => {
               <div className="cart-items-list-wrap">
                 {cartItems.map((item) => (
                   <div key={`${item._id}-${item.selectedSize || ''}-${item.selectedColor || ''}`} className="cart-item-card">
-                    <div className="cart-item-img">
-                      <img src={item.image} alt={item.name} />
-                    </div>
+                    <Link to={`/product/${item._id}`} className="cart-item-img">
+                      <img src={getImageUrl(item.image, 300)} alt="" />
+                    </Link>
                     <div className="cart-item-info">
-                      <Link to={`/product/${item._id}`} className="font-serif item-name-link">
-                        {item.name}
+                      <Link to={`/product/${item._id}`} className="item-name-link">
+                        {splitProductName(item.name).title}
                       </Link>
-                      <div className="item-meta">
-                        <span className="item-price">₹{item.price.toLocaleString('en-IN')}</span>
-                        <div className="qty-controls" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
-                          <button onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) - 1)} style={{ padding: '5px 10px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>-</button>
-                          <span style={{ fontWeight: 'bold' }}>{item.qty || 1}</span>
-                          <button onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) + 1)} style={{ padding: '5px 10px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>+</button>
-                        </div>
-                      </div>
                       {(item.selectedSize || item.selectedColor) && (
-                        <div style={{ marginTop: '8px', fontSize: '0.85rem', color: '#666', display: 'flex', gap: '15px' }}>
-                          {item.selectedSize && <span>Size: <strong style={{ color: '#2D0A4E' }}>{item.selectedSize}</strong></span>}
-                          {item.selectedColor && <span>Color: <strong style={{ color: '#2D0A4E' }}>{item.selectedColor}</strong></span>}
-                        </div>
+                        <p className="cart-item-options">
+                          {[item.selectedSize && `Size ${item.selectedSize}`, item.selectedColor].filter(Boolean).join(' · ')}
+                        </p>
                       )}
-                    </div>
-                    <div className="cart-item-actions">
-                      <button onClick={() => removeFromCartHandler(item.id || item._id, item.selectedSize, item.selectedColor)} className="btn-remove">
-                        REMOVE
-                      </button>
+                      <p className="item-price">₹{(item.price * (item.qty || 1)).toLocaleString('en-IN')}</p>
+                      <div className="cart-item-row">
+                        <div className="pdp-stepper">
+                          <button type="button" aria-label="Decrease quantity" onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) - 1)}>−</button>
+                          <span aria-live="polite">{item.qty || 1}</span>
+                          <button type="button" aria-label="Increase quantity" onClick={() => updateQtyHandler(item.id || item._id, item.selectedSize, item.selectedColor, (item.qty || 1) + 1)}>+</button>
+                        </div>
+                        <button type="button" onClick={() => removeFromCartHandler(item.id || item._id, item.selectedSize, item.selectedColor)} className="btn-remove">
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="cart-summary-card">
-                <h2 className="font-serif summary-title">Cart Summary</h2>
+                <h2 className="summary-title">Order summary</h2>
                 
                 {/* Coupon Code Section */}
                 <div style={{ marginBottom: '25px', paddingBottom: '20px', borderBottom: '1px solid #eee' }}>
-                  <span style={{ fontWeight: '600', fontSize: '0.9rem', color: '#2D0A4E', display: 'block', marginBottom: '10px' }}>Apply Coupon Code</span>
+                  <label htmlFor="coupon-code" style={{ fontWeight: 500, fontSize: '0.9rem', color: 'var(--ink)', display: 'block', marginBottom: '10px' }}>Coupon code</label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <input 
-                      type="text" 
+                    <input
+                      id="coupon-code"
+                      type="text"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                       placeholder="Enter code" 
@@ -329,16 +329,16 @@ const CartScreen = () => {
                       <button 
                         onClick={applyCouponHandler} 
                         disabled={couponLoading || !couponCode.trim()}
-                        style={{ backgroundColor: '#2D0A4E', color: 'white', border: 'none', borderRadius: '4px', padding: '0 15px', fontWeight: 'bold', cursor: 'pointer', opacity: (couponLoading || !couponCode.trim()) ? 0.7 : 1 }}
+                        style={{ backgroundColor: 'var(--ink)', color: 'white', border: 'none', borderRadius: '2px', padding: '0 18px', fontWeight: 500, cursor: 'pointer', opacity: (couponLoading || !couponCode.trim()) ? 0.6 : 1 }}
                       >
-                        {couponLoading ? '...' : 'APPLY'}
+                        {couponLoading ? '…' : 'Apply'}
                       </button>
                     ) : (
                       <button 
                         onClick={removeCouponHandler}
-                        style={{ backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '4px', padding: '0 15px', fontWeight: 'bold', cursor: 'pointer' }}
+                        style={{ backgroundColor: 'transparent', color: 'var(--ink)', border: '1px solid var(--line)', borderRadius: '2px', padding: '0 14px', fontWeight: 500, cursor: 'pointer' }}
                       >
-                        REMOVE
+                        Remove
                       </button>
                     )}
                   </div>
@@ -350,19 +350,24 @@ const CartScreen = () => {
                 </div>
 
                 <div className="summary-row">
-                  <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items)</span>
+                  <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} {cartItems.reduce((acc, item) => acc + item.qty, 0) === 1 ? 'item' : 'items'})</span>
                   <span>₹{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toLocaleString('en-IN')}</span>
                 </div>
                 
+                <div className="summary-row">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+
                 {appliedCoupon && (
-                  <div className="summary-row" style={{ color: '#16a34a' }}>
+                  <div className="summary-row" style={{ color: '#1F7A4D' }}>
                     <span>Discount ({appliedCoupon.discountPercent}%)</span>
                     <span>-₹{calculateDiscountAmount(cartItems, appliedCoupon).toLocaleString('en-IN')}</span>
                   </div>
                 )}
                 
                 <div className="summary-row" style={{ borderTop: '1px solid #eee', paddingTop: '15px', marginTop: '10px' }}>
-                  <span style={{ fontWeight: '800' }}>Total</span>
+                  <span style={{ fontWeight: 500 }}>Total</span>
                   <span className="summary-total">₹{(
                     cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - 
                     calculateDiscountAmount(cartItems, appliedCoupon)
@@ -380,13 +385,13 @@ const CartScreen = () => {
                     }
                   }}
                 >
-                  PROCEED TO CHECKOUT
+                  Checkout securely
                 </button>
               </div>
             </>
           ) : (
             <div className="checkout-form-wrap" style={{width: '100%', maxWidth: '600px', margin: '0 auto'}}>
-              <h2 className="font-serif summary-title">Shipping Details</h2>
+              <h2 className="summary-title">Where should we deliver?</h2>
               <form onSubmit={processPayment} style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
                 <input type="text" name="name" placeholder="Full Name" value={shippingAddress.name} onChange={handleInputChange} required className="form-input" />
                 <input type="email" name="email" placeholder="Email Address" value={shippingAddress.email} onChange={handleInputChange} required className="form-input" />
@@ -425,136 +430,161 @@ const CartScreen = () => {
 
       <style>{`
         .cart-screen-container {
-          padding: 50px 20px !important;
+          padding: 28px 20px 100px !important;
+          max-width: 1100px;
+        }
+        .cart-title {
+          margin-bottom: 24px !important;
+        }
+        .cart-empty {
+          padding: 56px 20px;
+          text-align: center;
+          border: 1px solid var(--line);
+          background: #fff;
+        }
+        .cart-empty p {
+          color: var(--ink-soft);
+          margin: 0 0 20px;
+          font-size: 1.05rem;
         }
         .cart-grid-wrap {
-          display: flex;
-          gap: 30px;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+          gap: 40px;
+          align-items: start;
         }
         .cart-items-list-wrap {
-          flex: 2;
-          min-width: 280px;
+          border-top: 1px solid var(--line);
         }
         .cart-item-card {
           display: flex;
-          align-items: center;
-          gap: 20px;
-          padding: 20px 0;
-          border-bottom: 1px solid #eee;
+          gap: 16px;
+          padding: 18px 0;
+          border-bottom: 1px solid var(--line);
         }
         .cart-item-img {
-          width: 80px;
-          flex-shrink: 0;
+          flex: 0 0 96px;
+          aspect-ratio: 3 / 4;
+          overflow: hidden;
+          border-radius: 2px;
+          background: var(--paper-deep);
         }
         .cart-item-img img {
           width: 100%;
-          border-radius: 4px;
+          height: 100%;
+          object-fit: cover;
+          object-position: top;
+          display: block;
         }
         .cart-item-info {
           flex: 1;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
         }
         .item-name-link {
-          font-size: 1.1rem;
-          color: #333;
+          color: var(--text-primary);
           text-decoration: none;
-          display: block;
-          margin-bottom: 5px;
+          font-size: 0.98rem;
+          line-height: 1.4;
         }
-        .item-meta {
-          display: flex;
-          gap: 15px;
-          font-size: 0.9rem;
-          color: #666;
+        .item-name-link:hover {
+          text-decoration: underline;
+          text-decoration-color: var(--brass);
+          text-underline-offset: 3px;
+        }
+        .cart-item-options {
+          margin: 0;
+          font-size: 0.86rem;
+          color: var(--ink-soft);
         }
         .item-price {
-          font-weight: 700;
-          color: var(--accent-purple);
+          margin: 2px 0 0;
+          font-weight: 500;
+          color: var(--ink);
         }
-        .cart-item-actions {
-          margin-left: auto;
+        .cart-item-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-top: auto;
+          padding-top: 10px;
         }
         .btn-remove {
           background: none;
-          border: 1px solid #ddd;
-          padding: 5px 12px;
-          font-size: 0.65rem;
-          font-weight: 800;
+          border: none;
+          padding: 4px 0;
+          font: inherit;
+          font-size: 0.88rem;
+          color: var(--ink-soft);
           cursor: pointer;
-          border-radius: 4px;
-          color: #999;
-          transition: all 0.3s;
+          text-decoration: underline;
+          text-underline-offset: 3px;
         }
         .btn-remove:hover {
-          color: #e53e3e;
-          border-color: #e53e3e;
+          color: var(--ink);
         }
-        .cart-summary-card {
-          flex: 1;
-          min-width: 280px;
-          padding: 30px;
-          background: #fcfcfc;
-          border: 1px solid #eee;
-          border-radius: 8px;
-          align-self: flex-start;
+        .cart-summary-card,
+        .checkout-form-wrap {
+          background: #fff;
+          border: 1px solid var(--line);
+          padding: 24px;
+        }
+        @media (min-width: 900px) {
+          .cart-summary-card {
+            position: sticky;
+            top: 120px;
+          }
         }
         .summary-title {
-          font-size: 1.5rem;
-          margin-bottom: 20px;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #eee;
+          font-family: var(--font-display);
+          font-weight: 400;
+          font-size: 1.4rem;
+          color: var(--ink);
+          margin: 0 0 18px;
         }
         .summary-row {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 25px;
-          font-weight: 600;
+          margin-bottom: 12px;
+          color: var(--ink-soft);
         }
         .summary-total {
           font-size: 1.2rem;
-          color: var(--primary-purple);
+          font-weight: 500;
+          color: var(--ink);
         }
         .form-input {
           width: 100%;
-          padding: 12px 15px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          font-size: 1rem;
-          font-family: 'Inter', sans-serif;
+          padding: 13px 14px;
+          border: 1px solid var(--line);
+          border-radius: 2px;
+          font: inherit;
+          font-size: 0.95rem;
+          background: #fff;
+          color: var(--text-primary);
         }
         .form-input:focus {
           outline: none;
-          border-color: var(--primary-purple);
-          box-shadow: 0 0 0 2px rgba(75,0,130,0.1);
+          border-color: var(--ink);
         }
-        .btn-outline {
-          background: transparent;
-          border: 1px solid var(--primary-purple);
-          color: var(--primary-purple);
+        .checkout-form-wrap {
+          grid-column: 1 / -1;
         }
-        .btn-outline:hover {
-          background: var(--primary-purple);
-          color: white;
+        .checkout-form-wrap form {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
         }
-
-        @media (max-width: 768px) {
-          .cart-screen-container h1 {
-            font-size: 1.8rem !important;
-          }
-          .cart-item-card {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 15px;
+        @media (max-width: 860px) {
+          .cart-grid-wrap {
+            grid-template-columns: 1fr;
+            gap: 28px;
           }
           .cart-item-img {
-            width: 100px;
-          }
-          .cart-item-actions {
-            margin-left: 0;
-            width: 100%;
-          }
-          .btn-remove {
-            width: 100%;
+            flex-basis: 84px;
           }
         }
       `}</style>

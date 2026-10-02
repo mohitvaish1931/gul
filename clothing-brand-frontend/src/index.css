@@ -9,18 +9,43 @@
 
 @config "../tailwind.config.js";
 
+/*
+  Gul Fashion design tokens
+  - ink: the aubergine of the logo, used for text, buttons and the brand bar
+  - brass: antique gold for hairlines, icons and large display accents only
+    (too light for small text; use --brass-ink there)
+  - paper: a barely-mauve white so photography stays the colour on the page
+*/
 :root {
-  --primary-purple: #4B0082; /* Royal Purple */
-  --accent-purple: #6A0DAD; /* Vibrant Purple */
-  --gold-primary: #C5A059;
-  --gold-light: #FBF7E9;
-  --luxury-dark: #121212;
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --text-muted: #999999;
+  --ink: #2D0A4E;
+  --ink-soft: #5E4A73;
+  --ink-muted: #8C7E99;
+  --brass: #B8913A;
+  --brass-ink: #86661F;
+  --paper: #FCFAFB;
+  --paper-deep: #F4EEF3;
+  --line: #E8E0EA;
+
+  --font-display: 'Marcellus', 'Times New Roman', serif;
+  --font-body: 'Jost', 'Segoe UI', system-ui, sans-serif;
+
+  /* jharokha (Jaipur window) arch used to frame navigation imagery */
+  --arch-radius: 999px 999px 6px 6px;
+
+  /* legacy names still used across the app, mapped to the tokens above */
+  --primary-purple: var(--ink);
+  --accent-purple: #4A1E6E;
+  --gold-primary: var(--brass);
+  --gold-light: #F7F1E3;
+  --luxury-dark: #1C1124;
+  --text-primary: #23172E;
+  --text-secondary: var(--ink-soft);
+  --text-muted: var(--ink-muted);
   --bg-white: #FFFFFF;
   --glass-bg: rgba(255, 255, 255, 0.95);
-  --glass-border: rgba(75, 0, 130, 0.1);
+  --glass-border: rgba(45, 10, 78, 0.1);
+  --secondary-color: var(--brass);
+  --font-serif: var(--font-display);
 }
 
 * {
@@ -29,16 +54,62 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Marcellus has one upright weight - never let the browser fake bold or italic versions */
+  font-synthesis: none;
+}
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--bg-white);
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ink);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
 }
 
 .font-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+/* Section heading used on the homepage and shop pages */
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+}
+
+.section-subtext {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+  margin: 8px 0 0;
+  max-width: 52ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .container {
@@ -64,28 +135,25 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-size: 0.8rem;
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  border-radius: 2px;
 }
 
 .btn-primary {
   background-color: var(--primary-purple);
   color: #fff;
   border: none;
-  box-shadow: 0 4px 15px rgba(75, 0, 130, 0.15);
 }
 
 .btn-primary:hover {
   background-color: var(--accent-purple);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(75, 0, 130, 0.25);
 }
 
 .btn-outline {
@@ -101,7 +169,7 @@ body {
 
 /* Luxury Typography */
 .luxury-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-weight: 600;
 }
 
@@ -162,12 +230,12 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(75, 0, 130, 0.2);
+  background: rgba(45, 10, 78, 0.2);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(75, 0, 130, 0.4);
+  background: rgba(45, 10, 78, 0.4);
 }
 
 /* Floating WhatsApp Button styles */
@@ -216,15 +284,39 @@ body {
 /* Discount Badge */
 .discount-badge {
   position: absolute;
-  bottom: 15px;
-  left: 15px;
-  background-color: rgba(144, 168, 126, 0.85); /* sage green color matching screenshot */
+  top: 10px;
+  left: 10px;
+  background-color: var(--ink);
   color: #fff;
-  padding: 6px 14px;
-  font-size: 0.85rem;
+  padding: 4px 10px;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 1px;
-  border-radius: 20px;
-  z-index: 10;
-  backdrop-filter: blur(4px);
+  letter-spacing: 0.02em;
+  border-radius: 2px;
+  z-index: 3;
+}
+
+/* Quantity stepper shared by the product page and the bag */
+.pdp-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: #fff;
+}
+
+.pdp-stepper button {
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pdp-stepper span {
+  min-width: 36px;
+  text-align: center;
+  font-weight: 500;
 }
