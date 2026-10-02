@@ -3,6 +3,7 @@ import Video from '../models/Video.js';
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.js';
+import { adminOnly } from '../middleware/authMiddleware.js';
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -28,7 +29,7 @@ router.get('/', async (req, res) => {
 });
 
 // Accept multipart form with optional file field 'file' or JSON body { title, url }
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', adminOnly, upload.single('file'), async (req, res) => {
   try {
     const body = { ...(req.body || {}) };
     if (req.file) {
@@ -44,7 +45,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
   try {
     await Video.findByIdAndDelete(req.params.id);
     res.json({ ok: true });

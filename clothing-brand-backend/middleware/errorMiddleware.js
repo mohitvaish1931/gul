@@ -14,6 +14,16 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 404;
   }
 
+  // Missing or invalid fields
+  if (err.name === 'ValidationError') {
+    message = Object.values(err.errors || {}).map((e) => e.message).join(', ') || 'Invalid data';
+    statusCode = 400;
+  }
+
+  if (statusCode >= 500) {
+    console.error(`${req.method} ${req.originalUrl} error:`, err);
+  }
+
   res.status(statusCode).json({
     message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,

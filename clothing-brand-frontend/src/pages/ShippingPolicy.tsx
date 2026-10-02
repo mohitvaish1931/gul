@@ -7,7 +7,7 @@ const ShippingPolicy = () => {
     title: 'Shipping Policy - GUL FASHION',
     description: 'Learn about our delivery times, shipping costs, and order tracking.',
     keywords: 'shipping policy, delivery time, shipping rates, GUL FASHION',
-    url: 'https://gulfashion.com/shipping-policy',
+    url: 'https://gulfashion.store/shipping-policy',
     type: 'website'
   });
 
@@ -22,7 +22,7 @@ const ShippingPolicy = () => {
       title: "SHIPPING COST",
       text: (
         <>
-          We charge ₹70 per order and also offer <strong style={{color: '#2d0a4e'}}>free shipping on all orders above ₹1499.</strong>
+          We offer <strong style={{color: '#2d0a4e'}}>free shipping on all orders delivered within India.</strong> There are no extra delivery charges at checkout.
         </>
       )
     },
@@ -141,7 +141,7 @@ const ShippingPolicy = () => {
             <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
             <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
             <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+            <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
 

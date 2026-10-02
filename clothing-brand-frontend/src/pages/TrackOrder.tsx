@@ -34,7 +34,7 @@ const TrackOrder = () => {
     title: 'Track Your Order - GUL FASHION',
     description: 'Track your GUL FASHION clothing order in real-time. Get live updates on your shipment status.',
     keywords: 'track order, clothing delivery status, gul fashion tracking',
-    url: 'https://gulfashion.com/track-order',
+    url: 'https://gulfashion.store/track-order',
     type: 'website'
   });
 
@@ -122,7 +122,7 @@ const TrackOrder = () => {
                     value={orderNumber}
                     onChange={(e) => setOrderNumber(e.target.value)}
                     style={{ width: '100%', padding: '15px 20px 15px 55px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none' }}
-                    placeholder="e.g. MOR-123456"
+                    placeholder="e.g. #6a944d13 (from My Account)"
                     required
                   />
                 </div>
@@ -258,7 +258,7 @@ const TrackOrder = () => {
             <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
             <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
             <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+            <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
 

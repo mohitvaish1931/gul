@@ -2,8 +2,16 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { useAppContext } from '../context/AppContext';
+import { useSEO } from '../utils/useSEO';
 
 const CartScreen = () => {
+  useSEO({
+    title: 'Shopping Cart | Gul Fashion',
+    description: 'Review the items in your Gul Fashion cart and check out securely.',
+    url: 'https://gulfashion.store/cart',
+    noindex: true,
+  });
+
   const location = useLocation();
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
@@ -152,12 +160,14 @@ const CartScreen = () => {
           discountAmount,
           couponCode: appliedCoupon ? appliedCoupon.code : null,
           totalPrice: totalAmount,
-          user: user ? (user.id || user._id) : undefined,
         })
       });
       const orderData = await orderResponse.json();
 
-      if (!orderResponse.ok) throw new Error('Failed to create order');
+      if (!orderResponse.ok) {
+        alert(orderData.message || 'Failed to create order');
+        return;
+      }
 
       // If total amount is 0 (100% off coupon), we can bypass Razorpay!
       if (totalAmount === 0) {
@@ -265,7 +275,7 @@ const CartScreen = () => {
             <>
               <div className="cart-items-list-wrap">
                 {cartItems.map((item) => (
-                  <div key={item._id} className="cart-item-card">
+                  <div key={`${item._id}-${item.selectedSize || ''}-${item.selectedColor || ''}`} className="cart-item-card">
                     <div className="cart-item-img">
                       <img src={item.image} alt={item.name} />
                     </div>

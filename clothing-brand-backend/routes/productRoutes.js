@@ -3,6 +3,8 @@ import Product from '../models/Product.js';
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.js';
+import { syncProductInBackground, deleteProductInBackground } from '../utils/googleMerchant.js';
+import { adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -144,7 +146,7 @@ router.get('/:id', async (req, res) => {
 
 // @desc    Create new product
 // @route   POST /api/products
-router.post('/', upload.any(), async (req, res) => {
+router.post('/', adminOnly, upload.any(), async (req, res) => {
   try {
     const imageFiles = req.files ? req.files.filter(f => f.fieldname === 'image') : [];
     const videoFiles = req.files ? req.files.filter(f => f.fieldname === 'videos_file') : [];
@@ -192,6 +194,7 @@ router.post('/', upload.any(), async (req, res) => {
 
     const createdProduct = await product.save();
     invalidateCache(); // Clear cache after product creation
+    syncProductInBackground(createdProduct); // Push to Google Merchant Center
     res.status(201).json(createdProduct);
   } catch (error) {
     console.error('Create product error:', error);
@@ -201,7 +204,7 @@ router.post('/', upload.any(), async (req, res) => {
 
 // @desc    Update a product
 // @route   PUT /api/products/:id
-router.put('/:id', upload.any(), async (req, res) => {
+router.put('/:id', adminOnly, upload.any(), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -266,6 +269,7 @@ router.put('/:id', upload.any(), async (req, res) => {
 
       const updatedProduct = await product.save();
       invalidateCache(); // Clear cache after product update
+      syncProductInBackground(updatedProduct); // Push to Google Merchant Center
       res.json(updatedProduct);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -278,13 +282,14 @@ router.put('/:id', upload.any(), async (req, res) => {
 
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
     if (product) {
       await Product.findByIdAndDelete(req.params.id);
       invalidateCache(); // Clear cache after product deletion
+      deleteProductInBackground(req.params.id); // Remove from Google Merchant Center
       res.json({ message: 'Product removed' });
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -297,7 +302,7 @@ router.delete('/:id', async (req, res) => {
 
 // @desc    Reorder products displayOrder
 // @route   POST /api/products/reorder
-router.post('/reorder', async (req, res) => {
+router.post('/reorder', adminOnly, async (req, res) => {
   try {
     const { products } = req.body;
     if (!products || !Array.isArray(products)) {

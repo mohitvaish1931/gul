@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS, storeUser } from '../utils/api';
+import { useSEO } from '../utils/useSEO';
 
 const RegisterScreen = () => {
+  useSEO({
+    title: 'Create Account | Gul Fashion',
+    description: 'Create a Gul Fashion account to track orders and check out faster.',
+    url: 'https://gulfashion.store/register',
+    noindex: true,
+  });
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,15 +51,7 @@ const RegisterScreen = () => {
         throw new Error(data.message || 'Registration failed. Please try again.');
       }
 
-      dispatch({ 
-        type: 'SET_USER', 
-        payload: { 
-          id: data.id || data._id, 
-          email: data.email, 
-          name: data.name, 
-          isAdmin: data.isAdmin 
-        } 
-      });
+      dispatch({ type: 'SET_USER', payload: storeUser(data) });
 
       navigate(redirect);
     } catch (err: any) {

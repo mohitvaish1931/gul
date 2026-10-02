@@ -1,5 +1,6 @@
 import express from 'express';
 import Banner from '../models/Banner.js';
+import { adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', adminOnly, async (req, res) => {
   try {
     const b = new Banner(req.body);
     await b.save();
@@ -24,7 +25,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', adminOnly, async (req, res) => {
   try {
     const updated = await Banner.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Not found' });
@@ -35,7 +36,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
   try {
     await Banner.findByIdAndDelete(req.params.id);
     res.json({ ok: true });

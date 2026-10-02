@@ -7,7 +7,7 @@ const AboutUs = () => {
     title: 'Our Story - GUL FASHION Jaipur',
     description: 'Experience the regal legacy of GUL FASHION. Handcrafted elegance from the heart of Jaipur since 2005.',
     keywords: 'about us, brand story, clothing heritage, craftsmanship, GUL FASHION Jaipur, luxury ethnic wear',
-    url: 'https://gulfashion.com/about-us',
+    url: 'https://gulfashion.store/about',
     type: 'website'
   });
 
@@ -141,7 +141,7 @@ const AboutUs = () => {
               <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
               <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
               <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-              <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+              <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
           </div>
         </div>
       </section>

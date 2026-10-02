@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
     title: 'Privacy Policy - GUL FASHION',
     description: 'How we collect, use, and protect your personal information.',
     keywords: 'privacy policy, data protection, security, GUL FASHION',
-    url: 'https://gulfashion.com/privacy-policy',
+    url: 'https://gulfashion.store/privacy-policy',
     type: 'website'
   });
 
@@ -116,7 +116,7 @@ const PrivacyPolicy = () => {
             <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
             <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
             <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+            <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
 

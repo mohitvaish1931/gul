@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import MobileBottomNav from './components/MobileBottomNav';
@@ -29,6 +29,7 @@ const AdminSalesReports = lazy(() => import('./pages/admin/AdminSalesReports'));
 const AdminProductReports = lazy(() => import('./pages/admin/AdminProductReports'));
 const AdminCustomerReports = lazy(() => import('./pages/admin/AdminCustomerReports'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
+const AdminReviews = lazy(() => import('./pages/admin/AdminReviews'));
 const AdminRoles = lazy(() => import('./pages/admin/AdminRoles'));
 const TrackOrder = lazy(() => import('./pages/TrackOrder'));
 const Contact = lazy(() => import('./pages/Contact'));
@@ -43,7 +44,6 @@ const Accessibility = lazy(() => import('./pages/Accessibility'));
 
 import ScrollToTop from './components/ScrollToTop';
 import { AppProvider } from './context/AppContext';
-import { HelmetProvider } from 'react-helmet-async';
 
 const MainLayout = () => {
   const location = useLocation();
@@ -132,6 +132,7 @@ const MainLayout = () => {
               <Route path="inventory" element={<AdminInventory />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
+              <Route path="reviews" element={<AdminReviews />} />
               <Route path="banners" element={<AdminBanners />} />
               <Route path="promotions" element={<AdminPromotions />} />
               <Route path="settings" element={<AdminSettings />} />
@@ -151,6 +152,13 @@ const MainLayout = () => {
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/accessibility" element={<Accessibility />} />
+            <Route path="*" element={
+              <div className="flex flex-col items-center justify-center min-h-[50vh] text-center px-4">
+                <h1 className="font-serif" style={{ fontSize: '2rem', color: '#2D0A4E', marginBottom: '12px' }}>Page not found</h1>
+                <p style={{ color: '#666', marginBottom: '24px' }}>The page you are looking for doesn't exist or has moved.</p>
+                <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
+              </div>
+            } />
           </Routes>
         </Suspense>
       </main>
@@ -179,15 +187,12 @@ const MainLayout = () => {
 
 function App() {
   return (
-    // @ts-ignore
-    <HelmetProvider>
-      <AppProvider>
-        <Router>
-          <ScrollToTop />
-          <MainLayout />
-        </Router>
-      </AppProvider>
-    </HelmetProvider>
+    <AppProvider>
+      <Router>
+        <ScrollToTop />
+        <MainLayout />
+      </Router>
+    </AppProvider>
   );
 }
 

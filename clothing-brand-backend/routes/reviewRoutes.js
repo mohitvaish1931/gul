@@ -1,8 +1,22 @@
 import express from 'express';
 import Review from '../models/Review.js';
 import Product from '../models/Product.js';
+import { protect, adminOnly, canAccess } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+// Recalculate a product's rating from its approved reviews
+async function updateProductRating(productId) {
+  const approved = await Review.find({ productId, status: 'approved' }).select('rating');
+  const count = approved.length;
+  const average = count ? Math.round((approved.reduce((sum, r) => sum + r.rating, 0) / count) * 10) / 10 : 0;
+  await Product.findByIdAndUpdate(productId, {
+    rating: average,
+    numReviews: count,
+    averageRating: average,
+    reviewCount: count,
+  });
+}
 
 // Get all reviews for a product
 router.get('/product/:productId', async (req, res) => {
@@ -14,9 +28,10 @@ router.get('/product/:productId', async (req, res) => {
       query.rating = parseInt(rating);
     }
 
+    // Reviewer emails are private
     let reviews = await Review.find(query)
-      .select('-updatedAt')
-      .populate('userId', 'name email');
+      .select('-updatedAt -userEmail')
+      .populate('userId', 'name');
 
     // Sort reviews
     if (sort === 'helpful') {
@@ -51,10 +66,73 @@ router.get('/product/:productId', async (req, res) => {
   }
 });
 
+// Get pending reviews (admin only)
+router.get('/admin/pending', adminOnly, async (req, res) => {
+  try {
+    const reviews = await Review.find({ status: 'pending' })
+      .populate('productId', 'name image')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      count: reviews.length,
+      reviews
+    });
+  } catch (err) {
+    console.error('GET /api/reviews/admin/pending error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch pending reviews' });
+  }
+});
+
+// Approve review (admin only)
+router.put('/admin/:id/approve', adminOnly, async (req, res) => {
+  try {
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { status: 'approved' },
+      { new: true }
+    );
+
+    if (!review) return res.status(404).json({ error: 'Review not found' });
+
+    await updateProductRating(review.productId);
+
+    res.json({
+      message: 'Review approved',
+      review
+    });
+  } catch (err) {
+    console.error('PUT /api/reviews/admin/:id/approve error:', err.message);
+    res.status(500).json({ error: 'Failed to approve review' });
+  }
+});
+
+// Reject review (admin only)
+router.put('/admin/:id/reject', adminOnly, async (req, res) => {
+  try {
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { status: 'rejected' },
+      { new: true }
+    );
+
+    if (!review) return res.status(404).json({ error: 'Review not found' });
+
+    await updateProductRating(review.productId);
+
+    res.json({
+      message: 'Review rejected',
+      review
+    });
+  } catch (err) {
+    console.error('PUT /api/reviews/admin/:id/reject error:', err.message);
+    res.status(500).json({ error: 'Failed to reject review' });
+  }
+});
+
 // Get single review
 router.get('/:id', async (req, res) => {
   try {
-    const review = await Review.findById(req.params.id);
+    const review = await Review.findById(req.params.id).select('-userEmail');
     if (!review) return res.status(404).json({ error: 'Review not found' });
     res.json(review);
   } catch (err) {
@@ -63,8 +141,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create a review (authenticated users)
-router.post('/', async (req, res) => {
+// Create a review (logged-in users)
+router.post('/', protect, async (req, res) => {
   try {
     const { productId, rating, title, comment } = req.body;
 
@@ -81,10 +159,7 @@ router.post('/', async (req, res) => {
     if (!product) return res.status(404).json({ error: 'Product not found' });
 
     // Check if user already reviewed this product
-    const existingReview = await Review.findOne({
-      productId,
-      userId: req.body.userId || 'anonymous'
-    });
+    const existingReview = await Review.findOne({ productId, userId: req.user._id });
 
     if (existingReview) {
       return res.status(400).json({ error: 'You have already reviewed this product' });
@@ -92,9 +167,9 @@ router.post('/', async (req, res) => {
 
     const review = new Review({
       productId,
-      userId: req.body.userId || 'anonymous',
-      userName: req.body.userName || 'Anonymous',
-      userEmail: req.body.userEmail || '',
+      userId: req.user._id,
+      userName: req.user.name,
+      userEmail: req.user.email,
       rating,
       title,
       comment,
@@ -113,13 +188,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update a review (user can update their own review)
-router.put('/:id', async (req, res) => {
+// Update a review (author or admin)
+router.put('/:id', protect, async (req, res) => {
   try {
     const review = await Review.findById(req.params.id);
-    if (!review) return res.status(404).json({ error: 'Review not found' });
-
-    // No auth check needed
+    if (!review || !canAccess(req, review.userId)) return res.status(404).json({ error: 'Review not found' });
 
     const { rating, title, comment } = req.body;
     if (rating && (rating < 1 || rating > 5)) {
@@ -132,6 +205,7 @@ router.put('/:id', async (req, res) => {
     review.status = 'pending'; // Re-submit for approval after edit
 
     await review.save();
+    await updateProductRating(review.productId);
 
     res.json({
       message: 'Review updated successfully',
@@ -143,31 +217,14 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete a review (user can delete their own, admin can delete any)
-router.delete('/:id', async (req, res) => {
+// Delete a review (author or admin)
+router.delete('/:id', protect, async (req, res) => {
   try {
     const review = await Review.findById(req.params.id);
-    if (!review) return res.status(404).json({ error: 'Review not found' });
-
-    // No auth check needed
-
-    // Update product rating stats
-    const productReviews = await Review.find({
-      productId: review.productId,
-      status: 'approved'
-    });
-
-    if (productReviews.length > 0) {
-      const avgRating = productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length;
-      await Product.findByIdAndUpdate(review.productId, {
-        rating: Math.round(avgRating * 10) / 10,
-        numReviews: Math.max(0, productReviews.length - 1),
-        averageRating: Math.round(avgRating * 10) / 10,
-        reviewCount: Math.max(0, productReviews.length - 1)
-      });
-    }
+    if (!review || !canAccess(req, review.userId)) return res.status(404).json({ error: 'Review not found' });
 
     await Review.findByIdAndDelete(req.params.id);
+    await updateProductRating(review.productId);
 
     res.json({ message: 'Review deleted successfully' });
   } catch (err) {
@@ -194,81 +251,6 @@ router.put('/:id/helpful', async (req, res) => {
   } catch (err) {
     console.error('PUT /api/reviews/:id/helpful error:', err.message);
     res.status(500).json({ error: 'Failed to mark review as helpful' });
-  }
-});
-
-// Get pending reviews (admin only)
-router.get('/admin/pending', async (req, res) => {
-  try {
-    const reviews = await Review.find({ status: 'pending' })
-      .populate('productId', 'name')
-      .sort({ createdAt: -1 });
-
-    res.json({
-      count: reviews.length,
-      reviews
-    });
-  } catch (err) {
-    console.error('GET /api/reviews/admin/pending error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch pending reviews' });
-  }
-});
-
-// Approve review (admin only)
-router.put('/admin/:id/approve', async (req, res) => {
-  try {
-    const review = await Review.findByIdAndUpdate(
-      req.params.id,
-      { status: 'approved' },
-      { new: true }
-    );
-
-    if (!review) return res.status(404).json({ error: 'Review not found' });
-
-    // Update product rating stats
-    const productReviews = await Review.find({
-      productId: review.productId,
-      status: 'approved'
-    });
-
-    if (productReviews.length > 0) {
-      const avgRating = productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length;
-      await Product.findByIdAndUpdate(review.productId, {
-        rating: Math.round(avgRating * 10) / 10,
-        numReviews: productReviews.length,
-        averageRating: Math.round(avgRating * 10) / 10,
-        reviewCount: productReviews.length
-      });
-    }
-
-    res.json({
-      message: 'Review approved',
-      review
-    });
-  } catch (err) {
-    console.error('PUT /api/reviews/admin/:id/approve error:', err.message);
-    res.status(500).json({ error: 'Failed to approve review' });
-  }
-});
-
-// Reject review (admin only)
-router.put('/admin/:id/reject', async (req, res) => {
-  try {
-    const review = await Review.findByIdAndUpdate(
-      req.params.id,
-      { status: 'rejected' },
-      { new: true }
-    );
-
-    if (!review) return res.status(404).json({ error: 'Review not found' });
-
-    res.json({
-      message: 'Review rejected',
-      review
-    });
-  } catch (err) {
-    console.error('PUT /api/reviews/admin/:id/reject error:', err.message);
-    res.status(500).json({ error: 'Failed to reject review' });
   }
 });
 

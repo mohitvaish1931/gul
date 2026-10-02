@@ -18,3 +18,10 @@ idaho_full.html
 *drive_downloads.zip*
 *Gul Fashion*
 *.env*
+
+# Google service account keys (Merchant Center)
+*service-account*.json
+google-merchant-key*.json
+
+# Local data backups
+clothing-brand-backend/backups/

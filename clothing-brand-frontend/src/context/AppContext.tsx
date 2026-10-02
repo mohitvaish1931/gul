@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, type ReactNode, useEffect } from 'react';
-import { API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS, AUTH_EXPIRED_EVENT, type ProductListResponse } from '../utils/api';
 
 export interface Product {
   id: string | number;
@@ -71,6 +71,7 @@ export interface User {
   email: string;
   name: string;
   isAdmin?: boolean;
+  token?: string;
 }
 
 interface AppState {
@@ -124,7 +125,9 @@ type AppAction =
 const loadInitialUser = () => {
   try {
     const item = localStorage.getItem('rr_user');
-    return item ? JSON.parse(item) : null;
+    const user = item ? JSON.parse(item) : null;
+    // Sessions saved before login tokens existed can't call protected APIs - ask to log in again
+    return user && user.token ? user : null;
   } catch { return null; }
 };
 
@@ -189,7 +192,7 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
     
     case 'SET_CART':
       return { ...state, cart: action.payload };
-    case 'ADD_TO_CART':
+    case 'ADD_TO_CART': {
       const existingCartItemIndex = state.cart.findIndex(
         item => item.id === action.payload.id && 
                 item.selectedSize === action.payload.selectedSize && 
@@ -207,7 +210,8 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         cart: [...state.cart, { ...action.payload, qty: action.payload.qty || 1 }],
       };
-    
+    }
+
     case 'REMOVE_FROM_CART':
       return {
         ...state,
@@ -301,17 +305,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const hydrate = async () => {
       // Try to fetch from MongoDB backend
       try {
-        const [prodRes, vidRes, banRes, coupRes] = await Promise.all([
-          fetch(API_ENDPOINTS.PRODUCTS),
+        // Reuse the early prefetch started in index.html instead of downloading products again
+        const prefetchedProducts = window.__PRODUCTS_PROMISE__;
+        const [prodsData, vidRes, banRes] = await Promise.all([
+          Promise.resolve(prefetchedProducts).then((data): Promise<ProductListResponse | null> | ProductListResponse =>
+            data || fetch(API_ENDPOINTS.PRODUCTS).then((res) => (res.ok ? res.json() : null))
+          ),
           fetch(API_ENDPOINTS.VIDEOS),
           fetch(API_ENDPOINTS.BANNERS),
-          fetch(API_ENDPOINTS.COUPONS),
         ]);
-        
+
         let hasBackendData = false;
-        
-        if (prodRes.ok) {
-          const prodsData = await prodRes.json();
+
+        if (prodsData) {
           const prodsArray = Array.isArray(prodsData) ? prodsData : (prodsData.products || []);
           if (mounted && prodsArray && prodsArray.length > 0) {
             dispatch({ type: 'SET_PRODUCTS', payload: prodsArray });
@@ -326,10 +332,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         if (banRes.ok) {
           const bans = await banRes.json();
           if (mounted) dispatch({ type: 'SET_BANNERS', payload: bans });
-        }
-        if (coupRes.ok) {
-          const coups = await coupRes.json();
-          if (mounted) dispatch({ type: 'SET_COUPONS', payload: coups });
         }
 
         // If no backend products, keep showing seed data
@@ -346,6 +348,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return () => { mounted = false; };
   }, []);
 
+  // Coupons are admin data - load them only for a logged-in admin
+  const adminToken = state.user?.isAdmin ? state.user.token : undefined;
+  useEffect(() => {
+    if (!adminToken) return;
+    let mounted = true;
+    fetch(API_ENDPOINTS.COUPONS, { headers: { Authorization: `Bearer ${adminToken}` } })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((coupons) => {
+        if (mounted && coupons) dispatch({ type: 'SET_COUPONS', payload: coupons });
+      })
+      .catch(() => { /* admin pages show their own errors */ });
+    return () => { mounted = false; };
+  }, [adminToken]);
+
+  // Log out when the API says the saved token is no longer valid
+  useEffect(() => {
+    const onExpired = () => dispatch({ type: 'LOGOUT' });
+    window.addEventListener(AUTH_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired);
+  }, []);
+
   // Persist user and cart to localStorage
   useEffect(() => {
     try {
@@ -354,16 +377,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       } else {
         localStorage.removeItem('rr_user');
       }
-    } catch (e) {
-      // ignore
+    } catch {
+      // storage unavailable (private mode) - ignore
     }
   }, [state.user]);
 
   useEffect(() => {
     try {
       localStorage.setItem('rr_cart', JSON.stringify(state.cart));
-    } catch (e) {
-      // ignore
+    } catch {
+      // storage unavailable (private mode) - ignore
     }
   }, [state.cart]);
 
@@ -374,6 +397,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components -- the hook belongs with its provider
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {

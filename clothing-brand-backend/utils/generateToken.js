@@ -1,22 +1,20 @@
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-const generateToken = (res, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET || 'fallbacksecret123', {
-    expiresIn: '30d',
-  });
+let temporarySecret;
 
-  const isProd = process.env.NODE_ENV === 'production';
-  // Use 'lax' for same-origin (Render/Hostinger), 'none' only if cross-origin is needed
-  const sameSiteMode = process.env.COOKIE_SAME_SITE || 'lax';
-  const isSecure = process.env.COOKIE_SECURE === 'true' || isProd;
-
-  // Set JWT as HTTP-Only cookie
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    secure: isSecure,
-    sameSite: sameSiteMode,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  });
+// JWT_SECRET must be set in production. Without it a random secret is used,
+// so tokens stop working (everyone is logged out) whenever the server restarts.
+export const getJwtSecret = () => {
+  if (process.env.JWT_SECRET) return process.env.JWT_SECRET;
+  if (!temporarySecret) {
+    temporarySecret = crypto.randomBytes(32).toString('hex');
+    console.warn('JWT_SECRET is not set - using a temporary secret. Set JWT_SECRET in the environment.');
+  }
+  return temporarySecret;
 };
+
+const generateToken = (userId) =>
+  jwt.sign({ userId: String(userId) }, getJwtSecret(), { expiresIn: '30d' });
 
 export default generateToken;

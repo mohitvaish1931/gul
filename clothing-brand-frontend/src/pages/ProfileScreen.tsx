@@ -3,8 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { ShoppingBag, LogOut, Package, Settings } from 'lucide-react';
+import { useSEO } from '../utils/useSEO';
 
 const ProfileScreen = () => {
+  useSEO({
+    title: 'My Account | Gul Fashion',
+    description: 'Your Gul Fashion account and order history.',
+    url: 'https://gulfashion.store/profile',
+    noindex: true,
+  });
+
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
   const { user } = state;

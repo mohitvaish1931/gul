@@ -3,12 +3,23 @@ import { Link, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 import './ProductStyles.css';
+import { useSEO } from '../utils/useSEO';
 
 const ProductListPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get('keyword') || '';
   const category = queryParams.get('category') || '';
+
+  const pageHeading = category || (keyword ? `Search: "${keyword}"` : 'All Collections');
+  useSEO({
+    title: `${pageHeading} | Gul Fashion`,
+    description: category
+      ? `Shop ${category} for women at Gul Fashion. Handcrafted ethnic and casual wear from Jaipur with free shipping across India.`
+      : 'Shop kurta sets, suits, tops and dresses for women at Gul Fashion. Handcrafted in Jaipur with free shipping across India.',
+    url: category ? `https://gulfashion.store/shop?category=${encodeURIComponent(category)}` : 'https://gulfashion.store/shop',
+    noindex: Boolean(keyword), // search result pages shouldn't be indexed
+  });
 
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

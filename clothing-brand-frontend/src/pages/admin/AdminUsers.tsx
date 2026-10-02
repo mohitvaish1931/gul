@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '../../utils/api';
-import { Shield, User, Trash2 } from 'lucide-react';
+import { Shield, User } from 'lucide-react';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -9,11 +9,7 @@ const AdminUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(API_ENDPOINTS.USERS, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` // assuming token is in localstorage or we use credentials
-          }
-        });
+        const res = await fetch(API_ENDPOINTS.USERS);
         if (res.ok) {
           const data = await res.json();
           setUsers(data);
@@ -43,7 +39,6 @@ const AdminUsers = () => {
                 <th className="text-left px-6 py-4 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Name</th>
                 <th className="text-left px-6 py-4 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Email</th>
                 <th className="text-left px-6 py-4 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-                <th className="text-right px-6 py-4 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -69,16 +64,11 @@ const AdminUsers = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </td>
                 </tr>
               ))}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
+                  <td colSpan={3} className="px-6 py-8 text-center text-sm text-gray-500">
                     No users found.
                   </td>
                 </tr>

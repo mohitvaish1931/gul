@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { MessageCircle, Mail, Phone } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 import './Footer.css';
 
@@ -15,11 +16,15 @@ const Footer = () => {
               Experience the royal legacy of Jaipur with our exquisite handcrafted ethnic wear for women.
             </p>
             <div className="social-links-purple">
-              {['facebook', 'instagram', 'twitter', 'youtube'].map((platform) => (
-                <a href={`https://${platform}.com`} key={platform} target="_blank" rel="noreferrer">
-                  <span className="capitalize">{platform[0]}</span>
-                </a>
-              ))}
+              <a href="https://wa.me/919351325459" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp" title="WhatsApp">
+                <MessageCircle size={18} />
+              </a>
+              <a href="mailto:gul.fashion.jaipur@gmail.com" aria-label="Email us" title="Email">
+                <Mail size={18} />
+              </a>
+              <a href="tel:+919351325459" aria-label="Call us" title="Call">
+                <Phone size={18} />
+              </a>
             </div>
           </div>
           
@@ -28,10 +33,10 @@ const Footer = () => {
             <ul className="footer-links-purple">
               <li><Link to="/shop?category=Kurta%20Sets">Kurta Sets</Link></li>
               <li><Link to="/shop?category=Suits">Designer Suits</Link></li>
+              <li><Link to="/shop?category=Suit%20Sets">Suit Sets</Link></li>
               <li><Link to="/shop?category=Tops">Tops & Tunics</Link></li>
-              <li><Link to="/shop?category=Three%20Piece%20Tops">Three Piece Tops</Link></li>
+              <li><Link to="/shop?category=Maxis%20%26%20Dresses">Maxis & Dresses</Link></li>
               <li><Link to="/shop">All Collections</Link></li>
-              <li><Link to="/shop?keyword=New">New Arrivals</Link></li>
             </ul>
           </div>
           
@@ -51,10 +56,15 @@ const Footer = () => {
             <p className="footer-desc-purple" style={{marginBottom: '15px'}}>
               Stay updated with our latest releases and exclusive styling tips.
             </p>
-            <form className="newsletter-form-purple">
-              <input type="email" placeholder="Enter your email" className="newsletter-input-purple" />
-              <button type="submit" className="btn-purple-submit">Join Now</button>
-            </form>
+            <a
+              href={`https://wa.me/919351325459?text=${encodeURIComponent('Hi Gul Fashion! Please send me updates about new arrivals and offers.')}`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-purple-submit"
+              style={{ display: 'inline-block', textAlign: 'center', textDecoration: 'none' }}
+            >
+              Get Updates on WhatsApp
+            </a>
           </div>
         </div>
         

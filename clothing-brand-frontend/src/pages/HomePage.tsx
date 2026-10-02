@@ -3,10 +3,84 @@ import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Categories from '../components/Categories';
 import CircleCategories from '../components/CircleCategories';
-import { Helmet } from 'react-helmet-async';
 import { API_ENDPOINTS } from '../utils/api';
+import { useSEO } from '../utils/useSEO';
 import { getImageUrl } from '../utils/mediaHelper';
 import './HomePage.css';
+
+// Defined outside HomePage so they aren't recreated (and remounted) on every render
+const TrustBadges = () => (
+  <div className="trust-badges-section">
+    <div className="container">
+      <div className="badges-grid">
+        <div className="badge-item">
+          <h4 className="badge-title font-serif">OUR STUDIO</h4>
+          <p className="badge-desc">Jaipur studio, Pahadiya Chowk</p>
+        </div>
+        <div className="badge-item">
+          <h4 className="badge-title font-serif">FREE SHIPPING</h4>
+          <p className="badge-desc">On all orders across India</p>
+        </div>
+        <div className="badge-item">
+          <h4 className="badge-title font-serif">EASY EXCHANGE</h4>
+          <p className="badge-desc">7 Days exchange</p>
+        </div>
+        <div className="badge-item">
+          <h4 className="badge-title font-serif">STYLING CONCIERGE</h4>
+          <p className="badge-desc">Personal advice via WhatsApp</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAllLink = '/shop' }: any) => (
+  <section className="carousel-section container section">
+    <div className="carousel-header flex justify-between items-center reveal-on-scroll" style={{marginBottom: '40px'}}>
+      <div>
+        <span className="small-gold-tag">{tag}</span>
+        <h2 className="title" style={{fontSize: '2.5rem'}}><span style={{fontWeight: 700}}>{titleLight}</span> <i className="font-serif" style={{color: 'var(--primary-purple)'}}>{titleItalic}</i></h2>
+        {subtext && <p className="subtext mt-2 text-gray-500 font-serif">{subtext}</p>}
+      </div>
+      <Link to={viewAllLink} className="view-all-link">VIEW ALL</Link>
+    </div>
+    
+    <div className="products-carousel-grid">
+      {items.map((product: any, idx: number) => {
+        const discount = product.originalPrice && product.price && product.originalPrice > product.price 
+          ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+          : 0;
+
+        return (
+          <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
+            <Link to={`/product/${product._id}`}>
+              <div className="carousel-img-wrapper">
+                <img src={getImageUrl(product.image, 600)} alt={product.name} className="primary-img" loading="lazy" />
+                {product.images && product.images.length > 1 && (
+                  <img src={getImageUrl(product.images[1], 600)} alt={`${product.name} alternate`} className="secondary-img" loading="lazy" />
+                )}
+                {discount > 0 && (
+                  <div className="discount-badge">{discount}% OFF</div>
+                )}
+              </div>
+            </Link>
+          <div className="carousel-product-details">
+            <Link to={`/product/${product._id}`}><h3 className="cp-name">{product.name}</h3></Link>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              {discount > 0 && (
+                <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', fontWeight: 500 }}>
+                  ₹{product.originalPrice.toLocaleString('en-IN')}
+                </span>
+              )}
+              <p className="cp-price" style={{ marginTop: 0 }}>₹{product.price.toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+    </div>
+  </section>
+);
 
 const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -17,14 +91,11 @@ const HomePage = () => {
     const fetchProducts = async () => {
       try {
         let data;
-        // Check if prefetch promise exists on window
-        // @ts-ignore
-        if (window.__INITIAL_PRODUCTS_PROMISE__) {
-          // @ts-ignore
-          data = await window.__INITIAL_PRODUCTS_PROMISE__;
-          // @ts-ignore
-          window.__INITIAL_PRODUCTS_PROMISE__ = null; // Clear it so it's not reused on re-renders
-        } 
+        // Reuse the early prefetch started in index.html
+        if (window.__PRODUCTS_PROMISE__) {
+          data = await window.__PRODUCTS_PROMISE__;
+          window.__PRODUCTS_PROMISE__ = null; // Clear it so it's not reused on re-renders
+        }
         
         if (!data) {
           const res = await fetch(API_ENDPOINTS.PRODUCTS);
@@ -49,6 +120,26 @@ const HomePage = () => {
     };
     fetchProducts();
   }, []);
+
+  useSEO({
+    title: "Gul Fashion | Premium Women's Ethnic & Casual Wear",
+    description: "Shop the latest trends in women's ethnic and casual wear at Gul Fashion. Explore our wide collection of Kurtis, Tops, Co-ord sets, and more with premium quality.",
+    url: 'https://gulfashion.store/',
+    type: 'website',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Gul Fashion',
+      url: 'https://gulfashion.store',
+      logo: 'https://gulfashion.store/favicon.svg',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+91-9351325459',
+        contactType: 'customer service',
+        email: 'gul.fashion.jaipur@gmail.com',
+      },
+    },
+  });
 
   const homepageProducts = products.filter(p => p.showOnHomepage !== false);
 
@@ -84,109 +175,12 @@ const HomePage = () => {
     .filter(p => p.category === 'Maxis & Dresses')
     .slice(0, 8);
 
-  const TrustBadges = () => (
-    <div className="trust-badges-section">
-      <div className="container">
-        <div className="badges-grid">
-          <div className="badge-item">
-            <h4 className="badge-title font-serif">OUR STORES</h4>
-            <p className="badge-desc">Jaipur, Delhi, Mumbai, Global</p>
-          </div>
-          <div className="badge-item">
-            <h4 className="badge-title font-serif">FREE SHIPPING</h4>
-            <p className="badge-desc">On domestic prepaid orders</p>
-          </div>
-          <div className="badge-item">
-            <h4 className="badge-title font-serif">EASY EXCHANGE</h4>
-            <p className="badge-desc">7 Days exchange</p>
-          </div>
-          <div className="badge-item">
-            <h4 className="badge-title font-serif">STYLING CONCIERGE</h4>
-            <p className="badge-desc">Personal advice via WhatsApp</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const CarouselSection = ({ tag, titleLight, titleItalic, subtext, items, viewAllLink = '/shop' }: any) => (
-    <section className="carousel-section container section">
-      <div className="carousel-header flex justify-between items-center reveal-on-scroll" style={{marginBottom: '40px'}}>
-        <div>
-          <span className="small-gold-tag">{tag}</span>
-          <h2 className="title" style={{fontSize: '2.5rem'}}><span style={{fontWeight: 700}}>{titleLight}</span> <i className="font-serif" style={{color: 'var(--primary-purple)'}}>{titleItalic}</i></h2>
-          {subtext && <p className="subtext mt-2 text-gray-500 font-serif">{subtext}</p>}
-        </div>
-        <Link to={viewAllLink} className="view-all-link">VIEW ALL</Link>
-      </div>
-      
-      <div className="products-carousel-grid">
-        {items.map((product: any, idx: number) => {
-          const discount = product.originalPrice && product.price && product.originalPrice > product.price 
-            ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
-            : 0;
-
-          return (
-            <div key={product._id} className={`carousel-product-card reveal-on-scroll delay-${(idx % 4) * 100}`}>
-              <Link to={`/product/${product._id}`}>
-                <div className="carousel-img-wrapper">
-                  <img src={getImageUrl(product.image, 600)} alt={product.name} className="primary-img" loading="lazy" />
-                  {product.images && product.images.length > 1 && (
-                    <img src={getImageUrl(product.images[1], 600)} alt={`${product.name} alternate`} className="secondary-img" loading="lazy" />
-                  )}
-                  {discount > 0 && (
-                    <div className="discount-badge">{discount}% OFF</div>
-                  )}
-                </div>
-              </Link>
-            <div className="carousel-product-details">
-              <Link to={`/product/${product._id}`}><h3 className="cp-name">{product.name}</h3></Link>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {discount > 0 && (
-                  <span style={{ textDecoration: 'line-through', color: '#999', fontSize: '0.9rem', fontWeight: 500 }}>
-                    ₹{product.originalPrice.toLocaleString('en-IN')}
-                  </span>
-                )}
-                <p className="cp-price" style={{ marginTop: 0 }}>₹{product.price.toLocaleString('en-IN')}</p>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-      </div>
-    </section>
-  );
-
   // Removed full-page blocking loader to drastically improve FCP and LCP
   // Components will handle their own empty/loading states
 
   return (
     <div className="homepage-wrapper">
-      {/* @ts-ignore */}
-      <Helmet>
-        <title>Gul Fashion | Premium Women's Ethnic & Casual Wear</title>
-        <meta name="description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion. Explore our wide collection of Kurtis, Tops, Co-ord sets, and more with premium quality." />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Gul Fashion",
-              "url": "https://gulfashion.store",
-              "logo": "https://gulfashion.store/favicon.svg",
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+91-9351325459",
-                "contactType": "customer service"
-              },
-              "sameAs": [
-                "https://www.facebook.com/gulfashion",
-                "https://www.instagram.com/gulfashion"
-              ]
-            }
-          `}
-        </script>
-      </Helmet>
+      <h1 className="sr-only">Gul Fashion – Premium Women's Ethnic &amp; Casual Wear from Jaipur</h1>
       <CircleCategories products={homepageProducts} />
       
       <Hero products={homepageProducts} />

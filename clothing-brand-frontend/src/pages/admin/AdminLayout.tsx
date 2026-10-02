@@ -4,7 +4,7 @@ import {
   LayoutDashboard, ShoppingBag, Package, Ticket, Users,
   Image as ImageIcon, Tag, BarChart2, PieChart, LineChart,
   Settings, UsersRound, ShieldCheck, LogOut, Menu, Search,
-  Bell, ExternalLink, Command
+  Bell, ExternalLink, Command, MessageSquare
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
@@ -12,32 +12,17 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { state, dispatch } = useAppContext();
-  const [isChecking, setIsChecking] = useState(true);
 
+  // Admin pages need a logged-in admin with a valid token (the API checks it on every call).
+  // This also runs when the session expires, sending the admin back to the login page.
+  const isAdminSession = Boolean(state.user?.isAdmin && state.user?.token);
   useEffect(() => {
-    // Check localStorage directly to avoid race condition on refresh
-    const rawUser = localStorage.getItem('rr_user');
-    if (rawUser) {
-      try {
-        const parsed = JSON.parse(rawUser);
-        if (parsed && parsed.isAdmin) {
-          // Restore user in context if not already set
-          if (!state.user) {
-            dispatch({ type: 'SET_USER', payload: { id: parsed.id, email: parsed.email, name: parsed.name, isAdmin: parsed.isAdmin } });
-          }
-          setIsChecking(false);
-          return;
-        }
-      } catch (e) { /* ignore */ }
+    if (!isAdminSession) {
+      navigate('/login?redirect=/admin', { replace: true });
     }
-    // No admin user found in localStorage
-    if (!state.user || !state.user.isAdmin) {
-      navigate('/login');
-    }
-    setIsChecking(false);
-  }, []);
+  }, [isAdminSession, navigate]);
 
-  if (isChecking) {
+  if (!isAdminSession) {
     return <div className="min-h-screen bg-[#F8F9FC] flex items-center justify-center"><div className="text-gray-400 text-lg">Loading...</div></div>;
   }
 
@@ -50,6 +35,7 @@ const AdminLayout = () => {
         { path: '/admin/inventory', name: 'Inventory', icon: Package },
         { path: '/admin/orders', name: 'Orders', icon: Ticket },
         { path: '/admin/customers', name: 'Customers', icon: Users },
+        { path: '/admin/reviews', name: 'Reviews', icon: MessageSquare },
       ]
     },
     {
@@ -157,7 +143,7 @@ const AdminLayout = () => {
         {/* Logout */}
         <div className="p-4 shrink-0">
           <button
-            onClick={() => { /* Handle logout */ }}
+            onClick={() => dispatch({ type: 'LOGOUT' })}
             className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-[14px] font-medium text-[#6B21A8] bg-[#F3E8FF]/50 hover:bg-[#F3E8FF] transition-colors"
           >
             <LogOut className="w-[18px] h-[18px]" />

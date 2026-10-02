@@ -7,7 +7,7 @@ const ApparelCareGuide = () => {
     title: 'Garment Care Guide - GUL FASHION',
     description: 'Expert tips on preserving the life and beauty of your luxury handcrafted ethnic wear.',
     keywords: 'garment care, clothing maintenance, silk care, embroidery care, GUL FASHION guide',
-    url: 'https://gulfashion.com/apparel-care-guide',
+    url: 'https://gulfashion.store/care-guide',
     type: 'website'
   });
 

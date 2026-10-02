@@ -5,7 +5,7 @@ import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCcw, Star } from 'l
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 import { useAppContext } from '../context/AppContext';
-import { Helmet } from 'react-helmet-async';
+import { useSEO } from '../utils/useSEO';
 
 // Helper component for star ratings
 const StarRating = ({ rating, size = 16, interactive = false, onChange }: { rating: number, size?: number, interactive?: boolean, onChange?: (r: number) => void }) => {
@@ -61,29 +61,31 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const fetchReviews = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/reviews/product/${productId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch reviews');
-      }
-      const data = await response.json();
-      setReviews(data.reviews || []);
-      setTotalReviews(data.totalReviews || 0);
-      setRatingDistribution(data.ratingDistribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Error loading reviews');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (productId) {
-      fetchReviews();
-    }
-  }, [productId]);
+    if (!productId) return;
+    let active = true;
+    fetch(`${API_BASE_URL}/api/reviews/product/${productId}`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to fetch reviews');
+        return response.json();
+      })
+      .then((data) => {
+        if (!active) return;
+        setReviews(data.reviews || []);
+        setTotalReviews(data.totalReviews || 0);
+        setRatingDistribution(data.ratingDistribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+      })
+      .catch((err) => {
+        console.error(err);
+        if (active) setError(err.message || 'Error loading reviews');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => { active = false; };
+  }, [productId, reloadKey]);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +114,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to submit review');
+        throw new Error(data.error || data.message || 'Failed to submit review');
       }
 
       setSubmitSuccess(true);
@@ -120,7 +122,7 @@ const ReviewsTab = ({ productId }: { productId: string }) => {
       setFormComment('');
       setFormRating(5);
       // Refresh list
-      fetchReviews();
+      setReloadKey((key) => key + 1);
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to submit review');
     } finally {
@@ -366,7 +368,7 @@ const ProductScreen = () => {
         }
         
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError('Error fetching product or backend not running');
         setLoading(false);
       }
@@ -395,6 +397,41 @@ const ProductScreen = () => {
 
   const productRating = product.rating !== undefined ? product.rating : (product.averageRating || 0);
   const productReviewsCount = product.numReviews !== undefined ? product.numReviews : (product.reviewCount || 0);
+  const inStock = !product.soldOut && product.countInStock > 0;
+  const hasDiscount = product.originalPrice > product.price;
+  const productUrl = `https://gulfashion.store/product/${product._id || id}`;
+  const metaDescription = product.description ? product.description.replace(/\s+/g, ' ').substring(0, 155) : '';
+
+  useSEO({
+    title: product.name ? `${product.name} | Gul Fashion` : 'Gul Fashion',
+    description: metaDescription,
+    image: product.image,
+    url: productUrl,
+    type: 'product',
+    structuredData: product._id ? {
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: product.name,
+      image: product.images?.length ? product.images : [product.image],
+      description: product.description,
+      sku: product._id,
+      category: product.category,
+      brand: { '@type': 'Brand', name: 'Gul Fashion' },
+      offers: {
+        '@type': 'Offer',
+        url: productUrl,
+        priceCurrency: 'INR',
+        price: String(product.price),
+        itemCondition: 'https://schema.org/NewCondition',
+        availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        shippingDetails: {
+          '@type': 'OfferShippingDetails',
+          shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'INR' },
+          shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IN' },
+        },
+      },
+    } : undefined,
+  });
 
   return (
     <div className="product-page-detail" style={{ backgroundColor: '#FDFBFD', minHeight: '100vh', padding: '60px 20px 100px' }}>
@@ -424,46 +461,12 @@ const ProductScreen = () => {
           </div>
         ) : (
           <>
-            {/* @ts-ignore */}
-            <Helmet>
-              <title>{`${product.name} | Gul Fashion`}</title>
-              <meta name="description" content={product.description ? product.description.substring(0, 150) + '...' : ''} />
-              <meta property="og:title" content={`${product.name} | Gul Fashion`} />
-              <meta property="og:description" content={product.description ? product.description.substring(0, 150) + '...' : ''} />
-              <meta property="og:image" content={product.image} />
-              <script type="application/ld+json">
-                {`
-                  {
-                    "@context": "https://schema.org/",
-                    "@type": "Product",
-                    "name": "${product.name}",
-                    "image": [
-                      "${product.image}"
-                    ],
-                    "description": "${product.description ? product.description.replace(/\\n/g, ' ').replace(/"/g, '\\"') : ''}",
-                    "sku": "${product._id}",
-                    "brand": {
-                      "@type": "Brand",
-                      "name": "Gul Fashion"
-                    },
-                    "offers": {
-                      "@type": "Offer",
-                      "url": "https://gulfashion.store/product/${product._id}",
-                      "priceCurrency": "INR",
-                      "price": "${product.price}",
-                      "itemCondition": "https://schema.org/NewCondition",
-                      "availability": "${product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}"
-                    }
-                  }
-                `}
-              </script>
-            </Helmet>
             <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '60px' }}>
               {/* Image Section */}
               <div className="product-image-section">
                 <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}>
                    <img src={getImageUrl(selectedImage || product.image, 1200)} alt={product.name} style={{ width: '100%', display: 'block' }} loading="eager" fetchPriority="high" />
-                   {product.countInStock === 0 && (
+                   {!inStock && (
                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ backgroundColor: '#2D0A4E', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: '800', fontSize: '0.8rem', letterSpacing: '2px' }}>SOLD OUT</span>
                      </div>
@@ -532,7 +535,12 @@ const ProductScreen = () => {
 
                 <div style={{ marginBottom: '30px' }}>
                    <span style={{ fontSize: '2rem', fontWeight: '800', color: '#2D0A4E' }}>₹{product.price?.toLocaleString('en-IN')}</span>
-                   <span style={{ marginLeft: '15px', color: '#999', fontSize: '0.9rem', textDecoration: 'line-through' }}>₹{(product.price * 1.2).toLocaleString('en-IN')}</span>
+                   {hasDiscount && (
+                     <>
+                       <span style={{ marginLeft: '15px', color: '#999', fontSize: '0.9rem', textDecoration: 'line-through' }}>₹{product.originalPrice.toLocaleString('en-IN')}</span>
+                       <span style={{ marginLeft: '10px', color: '#15803D', fontSize: '0.9rem', fontWeight: '700' }}>{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF</span>
+                     </>
+                   )}
                 </div>
 
                 <div style={{ color: '#666', lineHeight: '1.8', fontSize: '1.05rem', marginBottom: '40px', borderBottom: '1px solid #f0f0f0', paddingBottom: '30px' }}>
@@ -541,7 +549,7 @@ const ProductScreen = () => {
 
                 {/* Purchase Card */}
                 <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '20px', border: '1px solid #f0f0f0', marginBottom: '40px' }}>
-                   {product.countInStock > 0 ? (
+                   {inStock ? (
                      <>
                       {/* Sizes Selection */}
                       {product.sizes && product.sizes.length > 0 && (
@@ -857,4 +865,10 @@ const ProductScreen = () => {
   );
 };
 
-export default ProductScreen;
+// Remount on every product id so loading state, selected size, qty and image reset between products
+const ProductRoute = () => {
+  const { id } = useParams();
+  return <ProductScreen key={id} />;
+};
+
+export default ProductRoute;

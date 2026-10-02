@@ -7,6 +7,12 @@ import { getImageUrl } from '../utils/mediaHelper';
 import logoImg from '../assets/logo.png';
 import './Header.css';
 
+const announcements = [
+  "FREE DELIVERY ACROSS INDIA | SECURE ONLINE PAYMENTS",
+  "7-DAY SIZE EXCHANGE ON UNWORN GARMENTS",
+  "FREE SHIPPING ON ALL ORDERS ACROSS INDIA"
+];
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
@@ -20,11 +26,6 @@ const Header = () => {
   const { state } = useAppContext();
   const { user, cart } = state;
 
-  const announcements = [
-    "COD AVAILABLE | WORLDWIDE SHIPPING | FREE DELIVERY",
-    "SUMMER BONANZA SALE IS LIVE: UPTO 80% OFF | USE CODE: BONANZA80",
-    "FREE SHIPPING ON ALL DOMESTIC PREPAID ORDERS"
-  ];
   const [announcementIdx, setAnnouncementIdx] = useState(0);
   const [fadeProp, setFadeProp] = useState('fade-in');
 

@@ -6,9 +6,9 @@
 export const SEO_CONFIG = {
   // Site Information
   siteName: 'GUL FASHION',
-  siteUrl: 'https://gulfashion.com',
+  siteUrl: 'https://gulfashion.store',
   siteDescription: 'Premium luxury clothing collection with premium sarees, suits, and ethnic wear and more',
-  siteLogo: 'https://gulfashion.com/logo.png',
+  siteLogo: 'https://gulfashion.store/logo.png',
   
   // Business Information
   business: {
@@ -142,7 +142,7 @@ export const SEO_CONFIG = {
   },
 
   // Canonical Base URL
-  canonicalBase: 'https://gulfashion.com',
+  canonicalBase: 'https://gulfashion.store',
 
   // OpenSearch Description
   openSearchUrl: '/opensearch.xml',

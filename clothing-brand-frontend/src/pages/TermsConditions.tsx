@@ -7,7 +7,7 @@ const TermsConditions = () => {
     title: 'Terms & Conditions - GUL FASHION',
     description: 'Read our terms of service and business guidelines.',
     keywords: 'terms and conditions, service agreement, GUL FASHION rules',
-    url: 'https://gulfashion.com/terms-conditions',
+    url: 'https://gulfashion.store/terms-conditions',
     type: 'website'
   });
 
@@ -116,7 +116,7 @@ const TermsConditions = () => {
             <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
             <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
             <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+            <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
 

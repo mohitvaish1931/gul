@@ -9,6 +9,16 @@ const router = express.Router();
  * Settings > API > Webhooks
  */
 router.post('/webhook', async (req, res) => {
+  // Shiprocket sends the token configured in its webhook settings as the x-api-key header.
+  // Without SHIPROCKET_WEBHOOK_TOKEN anyone could mark orders delivered/cancelled, so it's required.
+  const expectedToken = process.env.SHIPROCKET_WEBHOOK_TOKEN;
+  if (!expectedToken) {
+    return res.status(503).json({ error: 'Webhook is not configured' });
+  }
+  if (req.get('x-api-key') !== expectedToken) {
+    return res.status(401).json({ error: 'Invalid webhook token' });
+  }
+
   try {
     // Log the incoming webhook for debugging
     // console.log('Shiprocket Webhook received:', JSON.stringify(req.body, null, 2));

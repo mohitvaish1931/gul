@@ -1,4 +1,5 @@
 import express from 'express';
+import './utils/asyncErrors.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
@@ -16,6 +17,7 @@ import shiprocketRoutes from './routes/shiprocketRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
+import merchantRoutes from './routes/merchantRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -24,6 +26,9 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// Render sits behind a proxy; needed so req.ip is the visitor's IP (used by rate limiting)
+app.set('trust proxy', 1);
 
 // Middleware - Compression middleware (must be before routes)
 app.use(compression()); // Compress responses
@@ -57,6 +62,7 @@ app.use('/api/videos', videoRoutes);
 app.use('/api/shiprocket', shiprocketRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/merchant', merchantRoutes);
 app.use('/api', sitemapRoutes);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -77,6 +83,11 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(notFound);
 app.use(errorHandler);
+
+// Last line of defence: log stray async errors instead of letting them crash the server
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled promise rejection:', reason);
+});
 
 const PORT = process.env.PORT || 5000;
 

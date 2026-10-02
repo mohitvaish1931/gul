@@ -8,7 +8,7 @@ const FAQ = () => {
     title: 'FAQs - GUL FASHION',
     description: 'Find answers to common questions about our products and services.',
     keywords: 'faq, questions, help, GUL FASHION',
-    url: 'https://gulfashion.com/faq',
+    url: 'https://gulfashion.store/faq',
     type: 'website'
   });
 
@@ -19,7 +19,7 @@ const FAQ = () => {
     },
     {
       question: "What are the shipping charges?",
-      answer: "We offer free shipping on all orders above ₹1999 across India. For orders below this amount, a flat shipping fee of ₹99 applies."
+      answer: "Shipping is free on all orders delivered within India. There are no extra delivery charges at checkout."
     },
     {
       question: "How long will it take to receive my order?",
@@ -128,7 +128,7 @@ const FAQ = () => {
             <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
             <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
             <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
-            <TrustItem icon={<Globe size={28} />} title="WORLDWIDE SHIPPING" sub="Delivered across the globe" />
+            <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
 

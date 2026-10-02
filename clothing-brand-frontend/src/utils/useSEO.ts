@@ -9,9 +9,13 @@ interface SEOProps {
   keywords?: string;
   author?: string;
   structuredData?: Record<string, any>;
+  noindex?: boolean; // private pages like cart or login
 }
 
 export const useSEO = (props: SEOProps) => {
+  // Compared as a string so a new-but-equal object doesn't re-run the effect
+  const structuredDataJson = props.structuredData ? JSON.stringify(props.structuredData) : '';
+
   useEffect(() => {
     // Update title
     document.title = props.title;
@@ -90,19 +94,34 @@ export const useSEO = (props: SEOProps) => {
     }
     canonical.setAttribute('href', canonicalUrl);
     
-    // Update JSON-LD structured data
-    if (props.structuredData) {
-      let script = document.querySelector('script[data-type="application/ld+json"][data-page="true"]');
+    // Update JSON-LD structured data (one page-level script, removed on pages without data)
+    let script = document.querySelector('script[type="application/ld+json"][data-page="true"]');
+    if (structuredDataJson) {
       if (!script) {
         script = document.createElement('script');
         script.setAttribute('type', 'application/ld+json');
         script.setAttribute('data-page', 'true');
         document.head.appendChild(script);
       }
-      script.textContent = JSON.stringify(props.structuredData);
+      script.textContent = structuredDataJson;
+    } else if (script) {
+      script.remove();
     }
     
+    // Keep private pages out of search results
+    let robots = document.querySelector('meta[name="robots"]');
+    if (props.noindex) {
+      if (!robots) {
+        robots = document.createElement('meta');
+        robots.setAttribute('name', 'robots');
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute('content', 'noindex, follow');
+    } else if (robots) {
+      robots.remove();
+    }
+
     // Scroll to top on component mount
     window.scrollTo(0, 0);
-  }, [props.title, props.description, props.image, props.url, props.type, props.keywords, props.author, JSON.stringify(props.structuredData)]);
+  }, [props.title, props.description, props.image, props.url, props.type, props.keywords, props.author, props.noindex, structuredDataJson]);
 };

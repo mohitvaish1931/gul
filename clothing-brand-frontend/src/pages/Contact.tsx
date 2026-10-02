@@ -12,7 +12,7 @@ const Contact = () => {
     title: 'Contact Us - GUL FASHION Jaipur',
     description: 'Get in touch with GUL FASHION for custom tailoring, styling guidance, and luxury ethnic wear inquiries.',
     keywords: 'contact gul fashion, jaipur boutique, ethnic wear contact, custom tailoring jaipur',
-    url: 'https://gulfashion.com/contact',
+    url: 'https://gulfashion.store/contact',
     type: 'website'
   });
 
@@ -305,8 +305,8 @@ const Contact = () => {
           <div className="trust-item">
             <Globe className="trust-icon" size={32} />
             <div className="trust-content">
-              <h5>WORLDWIDE SHIPPING</h5>
-              <p>Delivering worldwide</p>
+              <h5>FREE SHIPPING</h5>
+              <p>Free delivery across India</p>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import Order from '../models/Order.js';
 import Coupon from '../models/Coupon.js';
 import { createShipmozoOrder } from '../utils/shipmozo.js';
+import { protect, canAccess } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -15,9 +16,18 @@ router.get('/razorpay/config', (req, res) => {
 
 // @desc    Create Razorpay Order
 // @route   POST /api/payment/razorpay
-router.post('/razorpay', async (req, res) => {
+router.post('/razorpay', protect, async (req, res) => {
   try {
-    const { amount, receipt } = req.body;
+    // `receipt` is our MongoDB order id; the amount always comes from that order, never from the client
+    const order = await Order.findById(req.body.receipt);
+    if (!order || !canAccess(req, order.user)) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    if (order.isPaid) {
+      return res.status(400).json({ message: 'Order is already paid' });
+    }
+    const amount = order.totalPrice;
+    const receipt = String(order._id);
 
     if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
       // Mock mode for testing if keys are missing
@@ -40,8 +50,13 @@ router.post('/razorpay', async (req, res) => {
       receipt: receipt
     };
 
-    const order = await instance.orders.create(options);
-    res.status(200).json(order);
+    const razorpayOrder = await instance.orders.create(options);
+
+    // Remember which Razorpay order belongs to this order so /verify can match them
+    order.razorpayOrderId = razorpayOrder.id;
+    await order.save();
+
+    res.status(200).json(razorpayOrder);
   } catch (error) {
     console.error('Razorpay Error:', error);
     res.status(500).json({ message: 'Something went wrong with Razorpay', error });
@@ -50,7 +65,7 @@ router.post('/razorpay', async (req, res) => {
 
 // @desc    Verify Razorpay Payment
 // @route   POST /api/payment/verify
-router.post('/verify', async (req, res) => {
+router.post('/verify', protect, async (req, res) => {
   try {
     const { 
       razorpay_order_id, 
@@ -60,24 +75,34 @@ router.post('/verify', async (req, res) => {
       user_details // Optional, for shipmozo if guest
     } = req.body;
 
-    // Verify signature only if keys exist (skip in mock mode)
-    if (process.env.RAZORPAY_KEY_SECRET && !razorpay_order_id.startsWith('order_mock_')) {
+    const order = await Order.findById(mongo_order_id).populate('user', 'name email');
+
+    if (!order || !canAccess(req, order.user)) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Already processed - don't mark paid or create a shipment twice
+    if (order.isPaid) {
+      return res.status(200).json({ message: 'Order already paid' });
+    }
+
+    // Signature is skipped only in mock mode, i.e. when Razorpay keys are not configured at all
+    if (process.env.RAZORPAY_KEY_SECRET) {
+      if (!razorpay_order_id || razorpay_order_id !== order.razorpayOrderId) {
+        return res.status(400).json({ message: 'Payment does not match this order' });
+      }
+
       const sign = razorpay_order_id + "|" + razorpay_payment_id;
       const expectedSign = crypto
         .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
         .update(sign.toString())
         .digest("hex");
 
-      if (razorpay_signature !== expectedSign) {
+      const received = Buffer.from(String(razorpay_signature || ''));
+      const expected = Buffer.from(expectedSign);
+      if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
         return res.status(400).json({ message: 'Invalid signature sent!' });
       }
-    }
-
-    // Update MongoDB Order
-    const order = await Order.findById(mongo_order_id).populate('user', 'name email');
-    
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
     }
 
     order.isPaid = true;
@@ -126,13 +151,17 @@ router.post('/verify', async (req, res) => {
   }
 });
 
-router.post('/bypass', async (req, res) => {
+router.post('/bypass', protect, async (req, res) => {
   try {
     const { mongo_order_id, user_details } = req.body;
     const order = await Order.findById(mongo_order_id).populate('user', 'name email');
     
-    if (!order) {
+    if (!order || !canAccess(req, order.user)) {
       return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (order.isPaid) {
+      return res.json({ success: true });
     }
 
     if (order.totalPrice > 0) {

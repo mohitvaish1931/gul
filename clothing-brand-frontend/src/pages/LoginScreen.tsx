@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { API_ENDPOINTS } from '../utils/api';
+import { API_ENDPOINTS, storeUser } from '../utils/api';
+import { useSEO } from '../utils/useSEO';
 
 const LoginScreen = () => {
+  useSEO({
+    title: 'Sign In | Gul Fashion',
+    description: 'Sign in to your Gul Fashion account to track orders and check out faster.',
+    url: 'https://gulfashion.store/login',
+    noindex: true,
+  });
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -34,15 +42,7 @@ const LoginScreen = () => {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
-      dispatch({ 
-        type: 'SET_USER', 
-        payload: { 
-          id: data.id || data._id, 
-          email: data.email, 
-          name: data.name, 
-          isAdmin: data.isAdmin 
-        } 
-      });
+      dispatch({ type: 'SET_USER', payload: storeUser(data) });
 
       if (data.isAdmin) {
         navigate('/admin');

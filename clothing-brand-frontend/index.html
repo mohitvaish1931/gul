@@ -18,7 +18,7 @@
     <meta name="twitter:description" content="Shop the latest trends in women's ethnic and casual wear at Gul Fashion." />
     
     <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://gul-275k.onrender.com" crossorigin />
+    <link rel="preconnect" href="%VITE_API_BASE%" crossorigin />
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,7 +27,7 @@
 
     <script>
       // Early API prefetch
-      window.__PRODUCTS_PROMISE__ = fetch("https://gul-275k.onrender.com/api/products").then(r => r.json()).catch(() => null);
+      window.__PRODUCTS_PROMISE__ = fetch("%VITE_API_BASE%/api/products").then(r => r.json()).catch(() => null);
     </script>
   </head>
   <body>

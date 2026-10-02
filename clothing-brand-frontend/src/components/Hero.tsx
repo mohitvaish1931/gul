@@ -98,12 +98,12 @@ const Hero = ({ products = [] }: HeroProps) => {
             <div className="hero-overlay"></div>
             <div className="hero-content">
               <span className="hero-gold-tag animate-item">THE LUXURY EDIT</span>
-              <h1 className="hero-title font-serif animate-item">
+              <h2 className="hero-title font-serif animate-item">
                 <span className="title-bold">{slide.title.split(' ')[0]}</span>{' '}
                 <span className="title-italic font-serif" style={{color: 'var(--gold-primary)'}}>
                   {slide.title.split(' ').slice(1).join(' ')}
                 </span>
-              </h1>
+              </h2>
               <p className="hero-subtitle animate-item" style={{ maxWidth: '800px', margin: '0 auto 45px', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {slide.subtitle}
               </p>
