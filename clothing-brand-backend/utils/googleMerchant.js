@@ -65,7 +65,7 @@ async function getAccessToken() {
   const assertion = jwt.sign(
     { iss: sa.client_email, scope: SCOPE, aud: TOKEN_URL, iat: now, exp: now + 3600 },
     sa.private_key,
-    { algorithm: 'RS256', keyid: sa.private_key_id }
+    sa.private_key_id ? { algorithm: 'RS256', keyid: sa.private_key_id } : { algorithm: 'RS256' }
   );
 
   let data;
@@ -85,7 +85,10 @@ async function getAccessToken() {
   return tokenCache.token;
 }
 
-async function merchantRequest(method, path, { params, data } = {}) {
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Retries rate-limit (429) and temporary (5xx) errors with exponential backoff
+async function merchantRequest(method, path, { params, data } = {}, attempt = 0) {
   const token = await getAccessToken();
   try {
     const res = await axios({
@@ -97,12 +100,44 @@ async function merchantRequest(method, path, { params, data } = {}) {
     });
     return res.data;
   } catch (error) {
+    const status = error.response?.status;
+    if ((status === 429 || status >= 500) && attempt < 4) {
+      await sleep(1000 * 2 ** attempt);
+      return merchantRequest(method, path, { params, data }, attempt + 1);
+    }
     const apiError = error.response?.data?.error;
     const err = new Error(apiError?.message || error.message);
-    err.status = error.response?.status;
+    err.status = status;
     err.details = apiError;
     throw err;
   }
+}
+
+// What the admin panel needs to show setup progress (never exposes the private key)
+export function getMerchantConfig() {
+  let serviceAccountEmail = null;
+  let projectId = null;
+  let keyError = null;
+  try {
+    const sa = loadServiceAccount();
+    serviceAccountEmail = sa?.client_email || null;
+    projectId = sa?.project_id || null;
+  } catch (error) {
+    keyError = `The service account key could not be read: ${error.message}`;
+  }
+  return {
+    merchantId: getMerchantId(),
+    keyConfigured: Boolean(serviceAccountEmail),
+    serviceAccountEmail,
+    projectId,
+    keyError,
+    dataSource: cachedDataSource || (process.env.GOOGLE_MERCHANT_DATA_SOURCE_ID
+      ? `accounts/${getMerchantId()}/dataSources/${process.env.GOOGLE_MERCHANT_DATA_SOURCE_ID}`
+      : null),
+    feedLabel: FEED_LABEL,
+    currency: CURRENCY,
+    siteUrl: getSiteUrl(),
+  };
 }
 
 // ---------- One-time setup ----------
@@ -247,24 +282,69 @@ export async function deleteProduct(productId) {
   }
 }
 
-export async function syncAllProducts(products) {
-  const result = { synced: 0, skipped: [], failed: [] };
+export async function syncAllProducts(products, onProgress) {
+  const result = { total: products.length, synced: 0, skipped: [], failed: [] };
 
   for (const product of products) {
     const skipReason = getSkipReason(product);
     if (skipReason) {
       result.skipped.push({ id: String(product._id), name: product.name, reason: skipReason });
-      continue;
+    } else {
+      try {
+        await upsertProduct(product);
+        result.synced++;
+      } catch (error) {
+        result.failed.push({ id: String(product._id), name: product.name, error: error.message });
+      }
+      await sleep(120); // stay well under the API rate limits
     }
-    try {
-      await upsertProduct(product);
-      result.synced++;
-    } catch (error) {
-      result.failed.push({ id: String(product._id), name: product.name, error: error.message });
-    }
+    onProgress?.(result);
   }
 
   return result;
+}
+
+// ---------- Full sync runs (admin button + nightly schedule) ----------
+
+// One full sync at a time; the admin panel polls this state while it runs
+const syncState = { running: false, startedAt: null, finishedAt: null, trigger: null, progress: null, result: null, error: null };
+
+export const getSyncState = () => ({ ...syncState });
+
+export function startFullSync(loadProducts, trigger = 'manual') {
+  if (syncState.running) return false;
+  Object.assign(syncState, { running: true, startedAt: new Date(), finishedAt: null, trigger, progress: null, result: null, error: null });
+  (async () => {
+    try {
+      const products = await loadProducts();
+      syncState.result = await syncAllProducts(products, (progress) => {
+        syncState.progress = { done: progress.synced + progress.skipped.length + progress.failed.length, total: progress.total };
+      });
+      console.log(`Google Merchant ${trigger} sync: ${syncState.result.synced} synced, ${syncState.result.failed.length} failed`);
+    } catch (error) {
+      syncState.error = error.message;
+      console.error(`Google Merchant ${trigger} sync failed:`, error.message);
+    } finally {
+      syncState.running = false;
+      syncState.finishedAt = new Date();
+    }
+  })();
+  return true;
+}
+
+// Nightly safety net: full sync at about 2 AM India time, once per day
+export function scheduleNightlySync(loadProducts) {
+  let lastRunDay = null;
+  setInterval(() => {
+    if (!isMerchantConfigured()) return;
+    const now = new Date();
+    const hour = Number(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', hour12: false }));
+    const day = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    if (hour === 2 && lastRunDay !== day) {
+      lastRunDay = day;
+      startFullSync(loadProducts, 'nightly');
+    }
+  }, 10 * 60 * 1000);
 }
 
 // Processed products with Google's approval status and item-level issues

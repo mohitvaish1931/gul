@@ -17,7 +17,8 @@ import shiprocketRoutes from './routes/shiprocketRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import sitemapRoutes from './routes/sitemapRoutes.js';
-import merchantRoutes from './routes/merchantRoutes.js';
+import merchantRoutes, { loadAllProducts } from './routes/merchantRoutes.js';
+import { scheduleNightlySync } from './utils/googleMerchant.js';
 import contactRoutes from './routes/contactRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -92,6 +93,9 @@ process.on('unhandledRejection', (reason) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Full Google Merchant Center sync every night (only runs once the service account key is set)
+scheduleNightlySync(loadAllProducts);
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);

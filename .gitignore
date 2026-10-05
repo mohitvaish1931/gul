@@ -25,3 +25,7 @@ google-merchant-key*.json
 
 # Local data backups
 clothing-brand-backend/backups/
+
+# Google Cloud service account keys downloaded with their default names
+gulfashion-*.json
+*-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].json

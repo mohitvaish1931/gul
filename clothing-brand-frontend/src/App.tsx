@@ -31,6 +31,7 @@ const AdminCustomerReports = lazy(() => import('./pages/admin/AdminCustomerRepor
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const AdminReviews = lazy(() => import('./pages/admin/AdminReviews'));
 const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'));
+const AdminMerchant = lazy(() => import('./pages/admin/AdminMerchant'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 const AdminRoles = lazy(() => import('./pages/admin/AdminRoles'));
@@ -139,6 +140,7 @@ const MainLayout = () => {
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="reviews" element={<AdminReviews />} />
               <Route path="messages" element={<AdminMessages />} />
+              <Route path="google-shopping" element={<AdminMerchant />} />
               <Route path="banners" element={<AdminBanners />} />
               <Route path="promotions" element={<AdminPromotions />} />
               <Route path="settings" element={<AdminSettings />} />

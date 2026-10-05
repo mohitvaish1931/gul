@@ -4,7 +4,7 @@ import {
   LayoutDashboard, ShoppingBag, Package, Ticket, Users,
   Image as ImageIcon, Tag, BarChart2, PieChart, LineChart,
   Settings, UsersRound, ShieldCheck, LogOut, Menu, Search,
-  Bell, ExternalLink, Command, MessageSquare, Inbox
+  Bell, ExternalLink, Command, MessageSquare, Inbox, Store
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
@@ -44,6 +44,7 @@ const AdminLayout = () => {
       items: [
         { path: '/admin/banners', name: 'Banners', icon: ImageIcon },
         { path: '/admin/promotions', name: 'Promotions', icon: Tag },
+        { path: '/admin/google-shopping', name: 'Google Shopping', icon: Store },
       ]
     },
     {
