@@ -10,6 +10,7 @@ import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { getImageUrl } from '../utils/mediaHelper';
 import { useAppContext } from '../context/AppContext';
 import { useSEO } from '../utils/useSEO';
+import { trackAddToCart, trackViewItem } from '../utils/analytics';
 
 // Helper component for star ratings
 const StarRating = ({ rating, size = 16, interactive = false, onChange }: { rating: number, size?: number, interactive?: boolean, onChange?: (r: number) => void }) => {
@@ -426,6 +427,7 @@ const ProductScreen = () => {
         setProduct(data);
         setSelectedImage(data.image || '');
         addRecentlyViewed(data);
+        trackViewItem(data);
         
         // Auto-select size/color if they only have 1 option
         if (data.sizes && data.sizes.length === 1) {
@@ -451,10 +453,11 @@ const ProductScreen = () => {
       document.getElementById('size-picker')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-    dispatch({ 
-      type: 'ADD_TO_CART', 
-      payload: { ...product, id: product.id || product._id, qty: qty || 1, selectedSize, selectedColor } 
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: { ...product, id: product.id || product._id, qty: qty || 1, selectedSize, selectedColor }
     });
+    trackAddToCart({ ...product, selectedSize, selectedColor }, qty || 1);
     navigate('/cart');
   };
 

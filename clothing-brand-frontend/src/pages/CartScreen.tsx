@@ -5,6 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import { getImageUrl } from '../utils/mediaHelper';
 import { splitProductName } from '../utils/productName';
 import { useSEO } from '../utils/useSEO';
+import { trackAddShippingInfo, trackBeginCheckout, trackPurchase, trackRemoveFromCart, trackViewCart } from '../utils/analytics';
 
 const CartScreen = () => {
   useSEO({
@@ -32,8 +33,10 @@ const CartScreen = () => {
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponMessage, setCouponMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
+  // Cart is managed globally via AppContext; this only reports the bag view once per visit
   useEffect(() => {
-    // Cart is now managed globally via AppContext
+    if (cartItems.length > 0) trackViewCart(cartItems);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const applyCouponHandler = async () => {
@@ -112,6 +115,9 @@ const CartScreen = () => {
   };
   
   const removeFromCartHandler = (removeId: any, selectedSize?: string, selectedColor?: string) => {
+    const removed = cartItems.find((item) =>
+      (item.id || item._id) === removeId && item.selectedSize === selectedSize && item.selectedColor === selectedColor);
+    if (removed) trackRemoveFromCart(removed);
     dispatch({ type: 'REMOVE_FROM_CART', payload: { id: removeId, selectedSize, selectedColor } });
   };
 
@@ -144,6 +150,9 @@ const CartScreen = () => {
     const subtotalAmount = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
     const discountAmount = calculateDiscountAmount(cartItems, appliedCoupon);
     const totalAmount = subtotalAmount - discountAmount;
+    const purchasedItems = [...cartItems];
+    const couponUsed = appliedCoupon?.code;
+    trackAddShippingInfo(purchasedItems, totalAmount, couponUsed);
 
     try {
       // 1. Fetch Razorpay config
@@ -183,6 +192,7 @@ const CartScreen = () => {
         });
         
         if (bypassRes.ok) {
+          trackPurchase(orderData._id, purchasedItems, totalAmount, couponUsed);
           dispatch({ type: 'CLEAR_CART' });
           navigate(`/order/${orderData._id}/success`);
         } else {
@@ -226,6 +236,7 @@ const CartScreen = () => {
           });
           
           if (verifyRes.ok) {
+            trackPurchase(orderData._id, purchasedItems, totalAmount, couponUsed);
             dispatch({ type: 'CLEAR_CART' });
             navigate(`/order/${orderData._id}/success`);
           } else {
@@ -378,6 +389,11 @@ const CartScreen = () => {
                   type="button" 
                   className="btn btn-primary w-full"
                   onClick={() => {
+                    trackBeginCheckout(
+                      cartItems,
+                      cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - calculateDiscountAmount(cartItems, appliedCoupon),
+                      appliedCoupon?.code
+                    );
                     if (!user) {
                       navigate(`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`);
                     } else {
