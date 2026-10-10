@@ -9,7 +9,7 @@ import { STORE_CATEGORIES } from '../../utils/categories';
 const AdminEditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { state, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   
   const [localForm, setLocalForm] = useState<any>(null);
   const [newImageFiles, setNewImageFiles] = useState<File[]>([]);
@@ -19,24 +19,41 @@ const AdminEditProduct = () => {
   const [showOnHomepage, setShowOnHomepage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const product = state.products.find(p => ((p as any)._id || p.id) === id);
-    if (product) {
-      setLocalForm({
-        ...product,
-        images: [...(product.images || [])],
-        sizes_raw: product.sizes?.join(', ') || '',
-        colors_raw: product.colors?.join(', ') || '',
-        materials_raw: product.materials?.join('\n') || '',
-        specifications_raw: product.specifications?.join('\n') || '',
-        careInstructions_raw: product.careInstructions?.join('\n') || ''
-      });
-      setSoldOut(!!product.soldOut);
-      setIsBOGO(!!product.isBOGO);
-      setShowOnHomepage(product.showOnHomepage !== false);
-    }
-  }, [id, state.products]);
+  const [loadError, setLoadError] = useState(false);
 
+  // Load the full product from the API. The shop's product list leaves out stock, sizes,
+  // fit notes and offers, and saving a form built from it would wipe those fields.
+  useEffect(() => {
+    let cancelled = false;
+    const loadProduct = async () => {
+      try {
+        const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`);
+        if (!res.ok) throw new Error('Product not found');
+        const product = await res.json();
+        if (cancelled) return;
+        setLocalForm({
+          ...product,
+          stock: product.countInStock ?? product.stock ?? 0,
+          images: [...(product.images || [])],
+          sizes_raw: product.sizes?.join(', ') || '',
+          colors_raw: product.colors?.join(', ') || '',
+          materials_raw: product.materials?.join('\n') || '',
+          specifications_raw: product.specifications?.join('\n') || '',
+          careInstructions_raw: product.careInstructions?.join('\n') || ''
+        });
+        setSoldOut(!!product.soldOut);
+        setIsBOGO(!!product.isBOGO);
+        setShowOnHomepage(product.showOnHomepage !== false);
+      } catch (err) {
+        console.error('Failed to load product:', err);
+        if (!cancelled) setLoadError(true);
+      }
+    };
+    loadProduct();
+    return () => { cancelled = true; };
+  }, [id]);
+
+  if (loadError) return <div className="p-10 text-center text-gray-500">This product could not be loaded. Go back to Products and try again.</div>;
   if (!localForm) return <div className="p-10 text-center text-gray-400">Loading product...</div>;
 
   const handleDeleteImage = (idx: number) => {

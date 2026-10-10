@@ -1,205 +1,257 @@
 import { useState, useEffect } from 'react';
-import { 
-  ShoppingBag
-} from 'lucide-react';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';
+import { getImageUrl } from '../../utils/mediaHelper';
+import { splitProductName } from '../../utils/productName';
+import {
+  type AdminOrder, type AdminSummary, customerName, hasOpenExchange, needsShipping,
+  orderDate, orderNumber, orderState, rupees,
+} from './adminData';
+
+interface FullOrder extends AdminOrder {
+  shippingAddress?: AdminOrder['shippingAddress'] & {
+    address?: string; postalCode?: string; phoneNumber?: string; phone?: string;
+  };
+  couponCode?: string;
+  trackingUrl?: string;
+  awbNumber?: string;
+  courierName?: string;
+  exchangeRequest?: { status?: string; reason?: string; preferredSize?: string; details?: string };
+}
+
+const FILTERS: { value: string; label: string; test: (o: FullOrder) => boolean }[] = [
+  { value: 'to-ship', label: 'To ship', test: needsShipping },
+  { value: 'exchanges', label: 'Exchange requests', test: hasOpenExchange },
+  { value: 'shipped', label: 'Shipped', test: (o) => o.status === 'Shipped' },
+  { value: 'delivered', label: 'Delivered', test: (o) => o.status === 'Delivered' },
+  { value: 'unpaid', label: 'Unfinished checkouts', test: (o) => !o.isPaid && o.status !== 'Cancelled' },
+  { value: 'cancelled', label: 'Cancelled', test: (o) => o.status === 'Cancelled' },
+  { value: 'all', label: 'All', test: () => true },
+];
+
+const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
 const AdminOrders = () => {
   const { dispatch } = useAppContext();
-  const [orders, setOrders] = useState<any[]>([]);
+  const { refresh } = useOutletContext<AdminSummary>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [orders, setOrders] = useState<FullOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [query, setQuery] = useState('');
+  const [saved, setSaved] = useState<Record<string, 'saved' | 'failed'>>({});
 
-  const updateExchange = async (orderId: string, status: string) => {
-    try {
-      const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${orderId}/exchange`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        setOrders((list) => list.map((o) => (o._id === orderId ? { ...o, exchangeRequest: updated.exchangeRequest } : o)));
-      }
-    } catch (err) {
-      console.error('Failed to update exchange:', err);
-    }
-  };
+  const show = searchParams.get('show') || 'all';
+  const setShow = (value: string) => setSearchParams(value === 'all' ? {} : { show: value }, { replace: true });
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await fetch(API_ENDPOINTS.ORDERS.BASE);
-        if (res.ok) {
-          const data = await res.json();
-          setOrders(data);
-        }
+        if (!res.ok) throw new Error('Failed to load orders');
+        setOrders(await res.json());
+        setLoadFailed(false);
       } catch (err) {
         console.error('Failed to fetch orders:', err);
+        setLoadFailed(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchOrders();
   }, []);
 
+  const markSaved = (id: string, result: 'saved' | 'failed') => {
+    setSaved((s) => ({ ...s, [id]: result }));
+    if (result === 'saved') setTimeout(() => setSaved((s) => { const next = { ...s }; delete next[id]; return next; }), 2500);
+  };
+
+  const updateStatus = async (order: FullOrder, status: string) => {
+    try {
+      const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${order._id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error('Status update failed');
+      const updated = await res.json();
+      setOrders((list) => list.map((o) => (o._id === order._id ? updated : o)));
+      dispatch({ type: 'UPDATE_ORDER', payload: updated });
+      markSaved(order._id, 'saved');
+      refresh();
+    } catch (err) {
+      console.error('Failed to update order status:', err);
+      markSaved(order._id, 'failed');
+    }
+  };
+
+  const updateExchange = async (order: FullOrder, status: string) => {
+    try {
+      const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${order._id}/exchange`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error('Exchange update failed');
+      const updated = await res.json();
+      setOrders((list) => list.map((o) => (o._id === order._id ? { ...o, exchangeRequest: updated.exchangeRequest } : o)));
+      markSaved(order._id, 'saved');
+      refresh();
+    } catch (err) {
+      console.error('Failed to update exchange:', err);
+      markSaved(order._id, 'failed');
+    }
+  };
+
+  const filter = FILTERS.find((f) => f.value === show) || FILTERS[FILTERS.length - 1];
+  const needle = query.trim().toLowerCase();
+  const visible = orders.filter((o) => {
+    if (!filter.test(o)) return false;
+    if (!needle) return true;
+    const a = o.shippingAddress || {};
+    return [customerName(o), orderNumber(o), a.email, a.phoneNumber, a.phone, a.city, a.postalCode]
+      .some((v) => (v || '').toLowerCase().includes(needle));
+  });
+
+  const toShip = orders.filter(needsShipping).length;
+  const exchanges = orders.filter(hasOpenExchange).length;
+
   return (
-    <div className="space-y-10">
-      <div className="bg-white p-8 rounded-3xl border border-gold-primary/10 shadow-sm flex items-center justify-between relative overflow-hidden">
-        <div className="relative z-10">
-          <h2 className="text-2xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-1">Order Management</h2>
-          <div className="w-12 h-1 bg-primary-purple rounded-full"></div>
+    <div className="adm-page">
+      <div className="adm-head">
+        <div>
+          <h1>Orders</h1>
+          <p className="adm-head-note">
+            {loading
+              ? 'Loading orders…'
+              : toShip || exchanges
+                ? [toShip && `${toShip} paid ${toShip === 1 ? 'order' : 'orders'} to ship`, exchanges && `${exchanges} exchange ${exchanges === 1 ? 'request' : 'requests'} to answer`].filter(Boolean).join(' and ') + '.'
+                : 'Every paid order has been shipped.'}
+          </p>
         </div>
-        <div className="flex items-center gap-6 relative z-10">
-          <div className="text-right">
-            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-1">Status Overview</p>
-            <p className="text-sm font-black text-gold-primary uppercase tracking-widest tabular-nums">
-              {orders.filter(o => o.status === 'Processing').length} Pending
-            </p>
-          </div>
-          <div className="flex items-center space-x-3 bg-white/30 px-4 py-3 rounded-2xl border border-gold-primary/10 shadow-inner">
-            <ShoppingBag className="h-5 w-5 text-primary-purple" />
-            <span className="text-xs font-bold text-text-primary uppercase tracking-wider">{orders.length} Total</span>
-          </div>
-        </div>
-        <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-primary-purple/5 rounded-full blur-2xl"></div>
       </div>
 
-      <div className="bg-white border border-gold-primary/10 rounded-3xl overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-[#FDFBF9]">
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Order Info</th>
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Customer Detail</th>
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Items</th>
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Total</th>
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-text-muted uppercase tracking-widest">Status</th>
-                <th className="px-8 py-5 text-right text-[10px] font-bold text-text-muted uppercase tracking-widest">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gold-primary/5">
-              {orders.map((order) => (
-                <tr key={order._id} className="hover:bg-white/10 transition-all duration-200 group">
-                  <td className="px-8 py-4 whitespace-nowrap">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-text-primary tabular-nums">
-                        {order.orderNumber || (order._id ? `GUL-${order._id.substring(0, 6).toUpperCase()}` : 'N/A')}
-                      </span>
-                      <span className="text-[10px] text-text-muted font-medium">
-                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN') : 'N/A'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-4 whitespace-normal">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-bold text-text-primary">
-                        {order.shippingAddress?.name || order.user?.name || 'Guest'}
-                      </span>
-                      <span className="text-[10px] text-text-muted">{order.shippingAddress?.email}</span>
-                      <span className="text-[10px] text-text-muted">{order.shippingAddress?.phoneNumber || order.shippingAddress?.phone}</span>
-                      <span className="text-xs text-text-secondary max-w-[200px] break-words mt-1">
-                        {order.shippingAddress ? `${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}` : 'No Address Provided'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-4 whitespace-normal">
-                    <div className="flex flex-col max-w-[250px] gap-2">
-                      {(order.orderItems || order.items || []).map((it: any, idx: number) => (
-                        <div key={idx} className="flex items-start gap-3">
-                          {it.image && (
-                            <img src={it.image} alt={it.name} className="w-10 h-12 object-cover rounded-md border border-gray-200 shrink-0" />
-                          )}
-                          <div className="flex flex-col">
-                            <span className="text-xs text-text-secondary font-medium whitespace-normal break-words">
-                              {it.name} <span className="text-text-muted ml-1">x{it.qty}</span>
-                              {it.selectedSize && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Size: {it.selectedSize})</span>}
-                              {it.selectedColor && <span className="text-[10px] text-primary-purple ml-1 font-bold">(Color: {it.selectedColor})</span>}
-                            </span>
-                            <span className="text-[10px] text-text-muted">₹{it.price?.toLocaleString('en-IN')}</span>
-                          </div>
-                        </div>
-                      ))}
-                      <span className="text-[10px] text-text-muted font-bold mt-1">
-                        {(order.orderItems || order.items || []).length} item(s)
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-4 whitespace-nowrap">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-black text-text-primary luxury-serif">₹{(order.totalPrice || order.totalAmount)?.toLocaleString('en-IN')}</span>
-                      <span className={`text-[8px] font-bold uppercase tracking-tighter ${order.paymentStatus === 'Paid' ? 'text-emerald-600' : 'text-orange-600'}`}>
-                        {order.paymentStatus === 'Paid' ? '✓ Paid' : '⏳ Pending'}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-[9px] font-bold uppercase tracking-widest rounded-full shadow-sm ${
-                      order.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                      order.status === 'Shipped' ? 'bg-blue-50 text-blue-700 border border-blue-100' :
-                      order.status === 'Processing' ? 'bg-orange-50 text-orange-700 border border-orange-100' :
-                      'bg-gray-50 text-gray-700 border border-gray-100'
-                    }`}>
-                      <span className={`w-1 h-1 rounded-full ${
-                        order.status === 'Delivered' ? 'bg-emerald-600' :
-                        order.status === 'Shipped' ? 'bg-blue-600' :
-                        order.status === 'Processing' ? 'bg-orange-600' :
-                        'bg-gray-600'
-                      }`}></span>
-                      {order.status || 'Processing'}
-                    </span>
-                    {order.exchangeRequest?.status && (
-                      <div className="mt-2 p-2 rounded-lg bg-amber-50 border border-amber-100 text-[10px] text-amber-800 whitespace-normal max-w-[220px]">
-                        <p className="font-bold uppercase tracking-widest mb-1">Exchange request</p>
-                        <p>{order.exchangeRequest.reason}{order.exchangeRequest.preferredSize ? ` → size ${order.exchangeRequest.preferredSize}` : ''}</p>
-                        {order.exchangeRequest.details && <p className="mt-1 text-amber-700">{order.exchangeRequest.details}</p>}
-                        <select
-                          aria-label="Exchange status"
-                          value={order.exchangeRequest.status}
-                          onChange={(e) => updateExchange(order._id, e.target.value)}
-                          className="mt-1 w-full bg-white border border-amber-200 rounded px-1 py-0.5 text-[10px]"
-                        >
-                          <option value="requested">Requested</option>
-                          <option value="approved">Approved</option>
-                          <option value="rejected">Rejected</option>
-                          <option value="completed">Completed</option>
-                        </select>
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-8 py-4 whitespace-nowrap text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <select 
-                        value={order.status}
-                        onChange={async (e) => {
-                          try {
-                            const res = await fetch(`${API_ENDPOINTS.ORDERS.BASE}/${order._id}/status`, {
-                              method: 'PUT',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ status: e.target.value })
-                            });
-                            if (res.ok) {
-                              const updated = await res.json();
-                              setOrders(orders.map(o => o._id === order._id ? updated : o));
-                              dispatch({ type: 'UPDATE_ORDER', payload: updated });
-                            }
-                          } catch (err) {
-                            console.error('Failed to update order status:', err);
-                          }
-                        }}
-                        className="bg-white border border-gray-100 rounded-lg py-1 px-3 text-[10px] font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-purple/20 transition-all"
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="adm-toolbar">
+        <label className="adm-search">
+          <Search aria-hidden="true" />
+          <input
+            type="search"
+            placeholder="Name, phone, city or order number"
+            aria-label="Search orders"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
+        <div className="adm-chips" role="group" aria-label="Filter orders">
+          {FILTERS.map((f) => {
+            const count = orders.filter(f.test).length;
+            if (count === 0 && f.value !== 'all' && f.value !== show) return null;
+            return (
+              <button key={f.value} type="button" className="adm-chip" aria-pressed={show === f.value} onClick={() => setShow(f.value)}>
+                {f.label} <span className="adm-chip-count">{count}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
+
+      {loadFailed && (
+        <div className="adm-error" role="alert">Orders could not be loaded. Check the internet connection and refresh the page.</div>
+      )}
+
+      <section className="adm-panel" aria-label={`${filter.label} orders`}>
+        {visible.length === 0 ? (
+          <p className="adm-empty" style={{ paddingTop: 22 }}>
+            {loading ? 'Loading orders…' : needle ? 'No orders match this search.' : `No orders here right now.`}
+          </p>
+        ) : (
+          <ul className="adm-orders">
+            {visible.map((order) => {
+              const a = order.shippingAddress || {};
+              const items = order.orderItems || [];
+              const state = orderState(order);
+              const phone = a.phoneNumber || a.phone;
+              return (
+                <li key={order._id} className="adm-order">
+                  <div>
+                    <div className="adm-order-name">{customerName(order)}</div>
+                    <div className="adm-order-meta">
+                      {orderNumber(order)}, {orderDate(order).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      <br />
+                      {phone && <><a href={`tel:${phone}`}>{phone}</a><br /></>}
+                      {a.email && <>{a.email}<br /></>}
+                      {[a.address, a.city, a.postalCode].filter(Boolean).join(', ')}
+                    </div>
+                  </div>
+
+                  <div className="adm-order-items">
+                    {items.map((item, idx) => (
+                      <div key={idx} className="adm-item">
+                        {item.image && <img className="adm-thumb" src={getImageUrl(item.image, 120)} alt="" loading="lazy" />}
+                        <span style={{ minWidth: 0 }}>
+                          <span className="adm-item-name">{splitProductName(item.name).title}</span>
+                          <span className="adm-sub">
+                            {[item.selectedSize && `Size ${item.selectedSize}`, `Qty ${item.qty}`, rupees(item.price)].filter(Boolean).join(', ')}
+                          </span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="adm-order-side">
+                    <div className="adm-order-total">
+                      {order.totalPrice ? rupees(order.totalPrice) : 'Free'}
+                      {order.isPaid && <small>{order.couponCode ? `Paid, coupon ${order.couponCode}` : 'Paid'}</small>}
+                    </div>
+
+                    <div className="adm-order-status">
+                      <span className={`adm-state adm-state-${state.toLowerCase().replace(' ', '-')}`}>{state}</span>
+                      <select
+                        className="adm-select"
+                        aria-label={`Status of order ${orderNumber(order)}`}
+                        value={order.status || 'Pending'}
+                        onChange={(e) => updateStatus(order, e.target.value)}
+                      >
+                        {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                      {order.trackingUrl && (
+                        <a className="adm-link" href={order.trackingUrl} target="_blank" rel="noopener noreferrer">
+                          Track{order.courierName ? ` with ${order.courierName}` : ' shipment'}
+                        </a>
+                      )}
+                      {saved[order._id] === 'saved' && <span className="adm-status-saved" role="status">Saved</span>}
+                      {saved[order._id] === 'failed' && <span className="adm-status-failed" role="alert">Not saved. Try again.</span>}
+                    </div>
+                  </div>
+
+                  {order.exchangeRequest?.status && (
+                    <div className="adm-exchange">
+                      <span>
+                        <strong>Exchange request:</strong> {order.exchangeRequest.reason}
+                        {order.exchangeRequest.preferredSize ? `, wants size ${order.exchangeRequest.preferredSize}` : ''}
+                        {order.exchangeRequest.details ? `. ${order.exchangeRequest.details}` : ''}
+                      </span>
+                      <select
+                        className="adm-select"
+                        aria-label={`Exchange status for order ${orderNumber(order)}`}
+                        value={order.exchangeRequest.status}
+                        onChange={(e) => updateExchange(order, e.target.value)}
+                      >
+                        <option value="requested">Requested</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="completed">Completed</option>
+                      </select>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
     </div>
   );
 };

@@ -25,6 +25,7 @@ export interface Product {
   averageRating?: number;
   reviewCount?: number;
   stock?: number;
+  countInStock?: number;
   colors?: string[];
   sizes?: string[];
   selectedSize?: string;

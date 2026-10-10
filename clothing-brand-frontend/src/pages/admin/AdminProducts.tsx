@@ -1,200 +1,200 @@
 import { useState } from 'react';
-import { 
-  Plus, Search, Edit, Trash2, Eye, ShoppingBag
-} from 'lucide-react';
-import { useAppContext } from '../../context/AppContext';
+import { Plus, Search, Pencil, Trash2, Eye, GripVertical } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAppContext, type Product } from '../../context/AppContext';
 import { API_ENDPOINTS } from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
 import { getImageUrl } from '../../utils/mediaHelper';
+import { splitProductName } from '../../utils/productName';
+import { isOutOfStock, rupees } from './adminData';
+
+const productId = (product: Product) => String(product._id || product.id);
 
 const AdminProducts = () => {
   const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
-  const [productSearch, setProductSearch] = useState('');
-  const [draggedProductIndex, setDraggedProductIndex] = useState<number | null>(null);
-  const [dragOverProductIndex, setDragOverProductIndex] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState('');
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
 
-  const filteredProducts = state.products.filter(p => 
-    p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-    p.category.toLowerCase().includes(productSearch.toLowerCase())
-  );
+  const show = searchParams.get('show') || 'all';
+  const setShow = (value: string) => setSearchParams(value === 'all' ? {} : { show: value }, { replace: true });
 
-  const handleDeleteProduct = async (id: number | string) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+  const products = state.products;
+  const categories = Array.from(new Set(products.map((p) => p.category).filter(Boolean))).sort();
+  const soldOutCount = products.filter(isOutOfStock).length;
+
+  const needle = query.trim().toLowerCase();
+  const visible = products.filter((p) => {
+    if (show === 'sold-out' && !isOutOfStock(p)) return false;
+    if (show !== 'all' && show !== 'sold-out' && p.category !== show) return false;
+    return !needle || p.name.toLowerCase().includes(needle) || (p.category || '').toLowerCase().includes(needle);
+  });
+
+  // Reordering only makes sense on the full list, in the order the shop shows it
+  const canReorder = show === 'all' && !needle;
+
+  const handleDelete = async (product: Product) => {
+    if (!window.confirm(`Delete "${splitProductName(product.name).title}"? This removes it from the shop.`)) return;
     try {
-      const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        dispatch({ type: 'REMOVE_PRODUCT', payload: id });
-      }
+      const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/${productId(product)}`, { method: 'DELETE' });
+      if (res.ok) dispatch({ type: 'REMOVE_PRODUCT', payload: product._id || product.id });
     } catch (err) {
       console.error('Failed to delete product:', err);
     }
   };
 
-  const handleDragEnterProduct = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    setDragOverProductIndex(index);
-  };
-
-  const handleDragOverProduct = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDragEndProduct = async () => {
-    if (draggedProductIndex !== null && dragOverProductIndex !== null && draggedProductIndex !== dragOverProductIndex) {
-      const products = [...state.products];
-      const item = products.splice(draggedProductIndex, 1)[0];
-      products.splice(dragOverProductIndex, 0, item);
-
-      dispatch({ type: 'SET_PRODUCTS', payload: products });
-
-      const reorderPayload = products.map((p, idx) => ({
-        id: (p as any)._id || p.id,
-        displayOrder: idx,
-      }));
-
+  const handleDrop = async () => {
+    if (dragIndex !== null && overIndex !== null && dragIndex !== overIndex) {
+      const reordered = [...products];
+      const [moved] = reordered.splice(dragIndex, 1);
+      reordered.splice(overIndex, 0, moved);
+      dispatch({ type: 'SET_PRODUCTS', payload: reordered });
       try {
         const res = await fetch(`${API_ENDPOINTS.PRODUCTS}/reorder`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ products: reorderPayload }),
+          body: JSON.stringify({ products: reordered.map((p, idx) => ({ id: productId(p), displayOrder: idx })) }),
         });
-        if (!res.ok) throw new Error('Drag reorder failed');
+        if (!res.ok) throw new Error('Reorder failed');
       } catch (err) {
         console.error('Drag reorder update failed:', err);
       }
     }
-    setDraggedProductIndex(null);
-    setDragOverProductIndex(null);
+    setDragIndex(null);
+    setOverIndex(null);
   };
 
+  const chips = [
+    { value: 'all', label: 'All', count: products.length },
+    ...categories.map((c) => ({ value: c, label: c, count: products.filter((p) => p.category === c).length })),
+    ...(soldOutCount ? [{ value: 'sold-out', label: 'Out of stock', count: soldOutCount }] : []),
+  ];
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-primary-purple/5 rounded-2xl flex items-center justify-center text-primary-purple">
-            <ShoppingBag className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-800">Product Management</h1>
-            <p className="text-xs text-gray-500 font-medium">{state.products.length} Products listed</p>
-          </div>
+    <div className="adm-page">
+      <div className="adm-head">
+        <div>
+          <h1>Products</h1>
+          <p className="adm-head-note">
+            {products.length} in the shop{soldOutCount ? `, ${soldOutCount} out of stock` : ''}.{' '}
+            {canReorder ? 'Drag a row to change where it appears in the shop.' : 'Show all products without a search to change their order.'}
+          </p>
         </div>
-        
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Search products..." 
-              value={productSearch}
-              onChange={(e) => setProductSearch(e.target.value)}
-              className="pl-10 pr-4 py-2.5 bg-gray-50 border border-transparent rounded-xl text-sm focus:bg-white focus:border-primary-purple/20 w-64 transition-all outline-none"
-            />
-          </div>
-          <button 
-            onClick={() => navigate('/admin/products/add')}
-            className="flex items-center gap-2 px-5 py-2.5 bg-primary-purple text-white rounded-xl hover:shadow-lg transition-all text-sm font-bold shadow-md"
-          >
-            <Plus className="w-4 h-4" />
-            Add Product
-          </button>
+        <Link to="/admin/products/add" className="adm-btn">
+          <Plus aria-hidden="true" />
+          Add product
+        </Link>
+      </div>
+
+      <div className="adm-toolbar">
+        <label className="adm-search">
+          <Search aria-hidden="true" />
+          <input
+            type="search"
+            placeholder="Search by name or category"
+            aria-label="Search products"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
+        <div className="adm-chips" role="group" aria-label="Filter products">
+          {chips.map((chip) => (
+            <button key={chip.value} type="button" className="adm-chip" aria-pressed={show === chip.value} onClick={() => setShow(chip.value)}>
+              {chip.label} <span className="adm-chip-count">{chip.count}</span>
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50/50 border-b border-gray-100">
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Category</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Price</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {filteredProducts.map((product, idx) => (
-                <tr 
-                  key={(product as any)._id || product.id}
-                  draggable
-                  onDragStart={() => setDraggedProductIndex(idx)}
-                  onDragEnter={(e) => handleDragEnterProduct(e, idx)}
-                  onDragOver={handleDragOverProduct}
-                  onDragEnd={handleDragEndProduct}
-                  className={`hover:bg-gray-50/50 transition-colors cursor-move ${dragOverProductIndex === idx ? 'bg-indigo-50/50 border-2 border-indigo-200' : ''}`}
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
-                        <img 
-                          src={getImageUrl(product.images?.[0] || product.image)} 
-                          alt={product.name}
-                          loading="lazy"
-                          decoding="async"
-                          width="48"
-                          height="64"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-gray-800 truncate">{product.name}</p>
-                        <p className="text-[10px] text-gray-400 font-medium">ID: {(product as any)._id?.substring(0, 8) || product.id}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">
-                      {product.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-gray-800">₹{product.price.toLocaleString()}</span>
-                      {product.originalPrice && (
-                        <span className="text-[10px] text-gray-400 line-through">₹{product.originalPrice.toLocaleString()}</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
-                      product.soldOut ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-600'
-                    }`}>
-                      {product.soldOut ? 'Sold Out' : 'Active'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button 
-                        onClick={() => navigate(`/product/${(product as any)._id || product.id}`)}
-                        className="p-2 text-gray-400 hover:text-primary-purple hover:bg-primary-purple/5 rounded-xl transition-all"
-                        title="View Live"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button 
-                        onClick={() => navigate(`/admin/products/${(product as any)._id || product.id}/edit`)}
-                        className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
-                        title="Edit"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteProduct((product as any)._id || product.id)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+      <section className="adm-panel adm-products">
+        {visible.length === 0 ? (
+          <p className="adm-empty" style={{ paddingTop: 22 }}>
+            {products.length === 0 ? 'No products yet. Add the first one to start selling.' : 'No products match. Try another search or filter.'}
+          </p>
+        ) : (
+          <div className="adm-table-wrap">
+            <table className="adm-table">
+              <thead>
+                <tr>
+                  {canReorder && <th scope="col" style={{ width: 34 }}><span className="sr-only">Order</span></th>}
+                  <th scope="col" style={{ paddingTop: 16 }}>Product</th>
+                  <th scope="col" className="adm-hide-md" style={{ paddingTop: 16 }}>Category</th>
+                  <th scope="col" className="num" style={{ paddingTop: 16 }}>Price</th>
+                  <th scope="col" style={{ paddingTop: 16 }}>Status</th>
+                  <th scope="col" style={{ paddingTop: 16 }}><span className="sr-only">Actions</span></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              </thead>
+              <tbody>
+                {visible.map((product, idx) => {
+                  const { title, subtitle } = splitProductName(product.name);
+                  const rowClass = [
+                    dragIndex === idx ? 'adm-row-dragging' : '',
+                    overIndex === idx && dragIndex !== idx ? 'adm-row-target' : '',
+                  ].join(' ').trim();
+                  return (
+                    <tr
+                      key={productId(product)}
+                      className={rowClass || undefined}
+                      draggable={canReorder}
+                      onDragStart={() => setDragIndex(idx)}
+                      onDragEnter={(e) => { e.preventDefault(); setOverIndex(idx); }}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDragEnd={handleDrop}
+                    >
+                      {canReorder && (
+                        <td style={{ paddingRight: 0 }}>
+                          <GripVertical className="adm-grip" aria-hidden="true" />
+                        </td>
+                      )}
+                      <td>
+                        <div className="adm-item">
+                          <img
+                            className="adm-thumb"
+                            src={getImageUrl(product.images?.[0] || product.image, 120)}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <span style={{ minWidth: 0 }}>
+                            <span className="adm-item-name adm-strong">{title}</span>
+                            {subtitle && <span className="adm-sub adm-item-name">{subtitle}</span>}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="adm-hide-md"><span className="adm-tag">{product.category}</span></td>
+                      <td className="num">
+                        {rupees(product.price)}
+                        {product.originalPrice && product.originalPrice > product.price ? (
+                          <span className="adm-was">{rupees(product.originalPrice)}</span>
+                        ) : null}
+                      </td>
+                      <td>
+                        <span className={`adm-state ${isOutOfStock(product) ? 'adm-state-cancelled' : 'adm-state-delivered'}`}>
+                          {product.soldOut ? 'Sold out' : isOutOfStock(product) ? 'Out of stock' : 'In stock'}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="adm-actions">
+                          <a className="adm-icon-btn" href={`/product/${productId(product)}`} target="_blank" rel="noopener noreferrer" title="View in shop" aria-label={`View ${title} in the shop`}>
+                            <Eye aria-hidden="true" />
+                          </a>
+                          <button type="button" className="adm-icon-btn" onClick={() => navigate(`/admin/products/${productId(product)}/edit`)} title="Edit" aria-label={`Edit ${title}`}>
+                            <Pencil aria-hidden="true" />
+                          </button>
+                          <button type="button" className="adm-icon-btn is-danger" onClick={() => handleDelete(product)} title="Delete" aria-label={`Delete ${title}`}>
+                            <Trash2 aria-hidden="true" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </div>
   );
 };

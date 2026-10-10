@@ -1,106 +1,108 @@
-import { 
-  Package, Edit
-} from 'lucide-react';
-import { useAppContext } from '../../context/AppContext';
-import { useNavigate } from 'react-router-dom';
+import { Pencil } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAppContext, type Product } from '../../context/AppContext';
 import { getImageUrl } from '../../utils/mediaHelper';
+import { splitProductName } from '../../utils/productName';
+import { LOW_STOCK, isOutOfStock, stockOf } from './adminData';
+
+const productId = (product: Product) => String(product._id || product.id);
+
+const FILTERS = [
+  { value: 'all', label: 'All', test: () => true },
+  { value: 'low', label: `Running low (${LOW_STOCK} or fewer)`, test: (p: Product) => !isOutOfStock(p) && stockOf(p) <= LOW_STOCK },
+  { value: 'out', label: 'Out of stock', test: isOutOfStock },
+];
 
 const AdminInventory = () => {
   const { state } = useAppContext();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const show = searchParams.get('show') || 'all';
+  const filter = FILTERS.find((f) => f.value === show) || FILTERS[0];
+  const setShow = (value: string) => setSearchParams(value === 'all' ? {} : { show: value }, { replace: true });
+
+  const products = state.products;
+  const outCount = products.filter(FILTERS[2].test).length;
+  const lowCount = products.filter(FILTERS[1].test).length;
+
+  // Least stock first: that is what needs restocking
+  const visible = products
+    .filter(filter.test)
+    .sort((a, b) => (isOutOfStock(a) ? -1 : stockOf(a)) - (isOutOfStock(b) ? -1 : stockOf(b)));
 
   return (
-    <div className="space-y-10">
-      <div className="bg-white p-10 rounded-[3rem] border border-gold-primary/10 shadow-sm flex items-center justify-between relative overflow-hidden">
-        <div className="relative z-10">
-          <h2 className="text-3xl font-black text-text-primary luxury-serif tracking-widest uppercase mb-2">Live Inventory</h2>
-          <div className="w-16 h-1 bg-primary-purple rounded-full"></div>
+    <div className="adm-page">
+      <div className="adm-head">
+        <div>
+          <h1>Inventory</h1>
+          <p className="adm-head-note">
+            {products.length} products.{' '}
+            {outCount || lowCount
+              ? [outCount && `${outCount} out of stock`, lowCount && `${lowCount} running low`].filter(Boolean).join(', ') + '. Edit a product to update its stock.'
+              : 'Everything is in stock.'}
+          </p>
         </div>
-        <div className="flex items-center gap-10 relative z-10">
-          <div className="text-right">
-            <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Health Score</p>
-            <p className="text-lg font-black text-emerald-600 tracking-widest">98.5%</p>
-          </div>
-          <div className="flex items-center space-x-4 bg-white/5 px-6 py-4 rounded-[2rem] border border-gold-primary/10 shadow-inner">
-            <Package className="h-6 w-6 text-primary-purple" />
-            <span className="text-sm font-black text-text-primary uppercase tracking-widest">{state.products.length} Total SKUs</span>
-          </div>
-        </div>
-        <div className="absolute -right-8 -bottom-8 w-48 h-48 bg-gold-primary/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="bg-white border border-gold-primary/10 rounded-[3rem] overflow-hidden shadow-sm">
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-white/5">
-                <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Item Specification</th>
-                <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Category</th>
-                <th className="px-10 py-6 text-center text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Quantity</th>
-                <th className="px-10 py-6 text-left text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Stock Health</th>
-                <th className="px-10 py-6 text-right text-[11px] font-black text-text-muted uppercase tracking-[0.3em]">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gold-primary/5">
-              {state.products.map((product) => (
-                <tr key={(product as any).id} className="hover:bg-white/[0.02] transition-all duration-300 group">
-                  <td className="px-10 py-6 whitespace-nowrap">
-                    <div className="flex items-center gap-5">
-                      <div className="w-16 h-16 rounded-2xl bg-white/5 overflow-hidden border border-gold-primary/10 shadow-sm relative group-hover:scale-105 transition-transform duration-500">
-                        <img src={getImageUrl(product.images?.[0] || product.image)} alt="" className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-black text-text-primary tracking-wide">{product.name}</span>
-                        <span className="text-[10px] text-text-muted font-bold tracking-widest uppercase mt-0.5">ID: {String((product as any)._id || product.id).substring(0,8)}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-10 py-6 whitespace-nowrap">
-                    <span className="px-4 py-1.5 bg-white/5 rounded-full text-[10px] font-black text-gold-primary border border-gold-primary/10 uppercase tracking-widest">
-                      {product.category}
-                    </span>
-                  </td>
-                  <td className="px-10 py-6 whitespace-nowrap text-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <span className={`text-2xl font-black luxury-serif ${((product as any).stock || 0) <= 5 ? 'text-primary-purple' : 'text-text-primary'}`}>
-                        {(product as any).stock || 0}
-                      </span>
-                      <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden shadow-inner">
-                        <div 
-                          className={`h-full bg-gradient-to-r ${((product as any).stock || 0) <= 5 ? 'from-red-600 to-red-400' : 'from-gold-primary to-gold-light'} transition-all duration-1000`} 
-                          style={{ width: `${Math.min(((product as any).stock || 0) * 10, 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-10 py-6 whitespace-nowrap">
-                    {((product as any).stock || 0) > 5 ? (
-                      <span className="inline-flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm">
-                        <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        In Stock
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full bg-red-50 text-red-700 border border-red-100 shadow-sm">
-                        <span className="w-2 h-2 bg-red-600 rounded-full"></span>
-                        Low Stock
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-10 py-6 whitespace-nowrap text-right">
-                    <button
-                      onClick={() => navigate(`/admin/products/${(product as any)._id || product.id}/edit`)}
-                      className="p-3 bg-white border border-gold-primary/10 rounded-2xl text-text-muted hover:text-gold-primary hover:border-gold-primary/30 transition-all shadow-sm hover:shadow-xl hover:-translate-y-0.5"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="adm-chips" role="group" aria-label="Filter inventory">
+        {FILTERS.map((f) => (
+          <button key={f.value} type="button" className="adm-chip" aria-pressed={show === f.value} onClick={() => setShow(f.value)}>
+            {f.label} <span className="adm-chip-count">{products.filter(f.test).length}</span>
+          </button>
+        ))}
       </div>
+
+      <section className="adm-panel adm-products">
+        {visible.length === 0 ? (
+          <p className="adm-empty" style={{ paddingTop: 22 }}>Nothing here. Every product has enough stock.</p>
+        ) : (
+          <div className="adm-table-wrap">
+            <table className="adm-table">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ paddingTop: 16 }}>Product</th>
+                  <th scope="col" className="adm-hide-md" style={{ paddingTop: 16 }}>Category</th>
+                  <th scope="col" className="num" style={{ paddingTop: 16 }}>In stock</th>
+                  <th scope="col" style={{ paddingTop: 16 }}>Status</th>
+                  <th scope="col" style={{ paddingTop: 16 }}><span className="sr-only">Edit</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((product) => {
+                  const { title } = splitProductName(product.name);
+                  const out = isOutOfStock(product);
+                  const low = !out && stockOf(product) <= LOW_STOCK;
+                  return (
+                    <tr key={productId(product)}>
+                      <td>
+                        <div className="adm-item">
+                          <img className="adm-thumb" src={getImageUrl(product.images?.[0] || product.image, 120)} alt="" loading="lazy" decoding="async" />
+                          <span className="adm-item-name adm-strong">{title}</span>
+                        </div>
+                      </td>
+                      <td className="adm-hide-md"><span className="adm-tag">{product.category}</span></td>
+                      <td className="num">{out && product.soldOut ? 'Sold out' : stockOf(product)}</td>
+                      <td>
+                        <span className={`adm-state ${out ? 'adm-state-cancelled' : low ? 'adm-state-to-ship' : 'adm-state-delivered'}`}>
+                          {out ? 'Out of stock' : low ? 'Running low' : 'In stock'}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="adm-actions">
+                          <button type="button" className="adm-icon-btn" onClick={() => navigate(`/admin/products/${productId(product)}/edit`)} aria-label={`Edit ${title}`} title="Edit stock">
+                            <Pencil aria-hidden="true" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </div>
   );
 };
