@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, API_BASE_URL } from '../utils/api';
 import { useAppContext } from '../context/AppContext';
 import { getImageUrl } from '../utils/mediaHelper';
 import { splitProductName } from '../utils/productName';
 import { useSEO } from '../utils/useSEO';
 import { trackAddShippingInfo, trackBeginCheckout, trackPurchase, trackRemoveFromCart, trackViewCart } from '../utils/analytics';
+
+// A 10-digit Indian mobile number, also accepted with +91 or a leading 0
+const isValidMobile = (value: string) => {
+  let digits = value.replace(/\D/g, '');
+  if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);
+  if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+  return /^[6-9]\d{9}$/.test(digits);
+};
 
 const CartScreen = () => {
   useSEO({
@@ -15,15 +23,15 @@ const CartScreen = () => {
     noindex: true,
   });
 
-  const location = useLocation();
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
   const { user } = state;
   const cartItems = state.cart;
-  
+
+  // Checkout needs no account: a mobile number is enough, email is optional
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
-    name: '', email: '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
+    name: user?.name || '', email: user?.email || '', address: '', city: '', postalCode: '', country: 'India', phoneNumber: ''
   });
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -137,6 +145,10 @@ const CartScreen = () => {
 
   const processPayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidMobile(shippingAddress.phoneNumber)) {
+      setCheckoutError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
     setPaymentLoading(true);
     setCheckoutError(null);
 
@@ -182,13 +194,21 @@ const CartScreen = () => {
         return;
       }
 
+      // Proves this browser placed the order: needed to pay without an account and to
+      // open the confirmation page afterwards
+      const checkoutToken: string | undefined = orderData.checkoutToken;
+      if (checkoutToken) {
+        try { sessionStorage.setItem(`gul_order_${orderData._id}`, checkoutToken); } catch { /* not saved */ }
+      }
+      const userDetails = { name: shippingAddress.name, email: shippingAddress.email || undefined };
+
       // If total amount is 0 (100% off coupon), we can bypass Razorpay!
       if (totalAmount === 0) {
         // Call bypass route to mark as paid and trigger Shipmozo
         const bypassRes = await fetch(`${API_BASE_URL}/api/payment/bypass`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({ mongo_order_id: orderData._id, user_details: { name: shippingAddress.name, email: shippingAddress.email } })
+           body: JSON.stringify({ mongo_order_id: orderData._id, checkout_token: checkoutToken, user_details: userDetails })
         });
         
         if (bypassRes.ok) {
@@ -206,7 +226,7 @@ const CartScreen = () => {
       const rzpResponse = await fetch(`${API_BASE_URL}/api/payment/razorpay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalAmount, receipt: orderData._id })
+        body: JSON.stringify({ amount: totalAmount, receipt: orderData._id, checkout_token: checkoutToken })
       });
       const rzpData = await rzpResponse.json();
 
@@ -231,7 +251,8 @@ const CartScreen = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
               mongo_order_id: orderData._id,
-              user_details: { name: shippingAddress.name, email: shippingAddress.email }
+              checkout_token: checkoutToken,
+              user_details: userDetails
             })
           });
           
@@ -246,7 +267,7 @@ const CartScreen = () => {
         },
         prefill: {
           name: shippingAddress.name,
-          email: shippingAddress.email,
+          email: shippingAddress.email || undefined,
           contact: shippingAddress.phoneNumber
         },
         theme: {
@@ -394,11 +415,7 @@ const CartScreen = () => {
                       cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) - calculateDiscountAmount(cartItems, appliedCoupon),
                       appliedCoupon?.code
                     );
-                    if (!user) {
-                      navigate(`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`);
-                    } else {
-                      setIsCheckingOut(true);
-                    }
+                    setIsCheckingOut(true);
                   }}
                 >
                   Checkout securely
@@ -408,14 +425,19 @@ const CartScreen = () => {
           ) : (
             <div className="checkout-form-wrap" style={{width: '100%', maxWidth: '600px', margin: '0 auto'}}>
               <h2 className="summary-title">Where should we deliver?</h2>
+              {!user && (
+                <p style={{ fontSize: '0.9rem', color: 'var(--ink-soft)', margin: '-8px 0 16px' }}>
+                  No account needed. Your mobile number is used for delivery.
+                </p>
+              )}
               <form onSubmit={processPayment} style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-                <input type="text" name="name" placeholder="Full Name" value={shippingAddress.name} onChange={handleInputChange} required className="form-input" />
-                <input type="email" name="email" placeholder="Email Address" value={shippingAddress.email} onChange={handleInputChange} required className="form-input" />
-                <input type="text" name="phoneNumber" placeholder="Phone Number" value={shippingAddress.phoneNumber} onChange={handleInputChange} required className="form-input" />
-                <input type="text" name="address" placeholder="Complete Address" value={shippingAddress.address} onChange={handleInputChange} required className="form-input" />
+                <input type="text" name="name" placeholder="Full name" aria-label="Full name" autoComplete="name" value={shippingAddress.name} onChange={handleInputChange} required className="form-input" />
+                <input type="tel" name="phoneNumber" placeholder="Mobile number" aria-label="Mobile number" autoComplete="tel" inputMode="tel" value={shippingAddress.phoneNumber} onChange={handleInputChange} required className="form-input" />
+                <input type="email" name="email" placeholder="Email (optional)" aria-label="Email, optional" autoComplete="email" value={shippingAddress.email} onChange={handleInputChange} className="form-input" />
+                <input type="text" name="address" placeholder="House number, street and area" aria-label="Address" autoComplete="street-address" value={shippingAddress.address} onChange={handleInputChange} required className="form-input" />
                 <div style={{display: 'flex', gap: '15px'}}>
-                  <input type="text" name="city" placeholder="City" value={shippingAddress.city} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
-                  <input type="text" name="postalCode" placeholder="Pincode" value={shippingAddress.postalCode} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
+                  <input type="text" name="city" placeholder="City" aria-label="City" autoComplete="address-level2" value={shippingAddress.city} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
+                  <input type="text" name="postalCode" placeholder="Pincode" aria-label="Pincode" autoComplete="postal-code" inputMode="numeric" maxLength={6} pattern="[1-9][0-9]{5}" title="6-digit pincode" value={shippingAddress.postalCode} onChange={handleInputChange} required className="form-input" style={{flex: 1}} />
                 </div>
                 
                 <div className="summary-row" style={{marginTop: '20px', padding: '15px 0', borderTop: '1px solid #eee'}}>

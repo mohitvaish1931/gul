@@ -112,6 +112,11 @@ const orderSchema = mongoose.Schema(
     labelPdf: {
       type: String,
     },
+    // Hash of the checkout token the buyer's browser holds (see utils/orderAccess.js)
+    checkoutTokenHash: {
+      type: String,
+      select: false,
+    },
     // Size exchange requested by the customer from My Account (7-day exchange policy)
     exchangeRequest: {
       reason: { type: String },
@@ -125,6 +130,14 @@ const orderSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// The checkout token hash is only for access checks and never leaves the server
+orderSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    delete ret.checkoutTokenHash;
+    return ret;
+  },
+});
 
 const Order = mongoose.model('Order', orderSchema);
 export default Order;

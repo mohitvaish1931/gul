@@ -4,7 +4,8 @@ import crypto from 'crypto';
 import Order from '../models/Order.js';
 import Coupon from '../models/Coupon.js';
 import { createShipmozoOrder } from '../utils/shipmozo.js';
-import { protect, canAccess } from '../middleware/authMiddleware.js';
+import { optionalAuth } from '../middleware/authMiddleware.js';
+import { canAccessOrder } from '../utils/orderAccess.js';
 import { notifyOrderPaid } from '../utils/orderNotifications.js';
 
 const router = express.Router();
@@ -17,11 +18,11 @@ router.get('/razorpay/config', (req, res) => {
 
 // @desc    Create Razorpay Order
 // @route   POST /api/payment/razorpay
-router.post('/razorpay', protect, async (req, res) => {
+router.post('/razorpay', optionalAuth, async (req, res) => {
   try {
     // `receipt` is our MongoDB order id; the amount always comes from that order, never from the client
-    const order = await Order.findById(req.body.receipt);
-    if (!order || !canAccess(req, order.user)) {
+    const order = await Order.findById(req.body.receipt).select('+checkoutTokenHash');
+    if (!order || !canAccessOrder(req, order)) {
       return res.status(404).json({ message: 'Order not found' });
     }
     if (order.isPaid) {
@@ -66,7 +67,7 @@ router.post('/razorpay', protect, async (req, res) => {
 
 // @desc    Verify Razorpay Payment
 // @route   POST /api/payment/verify
-router.post('/verify', protect, async (req, res) => {
+router.post('/verify', optionalAuth, async (req, res) => {
   try {
     const { 
       razorpay_order_id, 
@@ -76,9 +77,9 @@ router.post('/verify', protect, async (req, res) => {
       user_details // Optional, for shipmozo if guest
     } = req.body;
 
-    const order = await Order.findById(mongo_order_id).populate('user', 'name email');
+    const order = await Order.findById(mongo_order_id).select('+checkoutTokenHash').populate('user', 'name email');
 
-    if (!order || !canAccess(req, order.user)) {
+    if (!order || !canAccessOrder(req, order)) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
@@ -153,12 +154,12 @@ router.post('/verify', protect, async (req, res) => {
   }
 });
 
-router.post('/bypass', protect, async (req, res) => {
+router.post('/bypass', optionalAuth, async (req, res) => {
   try {
     const { mongo_order_id, user_details } = req.body;
-    const order = await Order.findById(mongo_order_id).populate('user', 'name email');
+    const order = await Order.findById(mongo_order_id).select('+checkoutTokenHash').populate('user', 'name email');
     
-    if (!order || !canAccess(req, order.user)) {
+    if (!order || !canAccessOrder(req, order)) {
       return res.status(404).json({ error: 'Order not found' });
     }
 

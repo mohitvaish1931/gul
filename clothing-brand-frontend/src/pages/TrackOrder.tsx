@@ -39,7 +39,8 @@ const TrackOrder = () => {
   });
 
   const [orderNumber, setOrderNumber] = useState('');
-  const [email, setEmail] = useState('');
+  // Email or mobile number used at checkout
+  const [contact, setContact] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [trackingResult, setTrackingResult] = useState<OrderTrackingResponse | null>(null);
@@ -53,13 +54,13 @@ const TrackOrder = () => {
     try {
       const data = await fetchJSON<OrderTrackingResponse>(API_ENDPOINTS.ORDERS.TRACK, {
         method: 'POST',
-        body: JSON.stringify({ orderNumber, email }),
+        body: JSON.stringify({ orderNumber, contact, email: contact }),
       });
 
       if (data.success) {
         setTrackingResult(data);
       } else {
-        setError('Order not found. Please check your order number and email.');
+        setError('Order not found. Please check your order number and the email or mobile number you used.');
       }
     } catch (err: any) {
       console.error('Tracking error:', err);
@@ -122,24 +123,26 @@ const TrackOrder = () => {
                     value={orderNumber}
                     onChange={(e) => setOrderNumber(e.target.value)}
                     style={{ width: '100%', padding: '15px 20px 15px 55px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none' }}
-                    placeholder="e.g. #6a944d13 (from My Account)"
+                    placeholder="e.g. #6a944d13 (on your order confirmation)"
                     required
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '10px' }}>EMAIL ADDRESS</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', letterSpacing: '1px', color: '#2D0A4E', marginBottom: '10px' }}>EMAIL OR MOBILE NUMBER</label>
                 <div style={{ position: 'relative' }}>
                   <div style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#2D0A4E' }}>
                     <Mail size={20} strokeWidth={1.5} />
                   </div>
                   <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    aria-label="Email or mobile number"
+                    autoComplete="email"
                     style={{ width: '100%', padding: '15px 20px 15px 55px', borderRadius: '12px', border: '1px solid #e0e0e0', outline: 'none' }}
-                    placeholder="The email used during checkout"
+                    placeholder="The email or mobile number used at checkout"
                     required
                   />
                 </div>

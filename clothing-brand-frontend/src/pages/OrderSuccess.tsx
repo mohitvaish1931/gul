@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle2, Truck, RefreshCcw, MessageCircle } from 'lucide-react';
 import { API_ENDPOINTS } from '../utils/api';
+import { useAppContext } from '../context/AppContext';
 import { getImageUrl } from '../utils/mediaHelper';
 import { estimateDelivery } from '../utils/delivery';
 import { useSEO } from '../utils/useSEO';
@@ -28,6 +29,8 @@ interface Order {
 
 const OrderSuccess = () => {
   const { id } = useParams();
+  const { state } = useAppContext();
+  const isGuest = !state.user;
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +43,10 @@ const OrderSuccess = () => {
 
   useEffect(() => {
     let active = true;
-    fetch(`${API_ENDPOINTS.ORDERS.BASE}/${id}`)
+    // Orders placed without an account are opened with the checkout token saved at payment
+    let checkoutToken: string | null = null;
+    try { checkoutToken = sessionStorage.getItem(`gul_order_${id}`); } catch { /* unavailable */ }
+    fetch(`${API_ENDPOINTS.ORDERS.BASE}/${id}`, { headers: checkoutToken ? { 'X-Order-Token': checkoutToken } : {} })
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Order not found');
@@ -56,8 +62,10 @@ const OrderSuccess = () => {
     return (
       <div className="container page-top-padding" style={{ textAlign: 'center', padding: '80px 20px' }}>
         <h1 className="font-serif" style={{ color: '#2D0A4E', fontSize: '2rem', marginBottom: '12px' }}>We couldn't load this order</h1>
-        <p style={{ color: '#666', marginBottom: '24px' }}>{error}. Your order history is always available in My Account.</p>
-        <Link to="/profile" className="btn btn-primary">Go to My Account</Link>
+        <p style={{ color: '#666', marginBottom: '24px' }}>
+          {error}. {isGuest ? 'You can still track it with your order number and mobile number.' : 'Your order history is always available in My Account.'}
+        </p>
+        <Link to={isGuest ? '/track-order' : '/profile'} className="btn btn-primary">{isGuest ? 'Track your order' : 'Go to My Account'}</Link>
       </div>
     );
   }
@@ -124,7 +132,7 @@ const OrderSuccess = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '32px' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: '#fff', border: '1px solid #f0e8f7', borderRadius: '14px', padding: '16px', fontSize: '0.85rem', color: '#555' }}>
             <RefreshCcw size={18} color="var(--brass)" style={{ flexShrink: 0 }} />
-            <span>Wrong size? Request an exchange from My Account within 7 days of delivery.</span>
+            <span>{isGuest ? 'Wrong size? Message us on WhatsApp within 7 days of delivery to exchange it.' : 'Wrong size? Request an exchange from My Account within 7 days of delivery.'}</span>
           </div>
           <a href="https://wa.me/919351325459" target="_blank" rel="noreferrer" style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: '#fff', border: '1px solid #f0e8f7', borderRadius: '14px', padding: '16px', fontSize: '0.85rem', color: '#555', textDecoration: 'none' }}>
             <MessageCircle size={18} color="var(--brass)" style={{ flexShrink: 0 }} />
@@ -133,7 +141,11 @@ const OrderSuccess = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link to="/profile" className="btn btn-outline">View My Orders</Link>
+          {isGuest ? (
+            <Link to="/track-order" className="btn btn-outline">Track your order</Link>
+          ) : (
+            <Link to="/profile" className="btn btn-outline">View My Orders</Link>
+          )}
           <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
         </div>
       </div>

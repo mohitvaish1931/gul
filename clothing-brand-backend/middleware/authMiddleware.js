@@ -30,6 +30,21 @@ export const protect = async (req, res, next) => {
   next();
 };
 
+// Attaches the logged-in user when a valid token is sent; guests carry on without one
+export const optionalAuth = async (req, res, next) => {
+  const token = readToken(req);
+  if (token) {
+    try {
+      const payload = jwt.verify(token, getJwtSecret());
+      const user = await User.findById(payload.userId).select('-password');
+      if (user) req.user = user;
+    } catch {
+      // An expired or invalid token is treated as a guest
+    }
+  }
+  next();
+};
+
 export const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     return next();

@@ -2,8 +2,9 @@ import express from 'express';
 import Order from '../models/Order.js';
 import User from '../models/User.js';
 import { priceOrder } from '../utils/orderPricing.js';
-import { protect, adminOnly, canAccess } from '../middleware/authMiddleware.js';
+import { protect, adminOnly, canAccess, optionalAuth } from '../middleware/authMiddleware.js';
 import { rateLimit } from '../middleware/rateLimit.js';
+import { canAccessOrder, cleanShippingAddress, newCheckoutToken, normalizePhone } from '../utils/orderAccess.js';
 import { notifyOrderStatusChange } from '../utils/orderNotifications.js';
 import { sendMailInBackground, getStoreEmail } from '../utils/mailer.js';
 import { exchangeRequestOwnerEmail, exchangeRequestCustomerEmail, orderRecipient } from '../utils/emailTemplates.js';
@@ -18,11 +19,18 @@ const trackLimiter = rateLimit({
   message: 'Too many tracking requests. Please try again later.',
 });
 
+// Guest checkout opens order creation to everyone, so keep it from being flooded
+const createOrderLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: 'Too many orders started from this connection. Please try again in a few minutes.',
+});
+
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// @desc    Create new order
+// @desc    Create new order (logged in, or as a guest with a phone number)
 // @route   POST /api/orders
-router.post('/', protect, async (req, res) => {
+router.post('/', createOrderLimiter, optionalAuth, async (req, res) => {
   try {
     const {
       orderItems,
@@ -31,18 +39,27 @@ router.post('/', protect, async (req, res) => {
       couponCode,
     } = req.body;
 
+    const delivery = cleanShippingAddress(shippingAddress);
+    if (delivery.error) {
+      return res.status(400).json({ message: delivery.error });
+    }
+
     // Prices, discount and total are always calculated on the server
     const pricing = await priceOrder(orderItems, couponCode);
 
     const order = new Order({
-      user: req.user._id,
-      shippingAddress,
+      user: req.user?._id,
+      shippingAddress: delivery.address,
       paymentMethod,
       ...pricing,
     });
 
+    // The checkout token pays for this order and opens its confirmation page; it is sent only once
+    const checkout = newCheckoutToken();
+    order.checkoutTokenHash = checkout.hash;
+
     const createdOrder = await order.save();
-    res.status(201).json(createdOrder);
+    res.status(201).json({ ...createdOrder.toJSON(), checkoutToken: checkout.token });
   } catch (error) {
     if (error.status) {
       return res.status(error.status).json({ message: error.message });
@@ -52,22 +69,31 @@ router.post('/', protect, async (req, res) => {
   }
 });
 
-// @desc    Track an order with its order number (full id or the 8-character number shown to customers) and email
+// @desc    Track an order with its order number (full id or the 8-character number shown to customers)
+//          and the email or phone number used at checkout
 // @route   POST /api/orders/track
 router.post('/track', trackLimiter, async (req, res) => {
   const orderNumber = String(req.body.orderNumber || '').trim().replace(/^#/, '').toLowerCase();
-  const email = String(req.body.email || '').trim();
-  const notFoundMessage = 'Order not found. Please check your order number and email.';
+  const contact = String(req.body.contact || req.body.email || '').trim();
+  const notFoundMessage = 'Order not found. Please check your order number and the email or phone number you used.';
 
-  if (!/^[0-9a-f]{6,24}$/.test(orderNumber) || !email) {
+  if (!/^[0-9a-f]{6,24}$/.test(orderNumber) || !contact) {
     return res.status(404).json({ message: notFoundMessage });
   }
 
-  const emailMatch = new RegExp(`^${escapeRegex(email)}$`, 'i');
-  const users = await User.find({ email: emailMatch }).select('_id');
-  const orders = await Order.find({
-    $or: [{ 'shippingAddress.email': emailMatch }, { user: { $in: users.map((u) => u._id) } }],
-  }).sort({ createdAt: -1 });
+  let orders;
+  const phone = contact.includes('@') ? null : normalizePhone(contact);
+  if (phone) {
+    // Older orders may have the number saved with spaces or +91, so allow separators between digits
+    const phoneMatch = new RegExp(`${phone.split('').join('\\D*')}$`);
+    orders = await Order.find({ 'shippingAddress.phoneNumber': phoneMatch }).sort({ createdAt: -1 });
+  } else {
+    const emailMatch = new RegExp(`^${escapeRegex(contact)}$`, 'i');
+    const users = await User.find({ email: emailMatch }).select('_id');
+    orders = await Order.find({
+      $or: [{ 'shippingAddress.email': emailMatch }, { user: { $in: users.map((u) => u._id) } }],
+    }).sort({ createdAt: -1 });
+  }
 
   const order = orders.find((o) => String(o._id).startsWith(orderNumber));
   if (!order) {
@@ -130,12 +156,12 @@ router.get('/my/:userId', protect, async (req, res) => {
   }
 });
 
-// @desc    Get order by ID (owner or admin)
+// @desc    Get order by ID (owner, admin, or whoever holds the order's checkout token)
 // @route   GET /api/orders/:id
-router.get('/:id', protect, async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
-    if (order && canAccess(req, order.user)) {
+    const order = await Order.findById(req.params.id).select('+checkoutTokenHash');
+    if (order && canAccessOrder(req, order)) {
       res.json(order);
     } else {
       res.status(404).json({ message: 'Order not found' });
