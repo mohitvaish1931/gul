@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import logoImg from '../assets/logo.png';
+import { STORE_ADDRESS_LINE, STORE_MAPS_URL } from '../utils/business';
 import './Footer.css';
 
 const LINK_GROUPS = [
@@ -42,12 +43,12 @@ const Footer = () => {
         <div className="footer-brand">
           <img src={logoImg} alt="Gul Fashion" className="footer-logo" />
           <p className="footer-statement">
-            Women's kurta sets, suits and everyday cottons from our store in Pahadiya Chowk, Jaipur.
+            Women's kurta sets, suits and everyday cottons from our store in Sanganer, Jaipur.
           </p>
           <ul className="footer-contact">
             <li>
               <MapPin size={16} aria-hidden="true" />
-              <span>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur 302002</span>
+              <a href={STORE_MAPS_URL} target="_blank" rel="noreferrer">{STORE_ADDRESS_LINE}</a>
             </li>
             <li>
               <Phone size={16} aria-hidden="true" />

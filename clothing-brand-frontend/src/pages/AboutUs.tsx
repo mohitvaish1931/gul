@@ -81,7 +81,7 @@ const AboutUs = () => {
               Gul Fashion began in Jaipur in 2005. Named after the "Gul" (rose) that colours the Pink City, the store has been dressing women in comfortable ethnic wear ever since.
             </p>
             <p style={{ color: '#444', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '35px' }}>
-              Today we offer kurta sets, suit sets, tops and gowns in cotton, rayon and Roman silk, in printed, embroidered and bandhani styles, and every piece is checked at our Pahadiya Chowk store before it ships.
+              Today we offer kurta sets, suit sets, tops and gowns in cotton, rayon and Roman silk, in printed, embroidered and bandhani styles, and every piece is checked at our Sanganer store before it ships.
             </p>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
@@ -104,7 +104,7 @@ const AboutUs = () => {
           <StatItem number="2005" label="Established in Jaipur" />
           <StatItem number="Free" label="Delivery across India" />
           <StatItem number="7 days" label="Size exchange" />
-          <StatItem number="1 store" label="Pahadiya Chowk, Jaipur" />
+          <StatItem number="1 store" label="Sanganer, Jaipur" />
         </div>
       </section>
 

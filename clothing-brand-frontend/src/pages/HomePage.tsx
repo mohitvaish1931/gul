@@ -9,6 +9,7 @@ import FeaturedReviews from '../components/FeaturedReviews';
 import { splitProductName } from '../utils/productName';
 import { OCCASIONS } from '../utils/occasions';
 import { getImageUrl } from '../utils/mediaHelper';
+import { STORE_ADDRESS, STORE_ADDRESS_LINE, STORE_GEO, STORE_MAPS_URL } from '../utils/business';
 import { Truck, RefreshCcw, ShieldCheck, MessageCircle } from 'lucide-react';
 import './HomePage.css';
 
@@ -125,9 +126,9 @@ const StoryBand = ({ image, designCount }: { image?: string; designCount: number
       </div>
     )}
     <div className="story-copy">
-      <h2 className="section-heading">From Pahadiya Chowk, Jaipur</h2>
+      <h2 className="section-heading">From Sanganer, Jaipur</h2>
       <p className="story-text">
-        Every piece is checked at our store in Pahadiya Chowk before it is packed: breathable cottons,
+        Every piece is checked at our store in Sanganer before it is packed: breathable cottons,
         angrakha sets and embroidered suits for everyday and festive wear.
       </p>
       <dl className="story-facts">
@@ -186,10 +187,23 @@ const HomePage = () => {
     type: 'website',
     structuredData: {
       '@context': 'https://schema.org',
-      '@type': 'Organization',
+      '@type': 'ClothingStore',
       name: 'Gul Fashion',
       url: 'https://gulfashion.store',
       logo: 'https://gulfashion.store/favicon.svg',
+      image: 'https://gulfashion.store/favicon.svg',
+      telephone: '+91-9351325459',
+      priceRange: '₹299 - ₹2,499',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: STORE_ADDRESS.street,
+        addressLocality: `${STORE_ADDRESS.locality}, ${STORE_ADDRESS.city}`,
+        addressRegion: STORE_ADDRESS.state,
+        postalCode: STORE_ADDRESS.postalCode,
+        addressCountry: STORE_ADDRESS.country,
+      },
+      geo: { '@type': 'GeoCoordinates', ...STORE_GEO },
+      hasMap: STORE_MAPS_URL,
       contactPoint: {
         '@type': 'ContactPoint',
         telephone: '+91-9351325459',
@@ -288,9 +302,9 @@ const HomePage = () => {
           <section className="studio-band">
             <div className="studio-band-inner container">
               <h2 className="section-heading">Visit our store in Jaipur</h2>
-              <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur 302002. See the fabrics in person and get help with sizing.</p>
+              <p>{STORE_ADDRESS_LINE}. See the fabrics in person and get help with sizing.</p>
               <div className="studio-actions">
-                <a href="https://www.google.com/maps/search/?api=1&query=455+Mandhi+Khatikan+Pahadiya+Chowk+Jaipur+302002" target="_blank" rel="noreferrer" className="btn btn-light">Get directions</a>
+                <a href={STORE_MAPS_URL} target="_blank" rel="noreferrer" className="btn btn-light">Get directions</a>
                 <a href="https://wa.me/919351325459" target="_blank" rel="noreferrer" className="text-link text-link-light">Message us before you visit</a>
               </div>
             </div>

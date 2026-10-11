@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useSEO } from '../utils/useSEO';
 import { API_BASE_URL } from '../utils/api';
+import { STORE_ADDRESS_LINE, STORE_MAPS_EMBED_URL, STORE_MAPS_URL } from '../utils/business';
 import FeaturedReviews from '../components/FeaturedReviews';
 import './Contact.css';
 
@@ -126,7 +127,7 @@ const Contact = () => {
                 <div className="item-icon-circle"><MapPin size={20} /></div>
                 <div className="item-content">
                   <h3>OUR STUDIO</h3>
-                  <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur - 302002, Rajasthan, India</p>
+                  <p>{STORE_ADDRESS_LINE}, India</p>
                   <p className="sub-info">Mon – Sat | 10AM – 7PM</p>
                 </div>
               </div>
@@ -245,9 +246,9 @@ const Contact = () => {
             <div className="quick-help-wrap">
               <h4>Need quick help?</h4>
               <div className="quick-help-btns">
-                <button className="btn-quick"><Phone size={14} /> CALL NOW</button>
-                <button className="btn-quick"><MessageCircle size={14} /> WHATSAPP</button>
-                <button className="btn-quick"><MapPin size={14} /> VISIT STUDIO</button>
+                <a className="btn-quick" href="tel:+919351325459"><Phone size={14} /> CALL NOW</a>
+                <a className="btn-quick" href="https://wa.me/919351325459" target="_blank" rel="noreferrer"><MessageCircle size={14} /> WHATSAPP</a>
+                <a className="btn-quick" href={STORE_MAPS_URL} target="_blank" rel="noreferrer"><MapPin size={14} /> VISIT STORE</a>
               </div>
             </div>
           </div>
@@ -258,27 +259,26 @@ const Contact = () => {
       <section className="contact-map-section container">
         <div className="map-card">
           <div className="map-iframe-wrap">
-            {/* Using a placeholder for map, in production use Google Maps iframe */}
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.518683501712!2d75.8364!3d26.9175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db6fd7a44f77b%3A0xe74e797c558c4f0!2sJaipur!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+              src={STORE_MAPS_EMBED_URL} 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
               allowFullScreen={true} 
               loading="lazy"
-              title="Gul Fashion Studio Location"
+              title="Gul Fashion store location in Sanganer, Jaipur"
             ></iframe>
           </div>
           <div className="map-content">
-            <span className="map-tag">VISIT OUR STUDIO</span>
+            <span className="map-tag">VISIT OUR STORE</span>
             <h2 className="map-title font-serif">Experience Our Collections <br /> in Person</h2>
             <p className="map-desc">
-              Visit our store in Pahadiya Chowk, Jaipur to see the fabrics in person and get help with sizing.
+              Visit our store on Sanga Setu Road, Sanganer, Jaipur to see the fabrics in person and get help with sizing.
             </p>
-            <button className="btn-directions">
+            <a className="btn-directions" href={STORE_MAPS_URL} target="_blank" rel="noreferrer">
               <ExternalLink size={18} />
               GET DIRECTIONS
-            </button>
+            </a>
           </div>
         </div>
       </section>
