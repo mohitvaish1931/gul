@@ -109,7 +109,7 @@ const LoginScreen = () => {
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. name@luxury.com"
+              placeholder="e.g. name@example.com"
               required
               style={{ 
                 width: '100%', 

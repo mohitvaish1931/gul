@@ -5,8 +5,8 @@ import { ShieldCheck, Globe, Award, Lock, RefreshCcw } from 'lucide-react';
 const AboutUs = () => {
   useSEO({
     title: 'Our Story - GUL FASHION Jaipur',
-    description: 'Experience the regal legacy of GUL FASHION. Handcrafted elegance from the heart of Jaipur since 2005.',
-    keywords: 'about us, brand story, clothing heritage, craftsmanship, GUL FASHION Jaipur, luxury ethnic wear',
+    description: 'The story of GUL FASHION, a Jaipur store for ethnic wear for women since 2005.',
+    keywords: 'about us, brand story, clothing heritage, craftsmanship, GUL FASHION Jaipur, ethnic wear for women',
     url: 'https://gulfashion.store/about',
     type: 'website'
   });
@@ -78,20 +78,20 @@ const AboutUs = () => {
             <span className="small-gold-tag">OUR HERITAGE</span>
             <h2 className="font-serif" style={{ fontSize: '3rem', color: '#2D0A4E', marginBottom: '30px' }}>Born in the <br /> Pink City</h2>
             <p style={{ color: '#444', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '25px' }}>
-              Gul Fashion was born amidst the vibrant hues and architectural splendor of Jaipur. Inspired by the "Gul" (Rose) that characterizes the city's palette, our journey began with a vision to bring royal Rajputana aesthetics to the modern woman.
+              Gul Fashion began in Jaipur in 2005. Named after the "Gul" (rose) that colours the Pink City, the store has been dressing women in comfortable ethnic wear ever since.
             </p>
             <p style={{ color: '#444', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '35px' }}>
-              Every stitch in a Gul Fashion garment is a tribute to the master craftsmen of Rajasthan, whose hands carry the legacy of centuries. We pride ourselves on being a bridge between tradition and the future.
+              Today we offer kurta sets, suit sets, tops and gowns in cotton, rayon and Roman silk, in printed, embroidered and bandhani styles, and every piece is checked at our Pahadiya Chowk store before it ships.
             </p>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
                <div>
-                  <h4 style={{ fontWeight: '800', color: '#2D0A4E', marginBottom: '10px' }}>100% Handcrafted</h4>
-                  <p style={{ fontSize: '0.85rem', color: '#666' }}>Meticulously detailed by master artisans in our Jaipur atelier.</p>
+                  <h4 style={{ fontWeight: '800', color: '#2D0A4E', marginBottom: '10px' }}>Checked before dispatch</h4>
+                  <p style={{ fontSize: '0.85rem', color: '#666' }}>Every piece is checked at our Jaipur store before it ships.</p>
                </div>
                <div>
-                  <h4 style={{ fontWeight: '800', color: '#2D0A4E', marginBottom: '10px' }}>Ethical Fashion</h4>
-                  <p style={{ fontSize: '0.85rem', color: '#666' }}>Fair wages and sustainable practices at every stage of creation.</p>
+                  <h4 style={{ fontWeight: '800', color: '#2D0A4E', marginBottom: '10px' }}>Free delivery in India</h4>
+                  <p style={{ fontSize: '0.85rem', color: '#666' }}>Shipping is free on every order delivered within India.</p>
                </div>
             </div>
           </div>
@@ -101,10 +101,10 @@ const AboutUs = () => {
       {/* Stats Section */}
       <section style={{ backgroundColor: '#fff', padding: '80px 0', borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0' }}>
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
-          <StatItem number="100K+" label="Happy Patrons" />
-          <StatItem number="2000+" label="Unique Designs" />
-          <StatItem number="50+" label="Global Stores" />
-          <StatItem number="21" label="Years of Legacy" />
+          <StatItem number="2005" label="Established in Jaipur" />
+          <StatItem number="Free" label="Delivery across India" />
+          <StatItem number="7 days" label="Size exchange" />
+          <StatItem number="1 store" label="Pahadiya Chowk, Jaipur" />
         </div>
       </section>
 
@@ -118,18 +118,18 @@ const AboutUs = () => {
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           <ValueCard 
             icon={<Award size={32} />} 
-            title="Premium Quality" 
-            desc="We use only the finest silks, linens, and hand-woven fabrics, ensuring every piece feels as good as it looks."
+            title="Clear Product Details" 
+            desc="Every product page lists the fabric, neckline, sleeves and what comes in the set, so you know exactly what you are buying."
           />
           <ValueCard 
             icon={<ShieldCheck size={32} />} 
-            title="Authentic Artistry" 
-            desc="From Zardosi to Bandhani, we preserve the authentic techniques of Indian craftsmanship without compromise."
+            title="Jaipur Prints" 
+            desc="Sanganeri, bandhani and buti prints inspired by the traditions of Rajasthan, alongside embroidered festive sets."
           />
           <ValueCard 
             icon={<Globe size={32} />} 
-            title="Modern Heritage" 
-            desc="Designing for the global woman who respects her roots but embraces contemporary fashion sensibilities."
+            title="Everyday Comfort" 
+            desc="Breathable cottons and easy cuts for college, the office and family functions."
           />
         </div>
       </section>
@@ -138,9 +138,9 @@ const AboutUs = () => {
       <section style={{ backgroundColor: '#fff', borderTop: '1px solid #eee', padding: '80px 20px' }}>
         <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
-              <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
-              <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
-              <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+              <TrustItem icon={<ShieldCheck size={28} />} title="QUALITY CHECKED" sub="Every piece checked before dispatch" />
+              <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="Encrypted checkout by Razorpay" />
+              <TrustItem icon={<RefreshCcw size={28} />} title="7-DAY EXCHANGE" sub="Size exchange on unworn items" />
               <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
           </div>
         </div>

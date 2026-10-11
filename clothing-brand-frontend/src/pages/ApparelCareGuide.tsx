@@ -5,7 +5,7 @@ import { Sparkles, Archive, Droplets, Info, Wind, MessageCircle } from 'lucide-r
 const ApparelCareGuide = () => {
   useSEO({
     title: 'Garment Care Guide - GUL FASHION',
-    description: 'Expert tips on preserving the life and beauty of your luxury handcrafted ethnic wear.',
+    description: 'How to wash, iron and store your cotton, rayon and silk ethnic wear.',
     keywords: 'garment care, clothing maintenance, silk care, embroidery care, GUL FASHION guide',
     url: 'https://gulfashion.store/care-guide',
     type: 'website'
@@ -14,19 +14,19 @@ const ApparelCareGuide = () => {
   const sections = [
     {
       icon: <Droplets size={30} />,
-      title: "PROFESSIONAL CLEANING",
-      text: "Most of our ethnic wear, especially those with Zari, Gotta Patti, or Zardosi work, requires professional dry cleaning. Avoid machine washing or hand washing at home for silk sarees and heavy embroidered suits.",
-      note: "Important: Always inform your dry cleaner about the specific material and embroidery type."
+      title: "WASHING",
+      text: "Cotton and rayon pieces can be hand washed in cold water with a mild detergent. Wash dark and printed colours separately, and do not wring rayon. Roman silk and heavily embroidered sets are best dry cleaned.",
+      note: "Check the care instructions on each product page before washing."
     },
     {
       icon: <Archive size={30} />,
-      title: "PERFECT STORAGE",
-      text: "Store your precious sarees and lehengas in breathable muslin or cotton bags. Avoid plastic covers as they can cause yellowing. Change folds every few months to prevent fabric stress at the creases."
+      title: "STORAGE",
+      text: "Store your clothes in breathable cotton or muslin bags rather than plastic covers, which trap moisture and cause yellowing. Refold heavier sets every few months so the creases do not set."
     },
     {
       icon: <Wind size={30} />,
       title: "IRONING & STEAMING",
-      text: "Always iron on the reverse side of the garment using a low-to-medium heat setting. Steam ironing is preferred for removing wrinkles from delicate silks and georgettes, but avoid direct contact with embroidery."
+      text: "Iron on the reverse side on a low-to-medium setting. Steam works well for rayon and silk; keep the iron off embroidery and mirror work."
     },
     {
       icon: <Sparkles size={30} />,
@@ -36,7 +36,7 @@ const ApparelCareGuide = () => {
     {
       icon: <Info size={30} />,
       title: "SPECIFIC CARE",
-      text: "If a thread comes loose, never pull it. Instead, carefully snip it with small scissors. For heavy lehengas, we recommend storing them flat if possible to prevent the weight from stretching the fabric."
+      text: "If a thread comes loose, never pull it. Snip it carefully with small scissors. Dry printed cottons in the shade to keep the colours bright."
     }
   ];
 
@@ -53,7 +53,7 @@ const ApparelCareGuide = () => {
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Garment Care Guide</h1>
           <div style={{ width: '60px', height: '2px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>Preserve the beauty and longevity of your handcrafted ethnic wear with these expert tips.</p>
+          <p style={{ fontSize: '1.1rem', color: '#666' }}>Keep your ethnic wear looking new with these simple tips.</p>
         </div>
 
         {/* Sections */}

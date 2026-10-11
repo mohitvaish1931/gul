@@ -25,7 +25,7 @@ const Categories = ({ products = [] }: CategoriesProps) => {
               path: '/shop?category=Suit%20Sets',
               tag: 'DESIGNER FAVORITES',
               title: 'Suit Sets',
-              desc: 'Regal elegance for every precious occasion.'
+              desc: 'Embroidered and printed sets for festive occasions.'
             },
             {
               name: 'Tops',

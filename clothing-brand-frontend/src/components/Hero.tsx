@@ -53,8 +53,8 @@ const Hero = ({ products = [] }: HeroProps) => {
     slides = [{
       type: 'image',
       src: 'https://res.cloudinary.com/drjnbrsfj/image/upload/v1783939676/gul_fashion/products/xa5thpgio3ny1i3pkfm8.jpg',
-      title: 'Premium Suit Sets',
-      subtitle: 'Experience the royal legacy of Jaipur craftsmanship.',
+      title: 'Cotton Suit Sets',
+      subtitle: 'Printed and embroidered suit sets with dupattas, shipped from Jaipur.',
       btnPrimary: 'Shop suit sets',
       btnOutline: 'Our story',
       link: `/shop?category=Suit%20Sets`

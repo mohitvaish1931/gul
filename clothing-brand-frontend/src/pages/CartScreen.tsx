@@ -454,6 +454,14 @@ const CartScreen = () => {
                   </div>
                 )}
                 <p style={{ fontSize: '0.8rem', color: '#777', margin: 0 }}>Free shipping · Pay securely with UPI, cards or netbanking</p>
+                {/* Policies open in a new tab so the delivery details typed above are kept */}
+                <p style={{ fontSize: '0.8rem', color: '#777', margin: 0, lineHeight: 1.6 }}>
+                  By paying you agree to our{' '}
+                  <a href="/terms-conditions" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)' }}>terms</a>,{' '}
+                  <a href="/shipping-policy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)' }}>shipping policy</a> and{' '}
+                  <a href="/refund-policy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink)' }}>refund and exchange policy</a>
+                  {' '}(7-day size exchange on unworn garments, refunds for damaged products).
+                </p>
                 <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
                   <button type="button" className="btn btn-outline" onClick={() => setIsCheckingOut(false)} style={{flex: 1}}>BACK TO CART</button>
                   <button type="submit" className="btn btn-primary" disabled={paymentLoading} style={{flex: 2}}>

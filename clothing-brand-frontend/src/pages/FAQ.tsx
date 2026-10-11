@@ -15,7 +15,7 @@ const FAQ = () => {
   const faqs = [
     {
       question: "How do I care for my GUL FASHION clothing?",
-      answer: "Most of our ethnic wear requires professional dry cleaning to maintain the fabric and embroidery quality. Please refer to our Garment Care Guide for detailed instructions on storage and maintenance."
+      answer: "Cotton and rayon pieces can be gently hand washed in cold water; Roman silk and heavily embroidered sets are best dry cleaned. Each product page lists its care instructions, and our Garment Care Guide has more tips."
     },
     {
       question: "What are the shipping charges?",
@@ -23,7 +23,7 @@ const FAQ = () => {
     },
     {
       question: "How long will it take to receive my order?",
-      answer: "Orders are typically dispatched within 3-5 working days as many of our pieces are handcrafted. Once shipped, delivery takes approximately 4-8 working days."
+      answer: "Orders are usually dispatched within 2-3 working days. Once shipped, delivery takes approximately 4-8 working days."
     },
     {
       question: "Do you offer international shipping?",
@@ -43,7 +43,7 @@ const FAQ = () => {
     },
     {
       question: "Is your clothing authentic?",
-      answer: "Yes, all our garments are crafted using premium fabrics and authentic hand-embroidery techniques. Each piece goes through rigorous quality checks."
+      answer: "Yes. Every garment is checked at our Jaipur store before it is dispatched, and the fabric for each product is listed on its page."
     }
   ];
 
@@ -109,7 +109,7 @@ const FAQ = () => {
              <div>
                 <h2 className="font-serif" style={{ fontSize: '1.8rem', marginBottom: '5px', color: '#2d0a4e' }}>Still have questions?</h2>
                 <div style={{ width: '30px', height: '1.5px', backgroundColor: 'var(--brass)', marginBottom: '10px' }}></div>
-                <p style={{ color: '#666', fontSize: '0.9rem', maxWidth: '400px' }}>Our luxury consultants are available to assist you with any inquiries you may have.</p>
+                <p style={{ color: '#666', fontSize: '0.9rem', maxWidth: '400px' }}>Our team is happy to help with sizing, orders and exchanges.</p>
              </div>
           </div>
           
@@ -133,9 +133,9 @@ const FAQ = () => {
 
         {/* Trust Bar Footer */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '60px' }}>
-            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
-            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
-            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<ShieldCheck size={28} />} title="QUALITY CHECKED" sub="Every piece checked before dispatch" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="Encrypted checkout by Razorpay" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="7-DAY EXCHANGE" sub="Size exchange on unworn items" />
             <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>

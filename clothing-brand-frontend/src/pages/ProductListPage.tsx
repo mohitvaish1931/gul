@@ -26,8 +26,8 @@ const ProductListPage = () => {
   useSEO({
     title: `${pageHeading} | Gul Fashion`,
     description: category || occasion
-      ? `Shop ${pageHeading} for women at Gul Fashion. Handcrafted ethnic and casual wear from Jaipur with free shipping across India.`
-      : 'Shop kurta sets, suits, tops and dresses for women at Gul Fashion. Handcrafted in Jaipur with free shipping across India.',
+      ? `Shop ${pageHeading} for women at Gul Fashion. Ethnic and casual wear from Jaipur, with free shipping across India.`
+      : 'Shop kurta sets, suits, tops and dresses for women at Gul Fashion, Jaipur, with free shipping across India.',
     url: canonicalUrl,
     noindex: Boolean(keyword), // search result pages shouldn't be indexed
   });
@@ -88,7 +88,7 @@ const ProductListPage = () => {
                {category || occasion?.label || (keyword ? `Results for "${keyword}"` : 'All designs')}
             </h1>
             <p className="section-subtext">
-               {occasion ? occasion.tagline : 'Kurta sets, suits and everyday cottons, made at our studio in Jaipur.'}
+               {occasion ? occasion.tagline : 'Kurta sets, suits and everyday cottons from our store in Jaipur.'}
             </p>
          </div>
       </section>

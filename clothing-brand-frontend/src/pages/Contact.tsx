@@ -12,7 +12,7 @@ import './Contact.css';
 const Contact = () => {
   useSEO({
     title: 'Contact Us - GUL FASHION Jaipur',
-    description: 'Get in touch with GUL FASHION for custom tailoring, styling guidance, and luxury ethnic wear inquiries.',
+    description: 'Contact Gul Fashion, Jaipur, for orders, sizing help and exchanges.',
     keywords: 'contact gul fashion, jaipur boutique, ethnic wear contact, custom tailoring jaipur',
     url: 'https://gulfashion.store/contact',
     type: 'website'
@@ -85,7 +85,7 @@ const Contact = () => {
             <div className="contact-hero-img-wrap animate-fade-in" style={{animationDelay: '0.2s'}}>
               <img 
                 src="/images/clothing_rack_hero.png" 
-                alt="Gul Fashion Atelier" 
+                alt="Gul Fashion store in Jaipur" 
                 className="contact-hero-img"
               />
             </div>
@@ -273,7 +273,7 @@ const Contact = () => {
             <span className="map-tag">VISIT OUR STUDIO</span>
             <h2 className="map-title font-serif">Experience Our Collections <br /> in Person</h2>
             <p className="map-desc">
-              Step into our Jaipur studio and explore our exclusive ethnic wear collections. Get personalized styling, custom fittings, and a truly memorable experience.
+              Visit our store in Pahadiya Chowk, Jaipur to see the fabrics in person and get help with sizing.
             </p>
             <button className="btn-directions">
               <ExternalLink size={18} />
@@ -292,22 +292,22 @@ const Contact = () => {
           <div className="trust-item">
             <ShieldCheck className="trust-icon" size={32} />
             <div className="trust-content">
-              <h5>PREMIUM QUALITY</h5>
-              <p>Finest fabrics & craftsmanship</p>
+              <h5>QUALITY CHECKED</h5>
+              <p>Every piece checked before dispatch</p>
             </div>
           </div>
           <div className="trust-item">
             <Truck className="trust-icon" size={32} />
             <div className="trust-content">
               <h5>SECURE PAYMENTS</h5>
-              <p>100% secure & trusted</p>
+              <p>Encrypted checkout by Razorpay</p>
             </div>
           </div>
           <div className="trust-item">
             <RefreshCcw className="trust-icon" size={32} />
             <div className="trust-content">
-              <h5>EASY RETURNS</h5>
-              <p>Hassle-free returns</p>
+              <h5>7-DAY EXCHANGE</h5>
+              <p>Size exchange on unworn items</p>
             </div>
           </div>
           <div className="trust-item">

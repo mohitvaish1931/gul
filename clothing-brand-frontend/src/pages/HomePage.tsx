@@ -125,10 +125,10 @@ const StoryBand = ({ image, designCount }: { image?: string; designCount: number
       </div>
     )}
     <div className="story-copy">
-      <h2 className="section-heading">Designed and finished in Jaipur</h2>
+      <h2 className="section-heading">From Pahadiya Chowk, Jaipur</h2>
       <p className="story-text">
-        Every piece is made at our studio in Pahadiya Chowk — breathable cottons, angrakha ties and
-        embroidery finished by hand, so what arrives at your door feels as good as it looks.
+        Every piece is checked at our store in Pahadiya Chowk before it is packed: breathable cottons,
+        angrakha sets and embroidered suits for everyday and festive wear.
       </p>
       <dl className="story-facts">
         <div><dt>2005</dt><dd>Established in Jaipur</dd></div>
@@ -258,7 +258,7 @@ const HomePage = () => {
       ) : (
         <>
           {newArrivals.length > 0 && (
-            <ProductRail title="New arrivals" subtext="The latest pieces from our Jaipur studio." items={newArrivals} viewAllLink="/shop" />
+            <ProductRail title="New arrivals" subtext="The latest pieces in the shop." items={newArrivals} viewAllLink="/shop" />
           )}
 
           <ShopByOccasion products={homepageProducts} />
@@ -287,7 +287,7 @@ const HomePage = () => {
 
           <section className="studio-band">
             <div className="studio-band-inner container">
-              <h2 className="section-heading">Visit our Jaipur studio</h2>
+              <h2 className="section-heading">Visit our store in Jaipur</h2>
               <p>455, Mandhi Khatikan, Pahadiya Chowk, Jaipur 302002. See the fabrics in person and get help with sizing.</p>
               <div className="studio-actions">
                 <a href="https://www.google.com/maps/search/?api=1&query=455+Mandhi+Khatikan+Pahadiya+Chowk+Jaipur+302002" target="_blank" rel="noreferrer" className="btn btn-light">Get directions</a>

@@ -500,7 +500,14 @@ const ProductScreen = () => {
   const inStock = !product.soldOut && product.countInStock > 0;
   const hasDiscount = product.originalPrice > product.price;
   const productUrl = `https://gulfashion.store/product/${product._id || id}`;
-  const metaDescription = product.description ? product.description.replace(/\s+/g, ' ').substring(0, 155) : '';
+  // Search results show about 160 characters: use the opening sentence, or cut at a word
+  const metaDescription = (() => {
+    const text = (product.description || '').replace(/\s+/g, ' ').trim();
+    if (text.length <= 160) return text;
+    const firstSentence = text.split(/(?<=\.)\s/)[0];
+    if (firstSentence.length <= 160) return firstSentence;
+    return `${text.slice(0, 157).replace(/\s+\S*$/, '')}…`;
+  })();
 
   useSEO({
     title: product.name ? `${product.name} | Gul Fashion` : 'Gul Fashion',

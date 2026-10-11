@@ -76,7 +76,7 @@ const ProfileScreen = () => {
              {user.name.charAt(0).toUpperCase()}
            </div>
            <div>
-             <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>ROYAL PATRON</span>
+             <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>MY ACCOUNT</span>
              <h1 className="font-serif" style={{ fontSize: '2.8rem', color: '#2D0A4E' }}>Welcome, {user.name}</h1>
            </div>
         </div>
@@ -144,7 +144,7 @@ const ProfileScreen = () => {
                 </div>
                 <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#2D0A4E', marginBottom: '15px' }}>Your Collection Journey</h3>
                 <p style={{ color: '#666', lineHeight: '1.8', marginBottom: '35px', maxWidth: '400px', margin: '0 auto 35px' }}>
-                   It seems your wardrobe is awaiting its first Gul Fashion masterpiece. Our latest collection of handcrafted ethnic wear is ready for discovery.
+                   You have not placed an order yet. Browse the latest kurta sets, suits and tops to get started.
                 </p>
                 <Link to="/shop" style={{ 
                   display: 'inline-flex', 

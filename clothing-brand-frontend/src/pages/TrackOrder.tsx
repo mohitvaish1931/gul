@@ -96,7 +96,7 @@ const TrackOrder = () => {
              <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)' }}></div>
           </div>
           <p style={{ color: '#666', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
-            Enter your order details below to see the current status of your handcrafted apparel.
+            Enter your order details below to see the current status of your order.
           </p>
         </div>
 
@@ -242,14 +242,14 @@ const TrackOrder = () => {
             <HelpCard 
               icon={<RefreshCcw size={24} />} 
               title="Returns & Exchange" 
-              desc="Hassle-free returns for your peace of mind." 
+              desc="7-day size exchange on unworn items; refunds for damaged pieces." 
               linkText="Learn More" 
               href="/refund-policy"
             />
             <HelpCard 
               icon={<ShieldCheck size={24} />} 
               title="Secure & Safe" 
-              desc="Your information is 100% secure with us." 
+              desc="Payments are processed securely by Razorpay." 
               linkText="Privacy Policy" 
               href="/privacy-policy"
             />
@@ -258,9 +258,9 @@ const TrackOrder = () => {
 
         {/* Trust Bar */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '40px' }}>
-            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
-            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
-            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<ShieldCheck size={28} />} title="QUALITY CHECKED" sub="Every piece checked before dispatch" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="Encrypted checkout by Razorpay" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="7-DAY EXCHANGE" sub="Size exchange on unworn items" />
             <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>

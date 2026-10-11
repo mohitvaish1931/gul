@@ -18,8 +18,8 @@ const LINK_GROUPS = [
     title: 'Help',
     links: [
       { to: '/track-order', label: 'Track your order' },
-      { to: '/shipping-policy', label: 'Shipping' },
-      { to: '/refund-policy', label: 'Exchanges and returns' },
+      { to: '/shipping-policy', label: 'Shipping policy' },
+      { to: '/refund-policy', label: 'Refund and exchange policy' },
       { to: '/faq', label: 'FAQs' },
       { to: '/contact', label: 'Contact us' },
     ],
@@ -42,7 +42,7 @@ const Footer = () => {
         <div className="footer-brand">
           <img src={logoImg} alt="Gul Fashion" className="footer-logo" />
           <p className="footer-statement">
-            Women's kurta sets, suits and everyday cottons, designed and finished at our studio in Jaipur.
+            Women's kurta sets, suits and everyday cottons from our store in Pahadiya Chowk, Jaipur.
           </p>
           <ul className="footer-contact">
             <li>

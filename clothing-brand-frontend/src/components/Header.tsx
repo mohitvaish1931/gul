@@ -11,7 +11,7 @@ import './Header.css';
 const announcements = [
   "Free delivery across India",
   "7-day size exchange on unworn garments",
-  "Handcrafted in Jaipur since 2005"
+  "From Jaipur since 2005"
 ];
 
 const Header = () => {

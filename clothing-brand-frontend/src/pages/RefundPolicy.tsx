@@ -4,8 +4,8 @@ import { RotateCcw, ShieldAlert, CheckCircle, HelpCircle, Mail, MessageCircle, H
 
 const RefundPolicy = () => {
   useSEO({
-    title: 'Refund Policy - GUL FASHION',
-    description: 'Understand our return and exchange process for your luxury ethnic wear.',
+    title: 'Refund and Exchange Policy - GUL FASHION',
+    description: 'Our 7-day size exchange for unworn garments, and refunds or replacements for damaged products.',
     keywords: 'refund policy, returns, exchanges, GUL FASHION policies',
     url: 'https://gulfashion.store/refund-policy',
     type: 'website'
@@ -25,7 +25,7 @@ const RefundPolicy = () => {
     {
       icon: <CheckCircle size={30} />,
       title: "QUALITY ASSURANCE",
-      text: "Every GUL FASHION garment undergoes multiple quality checks before being dispatched to ensure you receive only the finest handcrafted quality."
+      text: "Every GUL FASHION garment is checked before it is dispatched."
     },
     {
       icon: <HelpCircle size={30} />,
@@ -55,9 +55,9 @@ const RefundPolicy = () => {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span style={{ color: 'var(--brass)', letterSpacing: '4px', fontWeight: '800', fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: '20px' }}>SERVICE</span>
-          <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Refund Policy</h1>
+          <h1 className="font-serif" style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '15px', color: '#2d0a4e' }}>Refund and Exchange Policy</h1>
           <div style={{ width: '40px', height: '1.5px', backgroundColor: 'var(--brass)', margin: '0 auto 20px' }}></div>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>Understand our return and exchange process for your luxury ethnic wear.</p>
+          <p style={{ fontSize: '1.1rem', color: '#666' }}>A 7-day size exchange for unworn garments, and a refund or replacement for damaged products.</p>
         </div>
 
         {/* Sections */}
@@ -129,9 +129,9 @@ const RefundPolicy = () => {
 
         {/* Trust Bar Footer */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', borderTop: '1px solid #eee', paddingTop: '60px' }}>
-            <TrustItem icon={<ShieldCheck size={28} />} title="PREMIUM QUALITY" sub="Finest fabrics & craftsmanship" />
-            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="100% secure & trusted" />
-            <TrustItem icon={<RefreshCcw size={28} />} title="EASY RETURNS" sub="Hassle-free returns" />
+            <TrustItem icon={<ShieldCheck size={28} />} title="QUALITY CHECKED" sub="Every piece checked before dispatch" />
+            <TrustItem icon={<Lock size={28} />} title="SECURE PAYMENTS" sub="Encrypted checkout by Razorpay" />
+            <TrustItem icon={<RefreshCcw size={28} />} title="7-DAY EXCHANGE" sub="Size exchange on unworn items" />
             <TrustItem icon={<Globe size={28} />} title="FREE SHIPPING" sub="Free delivery across India" />
         </div>
       </div>
